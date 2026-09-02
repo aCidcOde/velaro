@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./fonts.css";
 @import "../../vendor/livewire/flux/dist/flux.css";
 @import "@tabler/icons-webfont/tabler-icons.min.css";
 @import "./panel/theme.css";
