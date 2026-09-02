@@ -2,18 +2,26 @@
 
 ## Principais implementações
 
-- Identidade visual Velaro consolidada para os quatro ambientes da plataforma B2B.
-- Mockups responsivos com navegação móvel, hierarquia consistente e acessibilidade.
-- Prancha visual de inputs com estados, densidades e composições reutilizáveis.
+- Identidade visual Velaro consolidada e aprovada para os quatro ambientes da plataforma B2B.
+- Todas as telas do escopo contratado desenhadas, navegáveis e validadas em desktop, tablet e mobile.
+- Documentação por tela com campos, permissões, regras de negócio e critérios de aceite.
+- Sistema de design registrado como referência única para a implementação funcional.
 
-### 2026-09-02 · FEAT · Design system e mockups da plataforma B2B
+### 2026-09-02 · FEAT · Design system e telas da plataforma B2B
 
-**Resumo:** A experiência visual da Velaro foi amadurecida em uma referência única,
-coerente e responsiva para validação antes da implementação funcional.
+**Resumo:** A plataforma B2B da Velaro ganhou uma referência visual e funcional completa,
+cobrindo todo o escopo contratado, para validação antes da implementação. A marca e a
+operação passaram a conviver na mesma experiência sem que uma prejudique a outra.
 
-**O que foi feito:** Foram consolidados identidade, tipografia, componentes, quatro
-ambientes de produto e uma prancha visual de inputs, com comportamento validado em
-desktop, tablet e mobile.
+**O que foi feito:** A identidade visual foi consolidada e aprovada, com paleta,
+tipografia e regras de uso definidas a partir da arte oficial da marca. Todas as telas
+do escopo contratado foram desenhadas e conectadas entre si, permitindo percorrer os
+quatro ambientes de ponta a ponta: a captação e aprovação de lojistas, o portal do
+parceiro, a vitrine com a marca do revendedor e o painel interno da fábrica. Cada tela
+recebeu documentação própria com campos, permissões, regras de negócio e critérios de
+aceite, apoiada na transcrição do material aprovado pelas partes. Campos e etapas
+exigidos em contrato que não apareciam no material original foram identificados e
+incorporados. O comportamento foi validado em desktop, tablet e mobile.
 
 ## Auditoria Técnica — Segurança, Arquitetura e Workflow de Pedidos
 
@@ -381,17 +389,18 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 
 | Gate | Comando | Resultado |
 |------|---------|-----------|
-| 1 | `composer validate --no-check-publish` | 🟢 valid |
-| 2 | `composer audit --locked` | 🟢 zero advisories |
+| 1 | `composer qa:validate` | 🟢 composer.json valid |
+| 2 | `composer qa:security` | 🟢 zero advisories |
 | 3 | `composer qa:style` | 🟢 passed |
-| 4 | `vendor/bin/phpstan analyse` | 🟢 no errors |
-| 5 | `php artisan test --compact` | 🟢 72 passed, 332 assertions |
-| 6 | `gitleaks detect` | 🟢 no leaks found |
-| 7 | prefixo de commit | 🟢 `[FEAT]` em pt-BR |
+| 4 | `composer qa:static` | 🟢 no errors (109 arquivos) |
+| 5 | `composer qa:test` | 🟢 72 passed, 332 assertions |
+| 6 | `composer qa:secrets` | 🟢 no leaks found |
+| 7 | prefixo de commit | 🟢 `[FEAT]` com descrição em pt-BR |
 | 8 | `composer qa:anti-debug` | 🟢 sem debug calls |
 | 9 | Trivy | ⚪ N/A (sem Dockerfile) |
 | 10 | changelog atualizado | 🟢 este bloco |
-| — | `php artisan route:list` | 🟢 85 rotas |
+| — | `php artisan route:list --except-vendor` | 🟢 85 rotas |
+| — | `php artisan migrate --pretend` | 🟢 nothing to migrate |
 
 **📊 Total de testes**
 
@@ -399,20 +408,22 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 
 **🛡️ Validação das demais gates**
 
-- 🟢 Mockups inspecionados em desktop, tablet e mobile, sem overflow
-- 🟢 Console do navegador sem erros ou avisos
-- 🟢 Navegação móvel, foco visível e redução de movimento cobertos por teste
-- 🟢 Nenhuma migration alterada ou órfã nesta entrega
+- 🟢 Todas as telas do escopo navegáveis entre si — 942 destinos verificados, nenhum quebrado
+- 🟢 Telas inspecionadas em desktop, tablet e mobile, sem rolagem horizontal da página
+- 🟢 Contraste conferido nos dois temas; a cor de ação muda conforme a superfície para atender AA
+- 🟢 Ambiente com a marca do revendedor auditado: nenhuma referência à marca da fábrica
+- 🟢 Nenhuma migration alterada, criada ou órfã nesta entrega
+- 🟢 Núcleo compartilhado preservado: a entrega não altera o domínio base do scaffold
 
 **📈 Métricas do sistema**
 
-- 🔵 Arquivos rastreados: 720
-- 🔵 Linhas rastreadas: 146.488
+- 🔵 Arquivos rastreados: 788
+- 🔵 Linhas rastreadas: 156.628
 - ⚪ Release anterior de referência: N/A (`1.1` é a baseline da série)
 - ⚪ Arquivos da release anterior: N/A
 - ⚪ Linhas da release anterior: N/A
 - ⚪ Aumento de arquivos vs release anterior: N/A
 - ⚪ Aumento de linhas vs release anterior: N/A
-- 🔵 Novos commits da release: 2 (incluindo esta entrega)
+- 🔵 Novos commits da release: 3 (incluindo esta entrega)
 
 **Status final: 🟢 APROVADO**

@@ -4,26 +4,52 @@
     {
       "name": "Laravel Server",
       "runtimeExecutable": "php",
-      "runtimeArgs": ["artisan", "serve", "--host=0.0.0.0", "--port=8000"],
+      "runtimeArgs": [
+        "artisan",
+        "serve",
+        "--host=0.0.0.0",
+        "--port=8000"
+      ],
       "port": 8000
     },
     {
       "name": "Vite Dev",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite"],
+      "runtimeArgs": [
+        "vite"
+      ],
       "port": 5173
     },
     {
       "name": "Queue Worker",
       "runtimeExecutable": "php",
-      "runtimeArgs": ["artisan", "queue:listen", "--tries=1"],
+      "runtimeArgs": [
+        "artisan",
+        "queue:listen",
+        "--tries=1"
+      ],
       "port": 0
     },
     {
       "name": "Log Tail (Pail)",
       "runtimeExecutable": "php",
-      "runtimeArgs": ["artisan", "pail", "--timeout=0"],
+      "runtimeArgs": [
+        "artisan",
+        "pail",
+        "--timeout=0"
+      ],
       "port": 0
+    },
+    {
+      "name": "Mockups Velaro",
+      "runtimeExecutable": "php",
+      "runtimeArgs": [
+        "-S",
+        "127.0.0.1:8010",
+        "-t",
+        "docs/mockups"
+      ],
+      "port": 8010
     }
   ]
 }

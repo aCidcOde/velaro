@@ -1,0 +1,627 @@
+# -*- coding: utf-8 -*-
+"""Mapa das 31 telas do Velaro: rota, acesso, tabelas, permissões e regras.
+Fonte: Anexo I (escopo funcional), Plano de Negócio e os protótipos aprovados.
+Gera mapa.html — as telas dos mockups linkam para as âncoras daqui."""
+
+# status: 'pronta' (mockup existe) | 'aguardando' (layout pendente do GPT)
+# origem: 'core' (já existe no scaffold) | 'extensao' | 'novo' (módulo Velaro)
+
+T = []  # telas
+
+def tela(**k): T.append(k)
+
+# ══════════════════════════ ETAPA 1 · SITE PÚBLICO ══════════════════════════
+tela(slug="site-home", n="1.1", env="Site público", titulo="Página inicial B2B",
+     rota="GET /", acesso="Público", status="pronta", arquivo="01-site-publico.html",
+     anexo="§3.1",
+     tabelas=[("collections","novo","name, slug, description, cover_path, position, is_active"),
+              ("settings","novo","company.*, contact.* — telefone, e-mail, horário de atendimento")],
+     permissoes=["—"],
+     regras=["Comunicação expressa de que a plataforma é exclusiva para lojistas.",
+             "Nenhum preço B2B renderizado nesta rota, nem em JSON embutido.",
+             "Sem venda direta ao consumidor final."])
+
+tela(slug="site-sobre", n="1.2", env="Site público", titulo="Sobre nós",
+     rota="GET /sobre", acesso="Público", status="pronta", arquivo="10-site-sobre.html", anexo="§3.2",
+     tabelas=[("settings","novo","about.* — história, fábrica própria, diferenciais, mídia")],
+     permissoes=["—"],
+     regras=["Página institucional: fábrica própria, qualidade, atendimento consultivo, logística, posicionamento B2B."])
+
+tela(slug="site-catalogo", n="1.3", env="Site público", titulo="Catálogo público",
+     rota="GET /catalogo · GET /catalogo/{colecao} · GET /produto/{slug}",
+     acesso="Público", status="pronta", arquivo="11-site-catalogo.html", anexo="§3.3",
+     tabelas=[("products","core","name, slug, description, is_active"),
+              ("product_attributes","novo","collection_id, category_id, material_id, finish_id, largura_mm, formato, permite_gravacao"),
+              ("product_variants","novo","sku, aro (tamanho)"),
+              ("product_images","novo","path, position, is_primary"),
+              ("collections","novo","name, slug, position, is_active"),
+              ("categories","novo","name, slug, parent_id, position"),
+              ("materials","novo","name, slug — ex.: Ouro 18K, Ouro branco, Prata 950"),
+              ("finishes","novo","name, slug — ex.: polido, fosco, diamantado, trabalhado")],
+     permissoes=["—"],
+     regras=["**Bloqueio de preço:** `products.price` nunca serializado nesta rota. A checagem entra em teste automatizado.",
+             "Exibe material, acabamento, largura, formato e características técnicas.",
+             "Preço e condição comercial só depois do cadastro aprovado."])
+
+tela(slug="site-cadastro", n="1.4", env="Site público", titulo="Cadastro como lojista",
+     rota="GET/POST /seja-revendedor", acesso="Público", status="pronta", arquivo="12-site-cadastro.html", anexo="§3.4",
+     tabelas=[("resellers","novo","razao_social, nome_fantasia, cnpj, inscricao_estadual, responsavel_nome, responsavel_cpf, email, telefone, whatsapp, cep, logradouro, numero, complemento, bairro, cidade, uf, origem_contato, observacoes, status, protocolo"),
+              ("reseller_documents","novo","type (contrato_social|documento_socio|cartao_cnpj), original_name, disk, path, size_bytes, mime"),
+              ("reseller_cnaes","novo","code, description, is_primary, compatible"),
+              ("users","core","name, email, password — criado em estado de pré-cadastro")],
+     permissoes=["—"],
+     regras=["Form Request obrigatório; CNPJ e CPF validados por regra de dígito.",
+             "Aceites (termos + LGPD) gravados com data, IP e versão do texto.",
+             "Upload de 3 documentos; nasce em `status = pre_cadastro`.",
+             "Dispara `VerifyResellerCnpjJob` — consulta externa nunca é síncrona."])
+
+tela(slug="site-enviada", n="1.5", env="Site público", titulo="Solicitação enviada",
+     rota="GET /solicitacao/{protocolo}/enviada", acesso="Link com protocolo",
+     status="pronta", arquivo="13-site-enviada.html", anexo="§3.5",
+     tabelas=[("resellers","novo","protocolo, created_at")],
+     permissoes=["—"],
+     regras=["Confirmação de recebimento com protocolo e resumo.",
+             "Informa prazo de análise e canais de acompanhamento."])
+
+tela(slug="site-status", n="1.6", env="Site público", titulo="Status da solicitação",
+     rota="GET /solicitacao/{protocolo}", acesso="Pré-cadastro (acesso limitado)",
+     status="pronta", arquivo="14-site-status.html", anexo="§3.6 · §2",
+     tabelas=[("resellers","novo","status, approved_at, rejected_at, rejection_reason"),
+              ("reseller_verifications","novo","status, cnpj_valido, empresa_ativa, cnaes_compativeis, score, checked_at"),
+              ("reseller_status_events","novo","from_status, to_status, actor_id, note, created_at — alimenta a linha do tempo")],
+     permissoes=["—"],
+     regras=["Linha do tempo: cadastro recebido → validação automática → aprovação final → liberação de acesso.",
+             "Estado de pré-cadastro dá acesso **somente** ao acompanhamento da própria solicitação.",
+             "Notificação a cada transição."])
+
+tela(slug="site-aprovado", n="1.7", env="Site público", titulo="Cadastro aprovado e liberação",
+     rota="GET /solicitacao/{protocolo}/aprovado", acesso="Link transacional",
+     status="pronta", arquivo="15-site-aprovado.html", anexo="§3.9",
+     tabelas=[("resellers","novo","status = aprovado, approved_at, approved_by, code"),
+              ("notification_logs","novo","type, channel (email|whatsapp), recipient, sent_at, provider_message_id, status")],
+     permissoes=["—"],
+     regras=["Aprovação libera o acesso de Parceiro Premium e cria o vínculo `users.reseller_id`.",
+             "Aviso transacional por e-mail e/ou WhatsApp — sempre via job."])
+
+# ══════════════════════════ TRANSVERSAL ══════════════════════════
+tela(slug="login", n="0", env="Transversal", titulo="Login único com roteamento por perfil",
+     rota="GET/POST /login", acesso="Público", status="pronta", arquivo="20-login.html", anexo="§2",
+     tabelas=[("users","core","email, password, is_admin, two_factor_*, google_id"),
+              ("users","extensao","reseller_id — vínculo com o Parceiro Premium")],
+     permissoes=["gate `access-backend` decide o destino do Master"],
+     regras=["**Um ponto de login** identifica o perfil e direciona ao ambiente correspondente.",
+             "Master → `/backend` · Parceiro Premium aprovado → `/portal` · Pré-cadastro → `/solicitacao/{protocolo}`.",
+             "Revendedor reprovado ou inativo não autentica.",
+             "Cliente final **não tem login** — existe só como `customers` na carteira do revendedor.",
+             "Login entra em `audit_logs` (§7 exige log de ações sensíveis)."])
+
+# ══════════════════════════ ETAPA 2 · PORTAL DO LOJISTA ══════════════════════════
+P = dict(env="Portal do Lojista", acesso="Parceiro Premium aprovado — tudo escopado por `reseller_id`")
+
+tela(slug="portal-dashboard", n="2.1", titulo="Dashboard do Lojista", **P,
+     rota="GET /portal", status="pronta", arquivo="02-portal-lojista.html", anexo="§4.1",
+     tabelas=[("orders + order_velaro_details","extensao","agregações por operational_status e payment_status"),
+              ("support_tickets","novo","contagem de chamados abertos"),
+              ("customers + customer_velaro_details","extensao","contagem por reseller_id")],
+     permissoes=["policy `ResellerScope` em toda query"],
+     regras=["Indicadores: em andamento, produção, prontos para retirada, pendência financeira, chamados, clientes.",
+             "Nenhuma query sem filtro por `reseller_id` — vazamento entre revendedores é falha crítica."])
+
+tela(slug="portal-catalogo", n="2.2", titulo="Catálogo Revendedor", **P,
+     rota="GET /portal/catalogo", status="pronta", arquivo="30-portal-catalogo.html", anexo="§4.2",
+     tabelas=[("products","core","price — **custo B2B**, visível só aqui"),
+              ("product_attributes","novo","filtros: coleção, material, acabamento, largura, formato"),
+              ("product_variants","novo","sku, aro — disponibilidade por tamanho"),
+              ("stock_items","novo","disponivel — o portal apenas consulta")],
+     permissoes=["policy: revendedor aprovado"],
+     regras=["Exibe o custo B2B Velaro. **Esse custo nunca chega à vitrine do consumidor.**",
+             "Estoque é somente leitura: o controle físico pertence à Velaro (§6).",
+             "Inclusão de item em pedido a partir daqui."])
+
+tela(slug="portal-clientes", n="2.3", titulo="Clientes / CRM", **P,
+     rota="GET /portal/clientes · /portal/clientes/{id}", status="pronta", arquivo="31-portal-clientes.html", anexo="§4.3 · §6",
+     tabelas=[("customers","core","name, email, phone, document (CPF), notes"),
+              ("customer_velaro_details","novo","reseller_id, cidade, uf, endereco, data_nascimento, data_casamento, data_namoro, origem_contato"),
+              ("customer_consents","novo","type (marketing|transacional), granted, granted_at, revoked_at, channel, evidence")],
+     permissoes=["policy `ResellerScope`"],
+     regras=["**LGPD:** data de casamento/namoro só alimenta campanha com consentimento de marketing válido.",
+             "O consentimento é registrável **e revogável** — por isso tabela própria com histórico, não booleano no cliente.",
+             "Comunicação transacional e promocional são tratadas separadamente."])
+
+tela(slug="portal-financeiro", n="2.4", titulo="Financeiro", **P,
+     rota="GET /portal/financeiro", status="pronta", arquivo="32-portal-financeiro.html", anexo="§4.4 · §6",
+     tabelas=[("order_batches","novo","code, cut_date, due_date, status, total_amount"),
+              ("payments","novo","method (pix|boleto|transferencia), amount, due_date, paid_at, status, external_id, receipt_path"),
+              ("invoices","novo","number, series, amount, issued_at, pdf_path, xml_path")],
+     permissoes=["policy `ResellerScope`"],
+     regras=["Mostra pedidos e lotes da conta, custo Velaro, data máxima de pagamento, status financeiro, NF emitida.",
+             "O revendedor paga **a Velaro** por meios B2B habilitados.",
+             "**Não existe** saldo do consumidor, carteira de recebíveis B2C nem saque.",
+             "Webhook de pagamento compara token com `hash_equals()`."])
+
+tela(slug="portal-pedidos", n="2.5", titulo="Pedidos — lista e detalhe", **P,
+     rota="GET /portal/pedidos · /portal/pedidos/{public_number}", status="pronta", arquivo="33-portal-pedidos.html", anexo="§4.5",
+     tabelas=[("orders","core","public_number, customer_id, total_amount, notes"),
+              ("order_velaro_details","novo","reseller_id, batch_id, operational_status, payment_status, previsao, retirado_em, retirado_por"),
+              ("order_items","core","product_id, quantity, unit_price (snapshot imutável)"),
+              ("order_item_engravings","novo","enabled, text, date, chars, price"),
+              ("order_status_events","novo","from, to, actor_id, note, created_at — timeline")],
+     permissoes=["policy `ResellerScope`"],
+     regras=["**Campos separados** para Status do Pedido e Status do Pagamento — são independentes (§6).",
+             "Detalhe registra eventual gravação adicional.",
+             "Rota sempre por `public_number`; `orders.id` interno nunca é exposto."])
+
+tela(slug="portal-loja", n="2.6", titulo="Personalização da loja", **P,
+     rota="GET/PUT /portal/loja", status="pronta", arquivo="34-portal-loja.html", anexo="§4.6 · §4.9",
+     tabelas=[("reseller_stores","novo","name, slogan, logo_path, banner_path, slug, domain, phone, whatsapp, email, endereco, color_primary, color_secondary, color_background, color_text, is_active, published_at")],
+     permissoes=["policy `ResellerScope`"],
+     regras=["Estes campos são a **única fonte de pintura da vitrine** (`--shop-*`).",
+             "Pré-visualização antes de publicar.",
+             "Regra global de preço quando aplicável."])
+
+tela(slug="portal-precos", n="2.7", titulo="Preços e margens", **P,
+     rota="GET/PUT /portal/precos", status="pronta", arquivo="35-portal-precos.html", anexo="§4.7 · §6",
+     tabelas=[("reseller_price_rules","novo","scope (global|collection|product), collection_id, product_id, mode (multiplier|percent|manual|promo), value, rounding, priority, is_active")],
+     permissoes=["policy `ResellerScope`"],
+     regras=["O preço B2C é definido pelo revendedor: multiplicador, percentual, edição manual ou promoção.",
+             "Markup, arredondamento, regra por coleção/produto e exportação.",
+             "Resolução de preço em service dedicado (`ResellerPriceResolver`), com prioridade explícita."])
+
+tela(slug="portal-suporte", n="2.8", titulo="Suporte — chamados", **P,
+     rota="GET /portal/suporte · /portal/suporte/{code}", status="pronta", arquivo="36-portal-suporte.html", anexo="§4.8 · §5.12",
+     tabelas=[("support_tickets","novo","code, reseller_id, order_id, customer_id, subject, category, priority, status, assignee_id, channel"),
+              ("support_messages","novo","author_id, author_role (revendedor|velaro), body, is_internal_note"),
+              ("support_attachments","novo","original_name, path, size_bytes, mime")],
+     permissoes=["policy `ResellerScope`"],
+     regras=["Vinculável a pedido, financeiro, troca, defeito, prazo, ajuste, vitrine ou dúvida operacional.",
+             "Conversa é **Velaro ↔ revendedor**. O cliente final aparece só como pessoa vinculada ao pedido.",
+             "`is_internal_note` nunca é exposto ao revendedor."])
+
+tela(slug="portal-vitrine", n="2.9", titulo="Vitrine para clientes (white label)",
+     env="Vitrine white label", acesso="Público, no domínio/URL do revendedor",
+     rota="GET /loja/{slug} — ou domínio próprio", status="pronta", arquivo="03-vitrine-pdv.html",
+     anexo="§4.9 · §6",
+     tabelas=[("reseller_stores","novo","logo, cores, banner, domínio — pinta 100% da tela"),
+              ("products","core","catálogo exposto ao consumidor"),
+              ("product_attributes","novo","categorias, destaques, características técnicas"),
+              ("reseller_price_rules","novo","resolve o **preço B2C**")],
+     permissoes=["—"],
+     regras=["**Zero marca Velaro ou SVD** perante o consumidor final. Vazamento de marca é pendência de escopo (§9).",
+             "Preço exibido é o B2C do revendedor — nunca o custo B2B.",
+             "Retirada somente na loja."])
+
+tela(slug="portal-carrinho", n="2.10", titulo="Carrinho de compras (tablet / PDV)",
+     env="Vitrine white label", acesso="Público / vendedor da loja",
+     rota="GET /loja/{slug}/carrinho", status="pronta", arquivo="03-vitrine-pdv.html",
+     anexo="§4.10 · §4.11 · §6",
+     tabelas=[("orders + order_velaro_details","core/novo","nasce em `draft`, vinculado a reseller_id e customer_id"),
+              ("order_items","core","unit_price = snapshot do preço B2C no momento da seleção"),
+              ("order_item_engravings","novo","enabled, text, date, chars, price"),
+              ("settings","novo","gravacao.max_chars, gravacao.preco — parametrizáveis")],
+     permissoes=["—"],
+     regras=["Atendimento presencial em tablet. O carrinho totaliza e orienta pagamento **no caixa do revendedor**.",
+             "**Nenhum** processamento de Pix, cartão, link de pagamento ou recebimento do consumidor pela Velaro/SVD.",
+             "Gravação adicional: Sim/Não, texto, data, limite de caracteres parametrizável e valor **discriminado separadamente**."])
+
+tela(slug="portal-retirada", n="2.11", titulo="Pedido pronto para retirada",
+     env="Portal do Lojista", acesso="Parceiro Premium + notificação ao cliente",
+     rota="GET /portal/pedidos/{public_number} (estado) · job de notificação",
+     status="pronta", arquivo="38-portal-retirada.html", anexo="§4.12 · §6",
+     tabelas=[("order_velaro_details","novo","operational_status = pronto_retirada, arrived_at, retirado_em, retirado_por"),
+              ("notification_logs","novo","type = pedido_pronto, channel, recipient_type (revendedor|cliente), sent_at, status")],
+     permissoes=["policy `ResellerScope`"],
+     regras=["Chegada na loja dispara comunicação automática por WhatsApp e/ou e-mail **em nome do revendedor**.",
+             "Notifica o consumidor **e** informa o revendedor no Portal.",
+             "Confirmação de retirada disponível por pedido."])
+
+# ══════════════════════════ ETAPA 3 · PAINEL INTERNO VELARO ══════════════════════════
+M = dict(env="Painel Interno Velaro", acesso="Perfil Master — `is_admin` + gate `access-backend`")
+
+tela(slug="master-dashboard", n="3.1", titulo="Dashboard Master", **M,
+     rota="GET /backend", status="pronta", arquivo="04-painel-master.html", anexo="§5.1",
+     tabelas=[("agregações","—","pedidos, pré-cadastros, produção, pendências financeiras, NF, solicitações, suporte")],
+     permissoes=["`velaro.dashboard.view`"],
+     regras=["Visão consolidada da operação.",
+             "Fluxo do lote em destaque: recebimento → baixa → NF → pedidos aprovados → liberação."])
+
+tela(slug="master-clientes", n="3.2", titulo="Clientes (base consolidada)", **M,
+     rota="GET /backend/clientes · /backend/clientes/{id}", status="pronta", arquivo="50-master-clientes.html", anexo="§5.2",
+     tabelas=[("customers + customer_velaro_details","core/novo","sempre com `reseller_id` visível")],
+     permissoes=["`velaro.customers.view`","`velaro.customers.update`"],
+     regras=["Consulta da base de clientes finais **sempre com o revendedor responsável identificado**.",
+             "Detalhe permite: Ver pedidos · Ver revendedor · Editar cadastro.",
+             "**Não há** cadastro manual de cliente pelo Master como fluxo comercial padrão."])
+
+tela(slug="master-config", n="3.3", titulo="Configurações", **M,
+     rota="GET/PUT /backend/configuracoes", status="pronta", arquivo="51-master-config.html", anexo="§5.3",
+     tabelas=[("settings","novo","grupos: empresa, notificações, integrações, segurança, financeiro/fiscal, personalização, backup, parâmetros de pedido, meios de pagamento B2B"),
+              ("users / acl_*","core","usuários e permissões")],
+     permissoes=["`velaro.settings.manage`"],
+     regras=["Toda escrita gera `AuditLog`.",
+             "Credencial de integração cifrada em repouso, nunca exibida após salvar.",
+             "Parâmetros de lote (data de corte, vencimento) e de gravação moram aqui."])
+
+tela(slug="master-estoque", n="3.4", titulo="Estoque", **M,
+     rota="GET /backend/estoque", status="pronta", arquivo="52-master-estoque.html", anexo="§5.4 · §6",
+     tabelas=[("stock_items","novo","product_variant_id, atual, reservado, disponivel, minimo, reposicao"),
+              ("stock_movements","novo","type (entrada|saida|ajuste|reserva|producao), qty, before, after, reason, actor_id, order_id")],
+     permissoes=["`velaro.stock.view`","`velaro.stock.adjust`","`velaro.stock.request_production`"],
+     regras=["Controle por SKU/tamanho (aro). O estoque físico principal pertence à Velaro.",
+             "Ajuste manual, entrada/reabastecimento, solicitação de produção e histórico.",
+             "**Ajuste de estoque é ação sensível: exige log (§7).** `before`/`after` gravados no movimento."])
+
+tela(slug="master-financeiro", n="3.5", titulo="Financeiro B2B", **M,
+     rota="GET /backend/financeiro", status="pronta", arquivo="53-master-financeiro.html", anexo="§5.5 · §6",
+     tabelas=[("order_batches","novo","code, reseller_id, cut_date, due_date, status, total_amount, paid_at, shipped_at"),
+              ("payments","novo","method, amount, paid_at, status, external_id, receipt_path"),
+              ("invoices","novo","number, series, amount, issued_at, pdf_path, xml_path, provider")],
+     permissoes=["`velaro.finance.view`","`velaro.finance.reconcile`","`velaro.finance.issue_invoice`","`velaro.finance.release_shipment`"],
+     regras=["Fluxo obrigatório: **recebimento identificado → baixa financeira → NF emitida/enviada → pedidos aprovados → liberação para a remessa.**",
+             "A Velaro emite a NF da venda B2B ao lojista; o lojista emite a do consumidor final.",
+             "Baixa financeira e liberação logística são ações sensíveis: log obrigatório (§7).",
+             "Nenhuma remessa sai sem quitação confirmada do lote."])
+
+tela(slug="master-pedidos", n="3.6", titulo="Pedidos — ciclo completo", **M,
+     rota="GET /backend/pedidos · /backend/pedidos/{public_number}", status="pronta", arquivo="54-master-pedidos.html",
+     anexo="§5.6 · §6 · §7.2",
+     tabelas=[("orders","core","public_number, customer_id, total_amount"),
+              ("order_velaro_details","novo","reseller_id, batch_id, operational_status, payment_status, previsao, arrived_at, retirado_em, retirado_por"),
+              ("order_status_events","novo","timeline completa com ator e nota"),
+              ("order_batches","novo","confirmação de chegada/retirada **por lote inteiro**")],
+     permissoes=["`velaro.orders.view`","`velaro.orders.update_status`","`velaro.orders.confirm_pickup`","`velaro.orders.confirm_batch_pickup`"],
+     regras=["Estados: registrado → pagamento confirmado → produção em andamento → produção finalizada → em transporte → pronto para retirada → retirado.",
+             "**Status operacional é independente do status financeiro.**",
+             "Confirmação de chegada/retirada por pedido **e** por lote inteiro.",
+             "Campos e status de transporte já entram no escopo mesmo sem a API da transportadora (§7.2)."])
+
+tela(slug="master-produtos", n="3.7", titulo="Produtos — catálogo mestre", **M,
+     rota="GET /backend/produtos", status="pronta", arquivo="55-master-produtos.html", anexo="§5.7",
+     tabelas=[("products","core","name, slug, sku, description, price (B2B), is_active"),
+              ("product_attributes","novo","collection_id, category_id, material_id, finish_id, largura_mm, formato, permite_gravacao, gravacao_max_chars"),
+              ("product_variants","novo","sku, aro/tamanho, is_active"),
+              ("product_images","novo","path, position, is_primary"),
+              ("collections","novo","abas do protótipo — tabela própria, não enum"),
+              ("categories","novo","name, slug, parent_id"),
+              ("materials","novo","name, slug"),
+              ("finishes","novo","name, slug"),
+              ("product_revisions","novo","histórico de alterações")],
+     permissoes=["`velaro.products.view`","`velaro.products.manage`","`velaro.products.duplicate`","`velaro.products.deactivate`"],
+     regras=["Novo produto, SKU/referência, categoria, coleção, material, acabamento, largura, formato, aro, preço B2B, disponibilidade, gravação, imagens, status, duplicação, histórico, inativação.",
+             "Produto inativo não aparece para revendedores.",
+             "Mudança de preço **não** afeta pedido já criado — `unit_price` é snapshot."])
+
+tela(slug="master-promocoes", n="3.8", titulo="Promoções", **M,
+     rota="GET /backend/promocoes", status="pronta", arquivo="56-master-promocoes.html", anexo="§5.8",
+     tabelas=[("promotions","novo","code, name, type (desconto_progressivo|preco_especial|frete_gratis|desconto_fixo|lancamento), starts_at, ends_at, status (rascunho|agendada|ativa|pausada|encerrada), priority, show_badge, budget"),
+              ("promotion_rules","novo","tiers — acima de X → Y% de desconto"),
+              ("promotion_products","novo","pivot produto/coleção"),
+              ("promotion_audiences","novo","público-alvo e canais")],
+     permissoes=["`velaro.promotions.view`","`velaro.promotions.manage`"],
+     regras=["Criar, editar, pausar, duplicar e encerrar.",
+             "Período, produtos/regras, público-alvo, canais, condições, prioridade, aparência e pré-visualização.",
+             "Promoção B2B (Velaro → lojista) não se confunde com promoção do revendedor na vitrine."])
+
+tela(slug="master-relatorios", n="3.9", titulo="Relatórios", **M,
+     rota="GET /backend/relatorios", status="pronta", arquivo="57-master-relatorios.html", anexo="§5.9 · §7",
+     tabelas=[("report_schedules","novo","name, type, cron, recipients, format, is_active, last_run_at"),
+              ("report_exports","novo","type, filters (json), file_path, generated_by, generated_at")],
+     permissoes=["`velaro.reports.view`","`velaro.reports.export`","`velaro.reports.schedule`"],
+     regras=["Faturamento B2B, pedidos por status, estoque, financeiro, revendedores, produtos, clientes, inadimplência e indicadores operacionais.",
+             "Exportação e agendamento conforme previsto no protótipo.",
+             "Exportação pesada sempre via job — nunca síncrona no controller."])
+
+tela(slug="master-revendedores", n="3.10", titulo="Revendedores + cadastro manual", **M,
+     rota="GET /backend/revendedores · POST /backend/revendedores", status="pronta", arquivo="58-master-revendedores.html",
+     anexo="§5.10 · §2 · §7",
+     tabelas=[("resellers","novo","todos os campos empresariais + code, status, approved_at, approved_by"),
+              ("reseller_cnaes","novo","code, description, compatible"),
+              ("reseller_documents","novo","contrato social, doc do sócio, cartão CNPJ"),
+              ("reseller_verifications","novo","resultado da IA, score, checked_at")],
+     permissoes=["`velaro.resellers.view`","`velaro.resellers.create`","`velaro.resellers.approve`","`velaro.resellers.impersonate`"],
+     regras=["Gestão de ativos/inativos **e** cadastro manual.",
+             "O cadastro manual executa verificação por IA e permite **aprovar na própria tela**, sem passar pela fila de pré-cadastro.",
+             "**“Ver como revendedor”** exige permissão própria e gera registro em `audit_logs` (§2 e §7) — início e fim da sessão."])
+
+tela(slug="master-precadastro", n="3.11", titulo="Solicitações pré-cadastro", **M,
+     rota="GET /backend/pre-cadastros · /backend/pre-cadastros/{id}", status="pronta", arquivo="59-master-precadastro.html",
+     anexo="§5.11 · §3.7 · §3.8",
+     tabelas=[("resellers","novo","status, protocolo, observacoes_internas, rejection_reason"),
+              ("reseller_verifications","novo","cnpj_valido, empresa_ativa, cnaes_compativeis, documentacao_enviada, score, result (json), raw_payload"),
+              ("reseller_status_events","novo","histórico e justificativa de cada decisão")],
+     permissoes=["`velaro.prospects.view`","`velaro.prospects.approve`","`velaro.prospects.reject`","`velaro.prospects.request_info`"],
+     regras=["Fila das solicitações vindas do site público, com CNPJ, responsável, endereço, CNAEs, documentos e resultado da IA.",
+             "**A IA é triagem/pré-aprovação. A decisão final é humana** (§3.7) e fica registrada com justificativa.",
+             "Ações: Aprovar cadastro · Solicitar informações adicionais · Reprovar cadastro.",
+             "Aprovar/reprovar é ação sensível: log obrigatório (§7)."])
+
+tela(slug="master-suporte", n="3.12", titulo="Suporte — atendimento", **M,
+     rota="GET /backend/suporte · /backend/suporte/{code}", status="pronta", arquivo="60-master-suporte.html", anexo="§5.12",
+     tabelas=[("support_tickets","novo","code, reseller_id, order_id, customer_id, subject, category, priority, status, assignee_id"),
+              ("support_messages","novo","author_role, body, is_internal_note"),
+              ("support_attachments","novo","original_name, path, size_bytes")],
+     permissoes=["`velaro.support.view`","`velaro.support.reply`","`velaro.support.assign`","`velaro.support.resolve`"],
+     regras=["Atendimento aos chamados abertos pelos revendedores.",
+             "**A conversa é Velaro ↔ revendedor.** O cliente final aparece apenas como pessoa vinculada ao pedido e não participa.",
+             "Observação interna nunca é visível ao revendedor."])
+
+
+# ══════════════════════════ GERADOR DO mapa.html ══════════════════════════
+import html, re, collections
+
+MOCKNAV = """
+<style>
+  /* Barra de navegação dos mockups — auxiliar de revisão, não faz parte do produto. */
+  .mocknav { position: fixed; right: 16px; bottom: 16px; z-index: 999;
+    display: flex; align-items: center; gap: 4px; padding: 7px 9px; border-radius: 999px;
+    background: rgba(1,26,29,.94); border: 1px solid rgba(219,167,101,.34);
+    box-shadow: 0 10px 30px rgba(0,0,0,.30); backdrop-filter: blur(6px);
+    font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif; }
+  .mocknav > span { font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+    color: rgba(255,255,255,.42); padding: 0 6px 0 4px; }
+  .mocknav a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,.74); white-space: nowrap; }
+  .mocknav a:hover { background: rgba(255,255,255,.10); color: #fff; }
+  .mocknav a.is-on { background: var(--color-gold-500); color: #06110f; font-weight: 600; }
+  .mocknav a.map { border: 1px solid rgba(219,167,101,.40); color: var(--color-gold-300); }
+  .mocknav a.map:hover { background: rgba(219,167,101,.16); color: #fff; }
+  @media print { .mocknav { display: none; } }
+  @media (max-width: 620px) { .mocknav > span { display: none; } .mocknav a { padding: 5px 8px; font-size: 11px; } }
+</style>
+<nav class="mocknav" aria-label="Navegação entre os mockups">
+  <span>Velaro</span>
+  <a href="index.html">Índice</a>
+  <a href="01-site-publico.html">Site</a>
+  <a href="02-portal-lojista.html">Portal</a>
+  <a href="03-vitrine-pdv.html">Vitrine</a>
+  <a href="04-painel-master.html">Master</a>
+  <a class="map" href="mapa.html">Mapa · 31 telas</a>
+</nav>
+<script>
+(function(){
+  var f = (location.pathname.split('/').pop() || 'index.html');
+  var a = document.querySelector('.mocknav a[href="' + f + '"]');
+  if (a) a.classList.add('is-on');
+})();
+</script>
+"""
+
+ENV_ORDER = ["Transversal", "Site público", "Portal do Lojista",
+             "Vitrine white label", "Painel Interno Velaro"]
+ENV_META = {
+  "Transversal":          ("0", "Ponto único de entrada"),
+  "Site público":         ("1", "Captação e aprovação"),
+  "Portal do Lojista":    ("2", "Parceiro Premium"),
+  "Vitrine white label":  ("2", "Marca do revendedor"),
+  "Painel Interno Velaro":("3", "Perfil Master"),
+}
+ORIGEM_LABEL = {"core":"core","extensao":"extensão","novo":"novo","core/novo":"core + novo","—":"—"}
+
+def md(s):
+    """Negrito e código inline — o suficiente para o texto das regras."""
+    s = html.escape(s)
+    s = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s)
+    s = re.sub(r'`(.+?)`', r'<code>\1</code>', s)
+    return s
+
+def render():
+    por_env = collections.OrderedDict((e, []) for e in ENV_ORDER)
+    for t in T:
+        por_env[t["env"]].append(t)
+
+    # ---- sumário de tabelas novas ----
+    tabelas = {}
+    for t in T:
+        for nome, origem, campos in t["tabelas"]:
+            if origem in ("—",):
+                continue
+            e = tabelas.setdefault(nome, {"origem": origem, "telas": set(), "campos": set()})
+            e["telas"].add(t["n"])
+            e["campos"].add(campos)
+
+    nav = "".join(
+      f'<a href="#env-{i}"><b>Etapa {ENV_META[e][0]}</b>{html.escape(e)}'
+      f'<span>{len(por_env[e])} tela{"s" if len(por_env[e])>1 else ""}</span></a>'
+      for i, e in enumerate(ENV_ORDER) if por_env[e])
+
+    secoes = []
+    for i, e in enumerate(ENV_ORDER):
+        telas = por_env[e]
+        if not telas:
+            continue
+        cards = []
+        for t in telas:
+            pronta = t["status"] == "pronta"
+            badge = (f'<a class="pill pill--ok" href="{t["arquivo"]}">mockup pronto ↗</a>'
+                     if pronta else '<span class="pill">a desenhar</span>')
+            tbs = "".join(
+              f'<tr><td><code>{html.escape(n)}</code></td>'
+              f'<td><span class="orig orig--{o.split("/")[0]}">{ORIGEM_LABEL.get(o,o)}</span></td>'
+              f'<td class="campos">{md(c)}</td></tr>'
+              for n, o, c in t["tabelas"])
+            perms = "".join(f'<li>{md(p)}</li>' for p in t["permissoes"])
+            regras = "".join(f'<li>{md(r)}</li>' for r in t["regras"])
+            cards.append(f'''
+      <article class="tela" id="{t['slug']}">
+        <header class="tela__head">
+          <span class="tela__n">{t['n']}</span>
+          <div class="tela__id">
+            <h3>{html.escape(t['titulo'])}</h3>
+            <p class="tela__rota"><code>{html.escape(t['rota'])}</code></p>
+          </div>
+          <div class="tela__badges">{badge}<span class="pill pill--ghost">{html.escape(t['anexo'])}</span></div>
+        </header>
+        <p class="tela__acesso"><b>Acesso</b> {md(t['acesso'])}</p>
+        <div class="tela__body">
+          <div>
+            <h4>Tabelas e campos</h4>
+            <table class="tb"><tbody>{tbs}</tbody></table>
+          </div>
+          <div>
+            <h4>Permissões</h4><ul class="lst">{perms}</ul>
+            <h4 style="margin-top:18px">Regras críticas</h4><ul class="lst lst--rule">{regras}</ul>
+          </div>
+        </div>
+      </article>''')
+        secoes.append(f'''
+    <section class="env" id="env-{i}">
+      <header class="env__head">
+        <span class="env__n">Etapa {ENV_META[e][0]}</span>
+        <h2>{html.escape(e)}</h2>
+        <span class="env__sub">{ENV_META[e][1]} · {len(telas)} tela{"s" if len(telas)>1 else ""}</span>
+      </header>
+      {''.join(cards)}
+    </section>''')
+
+    linhas = "".join(
+      f'<tr><td><code>{html.escape(n)}</code></td>'
+      f'<td><span class="orig orig--{d["origem"].split("/")[0]}">{ORIGEM_LABEL.get(d["origem"],d["origem"])}</span></td>'
+      f'<td class="num">{len(d["telas"])}</td>'
+      f'<td class="campos">{", ".join(sorted(d["telas"]))}</td></tr>'
+      for n, d in sorted(tabelas.items(), key=lambda x: (x[1]["origem"] != "novo", x[0])))
+    novas = sum(1 for d in tabelas.values() if d["origem"] == "novo")
+
+    return f'''<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velaro · Mapa das 31 telas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="velaro-tokens.css">
+<link rel="stylesheet" href="velaro-ui.css">
+<style>
+  body {{ background: var(--color-gray-100); }}
+  .wrap {{ max-width: 1180px; margin: 0 auto; padding: 0 var(--space-6) 64px; }}
+
+  .top {{ background: var(--silk); color: rgba(255,255,255,.76); padding: var(--space-12) 0 var(--space-8); margin-bottom: var(--space-8); }}
+  .top .wrap {{ padding-bottom: 0; }}
+  .top h1 {{ font-family: var(--font-display); font-weight: 300; font-size: 40px; line-height: 1.1;
+    letter-spacing: -.03em; color: #fff; margin: var(--space-4) 0 0; }}
+  .top h1 b {{ font-weight: 500; color: var(--color-gold-300); }}
+  .top p {{ max-width: 74ch; margin: var(--space-4) 0 0; font-size: 15px; line-height: 25px; color: rgba(255,255,255,.70); }}
+  .crumbs {{ display: flex; gap: var(--space-3); flex-wrap: wrap; font-size: var(--text-sm); }}
+  .crumbs a {{ color: var(--color-gold-300); }}
+  .crumbs a:hover {{ color: #fff; }}
+
+  .stats {{ display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: var(--space-3); margin-top: var(--space-8); }}
+  .stat {{ padding: var(--space-4); border: 1px solid rgba(219,167,101,.26); border-radius: var(--radius-md); background: rgba(255,255,255,.03); }}
+  .stat b {{ display: block; font-family: var(--font-display); font-size: 30px; font-weight: 500;
+    letter-spacing: -.02em; color: #fff; font-variant-numeric: tabular-nums; }}
+  .stat span {{ font-size: var(--text-xs); color: var(--color-gold-300); }}
+
+  .jump {{ display: grid; grid-template-columns: repeat(auto-fit,minmax(190px,1fr)); gap: var(--space-3); margin-bottom: var(--space-8); }}
+  .jump a {{ display: grid; gap: 2px; padding: var(--space-4); background: var(--surface);
+    border: 1px solid var(--border); border-radius: var(--radius-md); }}
+  .jump a:hover {{ border-color: var(--color-gold-400); }}
+  .jump b {{ font-size: var(--text-xs); letter-spacing: .14em; text-transform: uppercase; color: var(--action-link); }}
+  .jump span {{ font-size: var(--text-xs); color: var(--ink-muted); }}
+
+  .env {{ margin-bottom: var(--space-12); }}
+  .env__head {{ display: flex; align-items: baseline; gap: var(--space-3); flex-wrap: wrap;
+    padding-bottom: var(--space-3); margin-bottom: var(--space-5); border-bottom: 2px solid var(--color-brand-900); }}
+  .env__n {{ font-size: var(--text-xs); font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+    color: #fff; background: var(--color-brand-900); padding: 4px 10px; border-radius: var(--radius-pill); }}
+  .env__head h2 {{ font-family: var(--font-display); font-weight: 500; font-size: 27px;
+    letter-spacing: -.02em; color: var(--ink); margin: 0; }}
+  .env__sub {{ font-size: var(--text-sm); color: var(--ink-muted); margin-left: auto; }}
+
+  .tela {{ background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6) var(--space-6); margin-bottom: var(--space-4); scroll-margin-top: 20px; }}
+  .tela:target {{ border-color: var(--color-gold-400); box-shadow: 0 0 0 4px rgba(219,167,101,.16); }}
+  .tela__head {{ display: flex; align-items: flex-start; gap: var(--space-4); }}
+  .tela__n {{ flex: none; min-width: 44px; height: 30px; padding: 0 10px; display: grid; place-items: center;
+    border-radius: var(--radius-sm); background: var(--color-gray-100); color: var(--ink-body);
+    font-size: var(--text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }}
+  .tela__id {{ flex: 1; min-width: 0; }}
+  .tela__id h3 {{ font-family: var(--font-display); font-weight: 500; font-size: 20px;
+    letter-spacing: -.015em; color: var(--ink); margin: 0; }}
+  .tela__rota {{ margin: 4px 0 0; font-size: var(--text-xs); color: var(--ink-muted); }}
+  .tela__rota code {{ background: none; padding: 0; }}
+  .tela__badges {{ display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }}
+  .pill {{ display: inline-block; padding: 4px 10px; border-radius: var(--radius-pill);
+    font-size: var(--text-xs); font-weight: 600; background: var(--color-gray-100); color: var(--ink-muted); }}
+  .pill--ok {{ background: var(--color-brand-900); color: var(--color-gold-300); }}
+  .pill--ok:hover {{ background: var(--color-brand-700); }}
+  .pill--ghost {{ background: none; border: 1px solid var(--border); color: var(--ink-muted); font-weight: 500; }}
+  .tela__acesso {{ margin: var(--space-4) 0 0; padding: 10px var(--space-3); border-radius: var(--radius-sm);
+    background: var(--surface-subtle); font-size: var(--text-sm); color: var(--ink-body); }}
+  .tela__acesso b {{ font-size: var(--text-xs); letter-spacing: .12em; text-transform: uppercase;
+    color: var(--ink-muted); margin-right: 8px; }}
+  .tela__body {{ display: grid; grid-template-columns: 1.25fr 1fr; gap: var(--space-6); margin-top: var(--space-5); }}
+  .tela__body > * {{ min-width: 0; }}
+  .tela h4 {{ font-size: var(--text-xs); font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink-muted); margin: 0 0 var(--space-2); }}
+
+  .tb {{ font-size: var(--text-sm); }}
+  .tb td {{ padding: 8px 10px 8px 0; border-bottom: 1px solid var(--border); vertical-align: top; }}
+  .tb tr:last-child td {{ border-bottom: 0; }}
+  .tb code {{ font-size: 12px; color: var(--ink); }}
+  .campos {{ color: var(--ink-muted); font-size: var(--text-xs); line-height: 18px; }}
+  .num {{ text-align: right; font-variant-numeric: tabular-nums; }}
+  .orig {{ display: inline-block; padding: 2px 8px; border-radius: var(--radius-pill);
+    font-size: 11px; font-weight: 600; white-space: nowrap; }}
+  .orig--novo {{ background: var(--color-gold-100); color: var(--color-gold-800); }}
+  .orig--extensao {{ background: var(--color-info-100); color: var(--color-info-700); }}
+  .orig--core {{ background: var(--color-success-100); color: var(--color-success-700); }}
+
+  .lst {{ margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: var(--text-sm); }}
+  .lst li {{ padding-left: 16px; position: relative; color: var(--ink-body); line-height: 20px; }}
+  .lst li::before {{ content: ""; position: absolute; left: 0; top: 8px; width: 5px; height: 5px;
+    border-radius: 50%; background: var(--color-gold-400); }}
+  .lst code {{ font-size: 12px; background: var(--color-gray-100); padding: 1px 5px; border-radius: 4px; }}
+  .lst--rule li::before {{ background: var(--color-brand-500); }}
+
+  .resumo {{ background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: var(--space-6); }}
+  .resumo h2 {{ font-family: var(--font-display); font-weight: 500; font-size: 24px; letter-spacing: -.02em;
+    color: var(--ink); margin: 0 0 var(--space-2); }}
+
+  @media (max-width: 900px) {{ .tela__body {{ grid-template-columns: 1fr; }} .tela__badges {{ justify-content: flex-start; }} }}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="wrap">
+    <p class="crumbs"><a href="index.html">← Mockups</a> <span style="opacity:.4">·</span>
+      <a href="01-site-publico.html">Site</a> <a href="02-portal-lojista.html">Portal</a>
+      <a href="03-vitrine-pdv.html">Vitrine</a> <a href="04-painel-master.html">Master</a></p>
+    <h1>Mapa das <b>31 telas</b></h1>
+    <p>Rota, perfil de acesso, tabelas e campos, permissões e regras críticas — tela a tela.
+       Derivado do Anexo I, do Plano de Negócio e dos protótipos aprovados. Este mapa não depende do
+       layout: ele diz o que cada tela precisa existir no banco e na ACL, independente de como for desenhada.
+       Cada tela tem mockup navegável e documentação própria em <code>docs/telas/</code>.</p>
+    <div class="stats">
+      <div class="stat"><b>31</b><span>telas no escopo</span></div>
+      <div class="stat"><b>31</b><span>mockups prontos</span></div>
+      <div class="stat"><b>{novas}</b><span>tabelas novas</span></div>
+      <div class="stat"><b>4</b><span>ambientes + login</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <nav class="jump">{nav}</nav>
+  {''.join(secoes)}
+
+  <section class="resumo" id="tabelas">
+    <h2>Resumo — todas as tabelas envolvidas</h2>
+    <p class="lede" style="margin-bottom:var(--space-5)">
+      <span class="orig orig--novo">novo</span> nasce no módulo Velaro ·
+      <span class="orig orig--extensao">extensão</span> acrescenta ao core sem alterá-lo ·
+      <span class="orig orig--core">core</span> já existe no scaffold.
+      Nenhuma tabela do núcleo é mutada: o domínio Velaro entra em tabelas 1:1 e tabelas próprias.
+    </p>
+    <table class="table">
+      <thead><tr><th>Tabela</th><th>Origem</th><th class="cell-num">Telas</th><th>Aparece em</th></tr></thead>
+      <tbody>{linhas}</tbody>
+    </table>
+  </section>
+</div>
+{MOCKNAV}</body>
+</html>'''
+
+if __name__ == "__main__":
+    open("mapa.html", "w").write(render())
+    print(f"mapa.html gerado — {len(T)} telas")

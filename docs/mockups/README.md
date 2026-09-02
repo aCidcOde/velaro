@@ -6,14 +6,18 @@ tela a tela (campo de banco, permissão, ambiente).
 Servidor local: `php -S 127.0.0.1:8010 -t docs/mockups`.
 Índice: <http://localhost:8010/index.html>
 
-| # | Arquivo | Ambiente | Tela | Acesso |
-|---|---------|----------|------|--------|
-| 1 | `01-site-publico.html` | Site público | Página Inicial B2B | Sem login |
-| 2 | `02-portal-lojista.html` | Portal do Lojista | Dashboard do Lojista | Parceiro Premium aprovado |
-| 3 | `03-vitrine-pdv.html` | Vitrine white label + PDV | Vitrine + Carrinho (tablet) | Público, na URL do revendedor |
-| 4 | `04-painel-master.html` | Painel Interno Velaro | Dashboard Master | Equipe Velaro |
-| 5 | `05-tipografia.html` | — | Comparativo de tipografia (4 opções) | — |
-| 6 | `06-mapa-inputs.html` | Design system | Mapa visual de inputs e estados | — |
+**31 telas construídas, todas navegáveis.** Índice completo em `index.html`; mapa consolidado em `mapa.html`;
+documentação por tela em [`docs/telas/`](../telas/README.md).
+
+| Etapa | Ambiente | Telas | Arquivos |
+|-------|----------|-------|----------|
+| 0 | Transversal | 1 | `20-login` |
+| 1 | Site público | 7 | `01-site-publico` · `10-site-sobre` · `11-site-catalogo` · `12-site-cadastro` · `13-site-enviada` · `14-site-status` · `15-site-aprovado` |
+| 2 | Portal do Lojista | 9 | `02-portal-lojista` · `30-portal-catalogo` · `31-portal-clientes` · `32-portal-financeiro` · `33-portal-pedidos` · `34-portal-loja` · `35-portal-precos` · `36-portal-suporte` · `38-portal-retirada` |
+| 2 | Vitrine white label | 2 | `03-vitrine-pdv` (vitrine + carrinho PDV) · `37-portal-vitrine` (gestão) |
+| 3 | Painel Interno Velaro | 12 | `04-painel-master` · `50-master-clientes` · `51-master-config` · `52-master-estoque` · `53-master-financeiro` · `54-master-pedidos` · `55-master-produtos` · `56-master-promocoes` · `57-master-relatorios` · `58-master-revendedores` · `59-master-precadastro` · `60-master-suporte` |
+
+Além dessas: `05-tipografia` (registro da decisão de fonte) e `mapa` (spec das 31 telas).
 
 Arquivos do sistema visual:
 
@@ -21,9 +25,26 @@ Arquivos do sistema visual:
 - `velaro-ui.css` — componentes base derivados dos tokens. Nenhum valor literal de cor.
 - `06-mapa-inputs.html` — prancha visual dos campos, controles, estados e composições.
 - `mapa-de-inputs.md` — regras visuais resumidas da prancha; sem modelagem funcional.
-- `velaro-fonts.css` — as 4 direções avaliadas. **Usado apenas por `05-tipografia.html`**,
-  como registro da decisão. Os 4 ambientes já carregam só o par escolhido.
-- `_gen_rings.py` — gerador dos placeholders de produto. Ver seção 3.
+- `velaro-screens.css` — padrões que se repetem nas 31 telas: filtros, formulário, drawer,
+  timeline, stepper, abas, toggle, checklist, tabela, gráfico.
+- `velaro-fonts.css` — as 4 direções tipográficas avaliadas. **Usado apenas por `05-tipografia.html`**,
+  como registro da decisão.
+
+Fontes de geração (não são entregáveis — são o como):
+
+| Arquivo | Papel |
+|---------|-------|
+| `_notas.md` | Transcrição literal, campo a campo, das 30 telas do protótipo. Base de tudo. |
+| `_ui.py` | Biblioteca de componentes: shells dos 4 ambientes + 20 blocos reutilizáveis. |
+| `_gen_rings.py` | Placeholders de aliança em SVG, por acabamento. |
+| `_build_site.py` · `_build_portal.py` · `_build_master.py` | Geram as telas. |
+| `_mapa.py` | Dados das 31 telas → `mapa.html`. |
+| `_build_docs.py` | Gera `docs/telas/*.md` a partir de `_mapa.py` + `_notas.md`. |
+
+```bash
+python3 _gen_rings.py && python3 _build_site.py && python3 _build_portal.py \
+  && python3 _build_master.py && python3 _mapa.py && python3 _build_docs.py
+```
 
 ---
 

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velaro · Entrar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="velaro-tokens.css">
+<link rel="stylesheet" href="velaro-ui.css">
+<link rel="stylesheet" href="velaro-screens.css">
+</head>
+<body class="site">
+
+<div class="loginwrap">
+  <div class="loginaside">
+    <div class="row" style="gap:12px"><svg width="38" height="38" viewBox="0 0 40 40" fill="none"><path d="M6 9h28l-14 22z" stroke="var(--color-gold-300)" stroke-width="1.6" stroke-linejoin="round"/><path d="M13 9l7 11 7-11M6 9l14 8 14-8" stroke="var(--color-gold-400)" stroke-width="1.1"/></svg><span style="display:grid;line-height:1"><strong style="font-family:var(--font-display);font-size:24px;letter-spacing:.30em;color:#fff;font-weight:400">VELARO</strong><small style="font-size:10px;letter-spacing:.34em;color:var(--color-gold-400);margin-top:4px">ALIANÇAS</small></span></div>
+    <div>
+      <h1 class="display-md" style="color:#fff">Um login.<br>O ambiente certo.</h1>
+      <p class="lede" style="color:rgba(255,255,255,.7);margin-top:var(--space-4)">
+        O mesmo ponto de entrada identifica o perfil autorizado e direciona o usuário ao ambiente correspondente.</p>
+    </div>
+    <div class="routerbox">
+      <span class="eyebrow" style="color:var(--color-gold-300)">Roteamento por perfil</span>
+      <div class="stack" style="margin-top:var(--space-3)"><div class="routerow"><span class="chip chip--brand">Perfil Master</span><svg class="ic" style="transform:rotate(90deg);color:var(--ink-muted)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg><code>/backend</code><small>Equipe Velaro · exige is_admin + gate access-backend</small></div><div class="routerow"><span class="chip chip--ok">Parceiro Premium</span><svg class="ic" style="transform:rotate(90deg);color:var(--ink-muted)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg><code>/portal</code><small>Revendedor aprovado · tudo escopado por reseller_id</small></div><div class="routerow"><span class="chip chip--warn">Pré-cadastro</span><svg class="ic" style="transform:rotate(90deg);color:var(--ink-muted)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg><code>/solicitacao/{protocolo}</code><small>Acesso limitado ao acompanhamento da própria solicitação</small></div><div class="routerow"><span class="chip chip--danger">Reprovado / inativo</span><svg class="ic" style="transform:rotate(90deg);color:var(--ink-muted)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg><code>—</code><small>Não autentica</small></div></div>
+    </div>
+    <p class="muted" style="font-size:var(--text-xs);color:rgba(255,255,255,.5)">
+      O cliente final não possui login. Ele existe apenas como cliente vinculado à carteira do Parceiro Premium.</p>
+  </div>
+  <div class="loginmain">
+    <div class="card" style="width:100%;max-width:420px">
+      <h2 class="title">Entrar</h2>
+      <p class="lede" style="margin:6px 0 var(--space-5)">Acesse com o e-mail e a senha do seu cadastro.</p>
+      <div class="fgrid fgrid--2"><div class="field" style="grid-column:span 2"><label>E-mail<i class="req">*</i></label><span class="input-fake">seuemail@exemplo.com.br</span></div><div class="field" style="grid-column:span 2"><label>Senha<i class="req">*</i></label><span class="input-fake">••••••••</span></div></div>
+      <div class="spread" style="margin-top:var(--space-4)">
+        <span class="checkline"><span class="cbox"></span>Manter conectado</span>
+        <a class="link-gold" href="mapa.html#login">Esqueci minha senha</a>
+      </div>
+      <a class="btn btn--primary" style="width:100%;margin-top:var(--space-5)" href="02-portal-lojista.html">Entrar</a>
+      <div class="divider" style="margin:var(--space-5) 0"></div>
+      <a class="btn btn--secondary" style="width:100%" href="mapa.html#login"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18a15 15 0 010-18"/></svg> Entrar com Google</a>
+      <p class="muted" style="text-align:center;margin-top:var(--space-5);font-size:var(--text-sm)">
+        Ainda não é parceiro? <a class="link-gold" href="12-site-cadastro.html">Cadastre-se como lojista</a></p>
+      <p class="notice notice--info"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg><span>Autenticação em duas etapas disponível. Todo login entra em <code>audit_logs</code> (Anexo I §7).</span></p>
+    </div>
+  </div>
+</div>
+
+<nav class="mocknav" aria-label="Navegação entre os mockups">
+  <span>Velaro</span>
+  <a href="index.html">Índice</a>
+  <a href="01-site-publico.html">Site</a>
+  <a href="02-portal-lojista.html">Portal</a>
+  <a href="03-vitrine-pdv.html">Vitrine</a>
+  <a href="04-painel-master.html">Master</a>
+  <a class="map" href="mapa.html">Mapa · 31 telas</a>
+</nav>
+<script>
+(function(){
+  var f = (location.pathname.split('/').pop() || 'index.html');
+  var a = document.querySelector('.mocknav a[href="' + f + '"]');
+  if (a) a.classList.add('is-on');
+})();
+</script>
+</body>
+</html>
