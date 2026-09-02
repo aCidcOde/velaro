@@ -1,0 +1,110 @@
+@layer components {
+    .panel-auth-shell {
+        @apply relative min-h-screen bg-white dark:bg-gray-950 lg:grid lg:grid-cols-2;
+    }
+
+    .panel-auth-aside {
+        @apply relative hidden overflow-hidden bg-gray-900 text-white lg:flex;
+    }
+
+    .panel-auth-aside::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(circle at 18% 18%, rgba(117, 146, 255, 0.24), transparent 34%),
+            radial-gradient(circle at 82% 12%, rgba(70, 95, 255, 0.28), transparent 30%),
+            linear-gradient(155deg, #111827 0%, #161950 100%);
+    }
+
+    .panel-auth-aside::after {
+        content: "";
+        position: absolute;
+        inset: 32px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 28px;
+        pointer-events: none;
+    }
+
+    .panel-auth-aside__inner {
+        @apply relative z-10 flex min-h-screen w-full flex-col justify-between gap-10 px-10 py-10 xl:px-16;
+    }
+
+    .panel-auth-main {
+        @apply flex min-h-screen items-center justify-center px-6 py-8 sm:px-10;
+    }
+
+    .panel-auth-card {
+        @apply w-full max-w-md space-y-8;
+    }
+
+    .panel-auth-back {
+        @apply inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300;
+    }
+
+    .panel-auth-eyebrow {
+        @apply inline-flex items-center gap-2 rounded-full bg-brand-50 px-3 py-1 text-theme-xs font-semibold uppercase tracking-[0.18em] text-brand-700 dark:bg-brand-500/15 dark:text-brand-300;
+    }
+
+    .panel-auth-title {
+        @apply mt-4 text-title-sm font-semibold text-gray-900 dark:text-white sm:text-title-md;
+    }
+
+    .panel-auth-copy {
+        @apply mt-2 text-sm leading-7 text-gray-500 dark:text-gray-400;
+    }
+
+    .panel-auth-social-grid {
+        @apply grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5;
+    }
+
+    .panel-auth-social-btn {
+        @apply inline-flex items-center justify-center gap-3 rounded-xl bg-gray-100 px-5 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-200 hover:text-gray-900 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10;
+    }
+
+    .panel-auth-divider {
+        @apply relative py-1;
+    }
+
+    .panel-auth-divider::before {
+        content: "";
+        @apply absolute inset-x-0 top-1/2 border-t border-gray-200 dark:border-gray-800;
+    }
+
+    .panel-auth-divider span {
+        @apply relative mx-auto block w-fit bg-white px-4 text-sm text-gray-400 dark:bg-gray-950;
+    }
+
+    .panel-auth-field {
+        @apply grid gap-2;
+    }
+
+    .panel-auth-field label {
+        @apply text-sm font-medium text-gray-700 dark:text-gray-400;
+    }
+
+    .panel-auth-input {
+        @apply h-11 w-full rounded-xl border border-gray-300 bg-white px-4 text-sm text-gray-800 shadow-theme-xs outline-hidden transition placeholder:text-gray-400 focus:border-brand-300 focus:ring-4 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-brand-700;
+    }
+
+    .panel-auth-link {
+        @apply text-sm font-medium text-brand-500 transition hover:text-brand-600 dark:text-brand-300 dark:hover:text-brand-200;
+    }
+
+    .panel-auth-showcase-grid {
+        @apply grid gap-4 md:grid-cols-2;
+    }
+
+    .panel-auth-note {
+        @apply rounded-2xl border border-white/10 bg-white/6 p-5 backdrop-blur;
+    }
+
+    .panel-auth-note h2 {
+        @apply text-lg font-semibold text-white;
+    }
+
+    .panel-auth-note p,
+    .panel-auth-note li {
+        @apply mt-2 text-sm leading-7 text-white/72;
+    }
+}

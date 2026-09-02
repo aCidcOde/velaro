@@ -1,0 +1,16 @@
+# [Modulo: raiz do projeto]
+# @Author: André Gomes ( @acidcode )
+# @since 2026-03-02
+# Configuracao base do PHPStan/Larastan para gate estatico pre-deploy.
+
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+    paths:
+        - app
+    treatPhpDocTypesAsCertain: false
+    reportUnmatchedIgnoredErrors: false
+    tmpDir: storage/framework/cache/phpstan

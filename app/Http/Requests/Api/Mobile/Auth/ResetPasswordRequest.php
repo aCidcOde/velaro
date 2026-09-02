@@ -1,0 +1,39 @@
+<?php
+
+/*
+[App/Http/Requests/Api/Mobile/Auth]
+@Author: André Gomes ( @acidcode )
+@since 2026-02-09
+Valida payload de redefinicao de senha da API mobile.
+*/
+
+namespace App\Http\Requests\Api\Mobile\Auth;
+
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Foundation\Http\FormRequest;
+
+class ResetPasswordRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return [
+            'email' => ['required', 'email', 'max:255'],
+            'token' => ['required', 'string'],
+            'password' => ['required', 'string', 'confirmed', 'min:8'],
+            'password_confirmation' => ['required', 'string', 'min:8'],
+        ];
+    }
+}

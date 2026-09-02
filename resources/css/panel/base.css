@@ -1,0 +1,76 @@
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+
+    button:not(:disabled),
+    [role="button"]:not(:disabled) {
+        cursor: pointer;
+    }
+
+    html {
+        color-scheme: light;
+    }
+
+    html.dark {
+        color-scheme: dark;
+    }
+
+    body.panel-interface {
+        min-height: 100vh;
+        background: var(--color-gray-50);
+        color: var(--color-gray-900);
+        font-family: var(--font-sans);
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .dark body.panel-interface {
+        background: var(--color-gray-950);
+        color: rgba(255, 255, 255, 0.9);
+    }
+
+    body.panel-interface h1,
+    body.panel-interface h2,
+    body.panel-interface h3,
+    body.panel-interface h4,
+    body.panel-interface h5,
+    body.panel-interface h6 {
+        font-family: var(--font-display);
+        letter-spacing: -0.03em;
+    }
+
+    body.panel-interface a {
+        text-decoration: none;
+    }
+}
+
+@utility no-scrollbar {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+@utility custom-scrollbar {
+    &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(152, 162, 179, 0.55);
+        border-radius: 999px;
+    }
+}

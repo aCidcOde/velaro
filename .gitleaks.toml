@@ -1,0 +1,23 @@
+# [Modulo: raiz do projeto]
+# Configuracao do gitleaks para o gate 6 (scan de secrets) do Velaro.
+# Ver docs/guidelines/112-agente-deploy-gates.md
+
+title = "velaro gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Ignora placeholders de variaveis de ambiente e fixtures de teste."
+
+regexes = [
+  # placeholders vazios do .env.example
+  '''^[A-Z0-9_]*(KEY|TOKEN|SECRET|PASSWORD)=$''',
+]
+
+paths = [
+  # documentacao usa exemplos ilustrativos, nunca credencial real
+  '''^docs/''',
+  # fixtures de teste (senhas ficticias). Credencial real em teste e bug, nao excecao.
+  '''^tests/''',
+]
