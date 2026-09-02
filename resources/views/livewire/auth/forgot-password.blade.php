@@ -1,4 +1,4 @@
-<x-layouts.auth :title="__('Recuperar senha | CodaFácil')">
+<x-layouts.auth :title="__('Recuperar senha') . ' | ' . config('app.name')">
     <div class="flex flex-col gap-6">
         <x-auth-header :title="__('Esqueceu sua senha?')" :description="__('Informe seu e-mail para receber o link de redefinição')" />
 

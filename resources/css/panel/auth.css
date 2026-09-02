@@ -11,17 +11,17 @@
         content: "";
         position: absolute;
         inset: 0;
+        /* Cores literais removidas: a lateral agora usa a seda esmeralda da marca. */
         background:
-            radial-gradient(circle at 18% 18%, rgba(117, 146, 255, 0.24), transparent 34%),
-            radial-gradient(circle at 82% 12%, rgba(70, 95, 255, 0.28), transparent 30%),
-            linear-gradient(155deg, #111827 0%, #161950 100%);
+            radial-gradient(circle at 18% 18%, rgba(219, 167, 101, 0.16), transparent 36%),
+            var(--velaro-silk);
     }
 
     .panel-auth-aside::after {
         content: "";
         position: absolute;
         inset: 32px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(219, 167, 101, 0.22);
         border-radius: 28px;
         pointer-events: none;
     }

@@ -1,4 +1,4 @@
-<x-layouts.auth :title="__('Criar conta | CodaFácil')">
+<x-layouts.auth :title="__('Criar conta') . ' | ' . config('app.name')">
     <div class="flex flex-col gap-6">
 
         <x-auth-header :title="__('Crie sua conta')" :description="__('Preencha seus dados para começar a usar o sistema')" />

@@ -11,7 +11,7 @@
         Se você não reconhece essa alteração, fale com nossa equipe imediatamente.
     </p>
     <p style="margin: 0;">
-        <a href="{{ route('user-password.edit') }}" style="display: inline-block; background: #111827; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 999px; font-weight: 600;">
+        <a href="{{ route('user-password.edit') }}" style="display: inline-block; background: #0e5b58; color: #ffffff; text-decoration: none; padding: 10px 18px; border-radius: 999px; font-weight: 600;">
             Revisar configurações
         </a>
     </p>

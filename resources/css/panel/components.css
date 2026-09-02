@@ -200,11 +200,11 @@
     }
 
     .panel-line-chart__area {
-        fill: rgba(70, 95, 255, 0.16);
+        fill: color-mix(in srgb, var(--color-brand-500) 16%, transparent);
     }
 
     .dark .panel-line-chart__area {
-        fill: rgba(117, 146, 255, 0.18);
+        fill: color-mix(in srgb, var(--color-brand-300) 18%, transparent);
     }
 
     .panel-line-chart__line {

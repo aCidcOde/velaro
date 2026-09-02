@@ -5,7 +5,21 @@
 - Identidade visual Velaro consolidada e aprovada para os quatro ambientes da plataforma B2B.
 - Todas as telas do escopo contratado desenhadas, navegáveis e validadas em desktop, tablet e mobile.
 - Documentação por tela com campos, permissões, regras de negócio e critérios de aceite.
-- Sistema de design registrado como referência única para a implementação funcional.
+- Sistema de design registrado como referência única e já aplicado à aplicação em funcionamento.
+
+### 2026-09-02 · FEAT · Identidade visual aplicada à aplicação
+
+**Resumo:** A identidade aprovada saiu da prancheta e passou a valer no produto em
+funcionamento. Login, painéis, site e comunicações transacionais agora falam a mesma
+língua visual da marca.
+
+**O que foi feito:** A paleta e a tipografia aprovadas foram aplicadas ao sistema, de
+forma que todos os componentes já existentes passassem a exibir a marca sem precisar
+ser refeitos. As cores que estavam escritas diretamente nas telas, e por isso escapavam
+do sistema, foram localizadas e substituídas — incluindo a lateral do acesso, a área dos
+gráficos, o site institucional e os e-mails automáticos. O contraste foi medido par a par
+nos dois temas e atende ao critério de acessibilidade adotado. O nome da marca deixou de
+estar fixo nos títulos das telas de acesso e passou a vir da configuração do sistema.
 
 ### 2026-09-02 · FEAT · Design system e telas da plataforma B2B
 
@@ -401,6 +415,7 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 | 10 | changelog atualizado | 🟢 este bloco |
 | — | `php artisan route:list --except-vendor` | 🟢 85 rotas |
 | — | `php artisan migrate --pretend` | 🟢 nothing to migrate |
+| — | `npm run build` | 🟢 build concluído |
 
 **📊 Total de testes**
 
@@ -408,22 +423,22 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 
 **🛡️ Validação das demais gates**
 
-- 🟢 Todas as telas do escopo navegáveis entre si — 942 destinos verificados, nenhum quebrado
-- 🟢 Telas inspecionadas em desktop, tablet e mobile, sem rolagem horizontal da página
-- 🟢 Contraste conferido nos dois temas; a cor de ação muda conforme a superfície para atender AA
-- 🟢 Ambiente com a marca do revendedor auditado: nenhuma referência à marca da fábrica
+- 🟢 Contraste medido par a par: 12 combinações em uso aprovadas nos dois temas
+- 🟢 Identidade verificada na aplicação em execução, em tema claro e escuro
+- 🟢 Cores fixas fora do sistema de design eliminadas das telas, do site e dos e-mails
+- 🟢 Todas as telas do escopo navegáveis entre si — 942 destinos verificados
 - 🟢 Nenhuma migration alterada, criada ou órfã nesta entrega
-- 🟢 Núcleo compartilhado preservado: a entrega não altera o domínio base do scaffold
+- 🟢 Núcleo compartilhado preservado: os componentes existentes herdaram a marca sem reescrita
 
 **📈 Métricas do sistema**
 
 - 🔵 Arquivos rastreados: 788
-- 🔵 Linhas rastreadas: 156.628
+- 🔵 Linhas rastreadas: 156.811
 - ⚪ Release anterior de referência: N/A (`1.1` é a baseline da série)
 - ⚪ Arquivos da release anterior: N/A
 - ⚪ Linhas da release anterior: N/A
 - ⚪ Aumento de arquivos vs release anterior: N/A
 - ⚪ Aumento de linhas vs release anterior: N/A
-- 🔵 Novos commits da release: 3 (incluindo esta entrega)
+- 🔵 Novos commits da release: 4 (incluindo esta entrega)
 
 **Status final: 🟢 APROVADO**

@@ -1,7 +1,7 @@
 @import "../vendor/html5up-solid-state/assets/css/main.css";
 
 body.solid-state-app {
-    background-color: #1b2031;
+    background-color: #012227;
 }
 
 #header h1 a.app-brand {
@@ -18,8 +18,8 @@ body.solid-state-app {
     width: 2.85rem;
     height: 2.85rem;
     border-radius: 999px;
-    background: linear-gradient(135deg, #465fff 0%, #6f86ff 100%);
-    box-shadow: 0 12px 28px -18px rgba(70, 95, 255, 0.85);
+    background: linear-gradient(135deg, #a97c3c 0%, #c4954b 100%);
+    box-shadow: 0 12px 28px -18px rgba(169, 124, 60, 0.85);
 }
 
 .app-brand-badge img {
@@ -182,3 +182,121 @@ body.solid-state-app {
         grid-template-columns: 1fr;
     }
 }
+
+/* =========================================================================
+   Marca Velaro sobre o template herdado (html5up Solid State).
+
+   Override pontual: o template vem com uma família azul-periwinkle que não é
+   da marca. Aqui as superfícies visíveis passam para a esmeralda e o dourado,
+   espelhando os tokens de `panel/theme.css`. Não usamos custom property porque
+   o vendor é importado antes e a cascata precisa resolver no mesmo nível.
+
+   Provisório por natureza: o site público será substituído pelas 7 telas
+   desenhadas em `docs/mockups/` — ver `docs/telas/README.md`.
+   ========================================================================= */
+
+/* Sobreposição do banner: azul-ardósia → esmeralda profunda */
+#banner,
+#wrapper > .wrapper.style1.fullscreen,
+body.solid-state-app #banner {
+    background-image:
+        linear-gradient(to top, rgba(1, 34, 39, 0.86), rgba(1, 34, 39, 0.86)),
+        url("../vendor/html5up-solid-state/images/bg.jpg");
+}
+
+/* Faixas alternadas: escala periwinkle → escala esmeralda */
+.wrapper.spotlight        { background-color: #073334; }
+.wrapper.spotlight.style2 { background-color: #04292c; }
+.wrapper.spotlight.style3 { background-color: #012227; }
+.wrapper.spotlight.style4 { background-color: #0b4a49; }
+.wrapper.spotlight.style5 { background-color: #001a1d; }
+
+/* Ação primária: dourado, como manda a regra "Gold On Dark" do DESIGN.md */
+input[type="submit"].primary,
+input[type="reset"].primary,
+input[type="button"].primary,
+button.primary,
+.button.primary {
+    background-color: #a97c3c;
+}
+
+input[type="submit"].primary:hover,
+input[type="reset"].primary:hover,
+input[type="button"].primary:hover,
+button.primary:hover,
+.button.primary:hover {
+    background-color: #c4954b;
+}
+
+input[type="submit"].primary:active,
+input[type="reset"].primary:active,
+input[type="button"].primary:active,
+button.primary:active,
+.button.primary:active {
+    background-color: #8d6531;
+}
+
+#menu .links li a:hover,
+ul.pagination li > .page.active {
+    background-color: #0e5b58;
+}
+
+/* Cunhas diagonais entre seções: o template desenha triângulos em SVG inline com a
+   cor no próprio data URI, então a troca precisa reemitir o SVG inteiro. */
+.wrapper:before, .wrapper:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%23012227%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.style2:before, .wrapper.style2:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%2304292c%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.style3:before, .wrapper.style3:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%23073334%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.style4:before, .wrapper.style4:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%230b4a49%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.style5:before, .wrapper.style5:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%230e5b58%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.spotlight:before, .wrapper.spotlight:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%23073334%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.spotlight.style2:before, .wrapper.spotlight.style2:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%2304292c%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.spotlight.style3:before, .wrapper.spotlight.style3:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%23012227%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.spotlight.style4:before, .wrapper.spotlight.style4:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%230b4a49%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.spotlight.style5:before, .wrapper.spotlight.style5:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%23001a1d%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.style6:before, .wrapper.style6:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%230e5b58%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.spotlight.style6:before, .wrapper.spotlight.style6:after {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' preserveAspectRatio='none'%3E%3Cpolygon points='0,100 100,0 100,100' style='fill:%23073334%3B' /%3E%3C/svg%3E");
+}
+
+.wrapper.spotlight.style6 { background-color: #0b4a49; }
+
+/* Fundo das faixas neutras (sem .spotlight): escala ardósia → escala esmeralda */
+.wrapper        { background-color: #012227; }
+.wrapper.style2 { background-color: #04292c; }
+.wrapper.style3 { background-color: #073334; }
+.wrapper.style4 { background-color: #0b4a49; }
+.wrapper.style5 { background-color: #0e5b58; }
+.wrapper.style6 { background-color: #0d4442; }

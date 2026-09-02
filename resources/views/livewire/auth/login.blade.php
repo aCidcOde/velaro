@@ -1,4 +1,4 @@
-<x-layouts.auth :title="__('Login | CodaFácil')">
+<x-layouts.auth :title="__('Login') . ' | ' . config('app.name')">
     <div class="space-y-8">
         <a href="{{ route('home') }}" class="panel-auth-back">
             <i class="ti ti-arrow-left text-base"></i>
