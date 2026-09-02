@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velaro · Mockups dos 4 ambientes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="velaro-tokens.css">
+<link rel="stylesheet" href="velaro-ui.css">
+<style>
+  body { background: var(--color-brand-900); color: rgba(255,255,255,.72); }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: var(--space-12) var(--space-6); }
+  .head { display: flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-8); }
+  .cards { display: grid; grid-template-columns: repeat(2,1fr); gap: var(--space-4); }
+  .env { display: grid; gap: var(--space-3); padding: var(--space-6); border-radius: var(--radius-lg);
+    border: 1px solid rgba(215,166,93,.24); background: rgba(255,255,255,.02); }
+  .env:hover { border-color: var(--color-gold-400); }
+  .env h2 { margin: 0; font-family: var(--font-display); font-size: 23px; color: #fff; font-weight: 500; }
+  .env p { margin: 0; font-size: var(--text-sm); line-height: 21px; color: rgba(255,255,255,.62); }
+  .env dl { display: grid; grid-template-columns: auto 1fr; gap: 4px var(--space-3); margin: 0; font-size: var(--text-xs); }
+  .env dt { color: var(--color-gold-400); font-weight: 600; }
+  .env dd { margin: 0; color: rgba(255,255,255,.62); }
+  .n { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; flex: none;
+    background: var(--color-brand-800); color: var(--color-gold-300); font-size: var(--text-sm); font-weight: 700; }
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill,minmax(112px,1fr)); gap: 10px; margin-top: var(--space-4); }
+  .sw { border-radius: var(--radius-sm); overflow: hidden; border: 1px solid rgba(255,255,255,.10); }
+  .sw i { display: block; height: 52px; }
+  .sw span { display: block; padding: 7px 9px; font-size: 11px; color: rgba(255,255,255,.6); background: rgba(255,255,255,.03); }
+  .sw b { display: block; color: #fff; font-size: var(--text-xs); }
+  @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <svg width="46" height="46" viewBox="0 0 40 40" fill="none"><path d="M6 9h28l-14 22z" stroke="var(--color-gold-300)" stroke-width="1.6" stroke-linejoin="round"/><path d="M13 9l7 11 7-11M6 9l14 8 14-8" stroke="var(--color-gold-400)" stroke-width="1.1"/></svg>
+    <div>
+      <h1 class="display-md" style="color:#fff">Velaro — mockups dos 4 ambientes</h1>
+      <p class="lede" style="color:rgba(255,255,255,.6)">Tela inicial de cada módulo, para fechar o design system antes do mapeamento tela a tela.</p>
+    </div>
+  </div>
+
+  <div class="cards">
+    <a class="env" href="01-site-publico.html">
+      <div class="row"><span class="n">1</span><h2>Site Público</h2></div>
+      <p>Captação e aprovação de lojistas. Catálogo sem preço B2B, cadastro com CNPJ/CNAE e acompanhamento da solicitação.</p>
+      <dl><dt>Tela</dt><dd>Página Inicial</dd><dt>Acesso</dt><dd>Público (sem login)</dd><dt>Tema</dt><dd>Seda esmeralda + dourado</dd></dl>
+    </a>
+    <a class="env" href="02-portal-lojista.html">
+      <div class="row"><span class="n">2</span><h2>Portal do Lojista</h2></div>
+      <p>Operação do Parceiro Premium: catálogo com custo B2B, clientes, pedidos, financeiro, margens, vitrine e suporte.</p>
+      <dl><dt>Tela</dt><dd>Dashboard do Lojista</dd><dt>Acesso</dt><dd>Parceiro Premium aprovado</dd><dt>Tema</dt><dd>Sidebar escura + conteúdo claro</dd></dl>
+    </a>
+    <a class="env" href="03-vitrine-pdv.html">
+      <div class="row"><span class="n">3</span><h2>Vitrine White Label + PDV</h2></div>
+      <p>Ambiente do consumidor final, com a marca do revendedor. Carrinho em tablet, gravação adicional e retirada na loja.</p>
+      <dl><dt>Tela</dt><dd>Vitrine + Carrinho</dd><dt>Acesso</dt><dd>Público na URL do revendedor</dd><dt>Tema</dt><dd>Tokens do revendedor — zero marca Velaro</dd></dl>
+    </a>
+    <a class="env" href="04-painel-master.html">
+      <div class="row"><span class="n">4</span><h2>Painel Interno Velaro</h2></div>
+      <p>Perfil Master: pré-cadastros, revendedores, pedidos, produção, estoque, financeiro B2B, promoções, relatórios e suporte.</p>
+      <dl><dt>Tela</dt><dd>Dashboard Master</dd><dt>Acesso</dt><dd>Equipe Velaro (Master)</dd><dt>Tema</dt><dd>Sidebar escura + conteúdo claro</dd></dl>
+    </a>
+  </div>
+
+  <a class="env" style="margin-top:var(--space-8)" href="05-tipografia.html">
+    <div class="row"><span class="n" style="background:var(--color-gold-500);color:#06110f">Aa</span><h2>Tipografia — decisão</h2></div>
+    <p>Direção escolhida: geométrica sem serifa, a linguagem das joalherias nativas digitais. Luxo por silêncio e espaço, não por ornamento. As outras três direções ficam na página como registro da decisão.</p>
+    <dl><dt>Display</dt><dd>Jost — hero, título de página, wordmark, KPI</dd><dt>Texto</dt><dd>Inter Tight — tabela, formulário, navegação, chip</dd><dt>Hierarquia</dt><dd>Por peso e espacejamento, não por família</dd></dl>
+  </a>
+
+  <a class="env" style="margin-top:var(--space-4)" href="06-mapa-inputs.html">
+    <div class="row"><span class="n" style="background:var(--color-brand-500);color:#fff">In</span><h2>Mapa visual de inputs</h2></div>
+    <p>Prancha do design system com anatomia, densidades, estados, seletores, uploads e composições responsivas. O foco é exclusivamente visual.</p>
+    <dl><dt>Base</dt><dd>44 px, label persistente e raio de 8 px</dd><dt>Estados</dt><dd>Default, foco, preenchido, erro, sucesso e desabilitado</dd><dt>Escopo</dt><dd>Aparência e comportamento responsivo</dd></dl>
+  </a>
+
+  <a class="env" style="margin-top:var(--space-4)" href="mapa.html">
+    <div class="row"><span class="n" style="background:var(--color-gold-500);color:#06110f">31</span><h2>Mapa das telas</h2></div>
+    <p>Rota, perfil de acesso, tabelas e campos, permissões e regras críticas — tela a tela. Não depende de layout: diz o que cada tela precisa existir no banco e na ACL.</p>
+    <dl><dt>Escopo</dt><dd>31 telas · 4 ambientes + login</dd><dt>Prontas</dt><dd>5 mockups</dd><dt>Banco</dt><dd>~30 tabelas novas do módulo Velaro</dd></dl>
+  </a>
+
+  <h2 class="title" style="color:#fff;margin-top:var(--space-12)">Paleta proposta</h2>
+  <p class="lede" style="color:rgba(255,255,255,.6);margin-bottom:var(--space-3)">Valores amostrados pixel a pixel dos protótipos aprovados.</p>
+  <div class="swatches">
+    <span class="sw"><i style="background:var(--color-brand-900)"></i><span><b>brand-900</b>#012227 · marca</span></span>
+    <span class="sw"><i style="background:var(--color-brand-700)"></i><span><b>brand-700</b>#073334 · hero</span></span>
+    <span class="sw"><i style="background:var(--color-brand-500)"></i><span><b>brand-500</b>#0e5b58 · ação clara</span></span>
+    <span class="sw"><i style="background:var(--color-gold-500)"></i><span><b>gold-500</b>#a97c3c · CTA escuro</span></span>
+    <span class="sw"><i style="background:var(--color-gold-300)"></i><span><b>gold-300</b>#dba765 · texto/ícone</span></span>
+    <span class="sw"><i style="background:var(--color-onyx-900)"></i><span><b>onyx-900</b>#0c1817 · sidebar</span></span>
+    <span class="sw"><i style="background:var(--color-gray-50)"></i><span><b>gray-50</b>#faf9f7 · fundo</span></span>
+    <span class="sw"><i style="background:#ffffff"></i><span><b>surface</b>#ffffff · card</span></span>
+  </div>
+</div>
+
+<style>
+  /* Barra de navegação dos mockups — auxiliar de revisão, não faz parte do produto. */
+  .mocknav {
+    position: fixed; right: 16px; bottom: 16px; z-index: 999;
+    display: flex; align-items: center; gap: 4px;
+    padding: 7px 9px; border-radius: 999px;
+    background: rgba(1,26,29,.94); border: 1px solid rgba(219,167,101,.34);
+    box-shadow: 0 10px 30px rgba(0,0,0,.30); backdrop-filter: blur(6px);
+    font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  }
+  .mocknav > span { font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+    color: rgba(255,255,255,.42); padding: 0 6px 0 4px; }
+  .mocknav a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,.74); white-space: nowrap; }
+  .mocknav a:hover { background: rgba(255,255,255,.10); color: #fff; }
+  .mocknav a.is-on { background: var(--color-gold-500); color: #06110f; font-weight: 600; }
+  .mocknav a.map { border: 1px solid rgba(219,167,101,.40); color: var(--color-gold-300); }
+  .mocknav a.map:hover { background: rgba(219,167,101,.16); color: #fff; }
+  @media print { .mocknav { display: none; } }
+  @media (max-width: 620px) { .mocknav > span { display: none; } .mocknav a { padding: 5px 8px; font-size: 11px; } }
+</style>
+<nav class="mocknav" aria-label="Navegação entre os mockups">
+  <span>Velaro</span>
+  <a href="index.html">Índice</a>
+  <a href="01-site-publico.html" data-p="01">Site</a>
+  <a href="02-portal-lojista.html" data-p="02">Portal</a>
+  <a href="03-vitrine-pdv.html" data-p="03">Vitrine</a>
+  <a href="04-painel-master.html" data-p="04">Master</a>
+  <a class="map" href="mapa.html">Mapa · 31 telas</a>
+</nav>
+<script>
+(function(){
+  var f = (location.pathname.split('/').pop() || 'index.html');
+  var a = document.querySelector('.mocknav a[href="' + f + '"]');
+  if (a) a.classList.add('is-on');
+})();
+</script>
+</body>
+</html>

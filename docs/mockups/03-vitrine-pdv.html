@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velaro · Ambiente 3 — Vitrine White Label + Carrinho (PDV tablet)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="velaro-tokens.css">
+<link rel="stylesheet" href="velaro-ui.css">
+<style>
+  /* =====================================================================
+     REGRA CRÍTICA DO AMBIENTE 3
+     A vitrine NÃO usa a marca Velaro. Ela é pintada pelos tokens do
+     revendedor (--shop-*), carregados de `reseller_stores`. Nenhum token
+     --color-brand-* (vinho Velaro) aparece nesta tela. Trocar o lojista =
+     trocar apenas o bloco abaixo.
+     ===================================================================== */
+  .shop {
+    --shop-primary:   #800020;   /* reseller_stores.color_primary   */
+    --shop-secondary: #b8860b;   /* reseller_stores.color_secondary */
+    --shop-bg:        #ffffff;   /* reseller_stores.color_background*/
+    --shop-text:      #1a1a1a;   /* reseller_stores.color_text      */
+    --shop-surface:   #faf8f7;
+    --shop-border:    #e8e2e0;
+  }
+
+  body { background: #d9d4cf; display: grid; place-items: start center; padding: var(--space-6); }
+
+  /* Moldura de tablet — o fluxo 4.10 é atendimento presencial em tablet */
+  .tablet {
+    width: min(1320px, 100%);
+    border-radius: 26px; padding: 16px;
+    background: linear-gradient(160deg,#2c2c2e,#111113);
+    box-shadow: 0 30px 70px rgba(0,0,0,.32);
+  }
+  .tablet__screen { border-radius: 14px; overflow: hidden; background: var(--shop-bg); }
+  .tablet__hint { text-align: center; color: rgba(255,255,255,.55); font-size: var(--text-xs); padding-top: 10px; }
+
+  .shop { background: var(--shop-bg); color: var(--shop-text); font-family: var(--font-sans); display: grid; grid-template-columns: 1fr 400px; min-height: 780px; }
+
+  /* ---- catálogo do consumidor ---- */
+  .shop__main { padding: 0 0 var(--space-6); }
+  .shop__nav {
+    display: flex; align-items: center; gap: var(--space-6);
+    padding: var(--space-4) var(--space-6); border-bottom: 1px solid var(--shop-border);
+  }
+  .shop__logo { display: grid; line-height: 1; }
+  .shop__logo strong { font-family: var(--font-display); font-size: 21px; letter-spacing: .20em; color: var(--shop-primary); font-weight: 600; }
+  .shop__logo small { font-size: 8px; letter-spacing: .34em; color: var(--shop-secondary); margin-top: 5px; }
+  .shop__tabs { display: flex; gap: var(--space-2); margin-left: var(--space-6); }
+  .shop__tabs a { padding: 8px 14px; border-radius: var(--radius-pill); font-size: var(--text-sm); color: #6b6360; }
+  .shop__tabs a.is-active { background: var(--shop-primary); color: #fff; font-weight: 600; }
+  .shop__navicons { margin-left: auto; display: flex; gap: var(--space-4); color: #6b6360; }
+
+  .shop__banner {
+    margin: var(--space-5) var(--space-6) 0; border-radius: var(--radius-md); overflow: hidden;
+    padding: var(--space-8) var(--space-6);
+    background: linear-gradient(105deg, #1b0d10 0%, var(--shop-primary) 78%);
+    color: #fff;
+  }
+  .shop__banner h2 { font-family: var(--font-display); font-size: 30px; line-height: 36px; margin: 0; font-weight: 500; }
+  .shop__banner p { margin: 8px 0 var(--space-4); color: rgba(255,255,255,.78); font-size: var(--text-sm); }
+  .shop__banner .btn { background: var(--shop-secondary); color: #fff; }
+
+  .shop__section { padding: var(--space-6) var(--space-6) 0; }
+  .shop__section h3 { font-family: var(--font-display); font-size: 19px; margin: 0 0 var(--space-4); color: var(--shop-text); font-weight: 600; }
+
+  .prods { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-3); }
+  .prod {
+    border: 1px solid var(--shop-border); border-radius: var(--radius-md);
+    background: var(--shop-bg); padding: var(--space-3); display: grid; gap: 8px;
+    transition: border-color .16s ease, transform .16s ease;
+  }
+  .prod:hover { border-color: var(--shop-primary); transform: translateY(-2px); }
+  .prod__img { height: 104px; border-radius: var(--radius-sm); overflow: hidden;
+    display: grid; place-items: center; padding: 6px;
+    background: linear-gradient(155deg,#fdf9f2,#efe4d2); }
+  .prod__img svg { width: 100%; height: 100%; }
+  .prod h4 { margin: 0; font-size: var(--text-body); font-weight: 600; color: var(--shop-text); }
+  .prod small { font-size: var(--text-xs); color: #857b78; line-height: 16px; }
+  .prod .price { font-family: var(--font-display); font-size: 19px; font-weight: 600; color: var(--shop-primary); }
+  .prod .btn { width: 100%; }
+
+  /* ---- carrinho ---- */
+  .cart { border-left: 1px solid var(--shop-border); background: var(--shop-surface); display: flex; flex-direction: column; }
+  .cart__head { display: flex; align-items: center; gap: 10px; padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--shop-border); }
+  .cart__head h3 { margin: 0; font-size: var(--text-sm); font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--shop-text); }
+  .cart__body { flex: 1; overflow: auto; padding: var(--space-4) var(--space-5); display: grid; gap: var(--space-3); align-content: start; }
+
+  .line { display: grid; grid-template-columns: 52px 1fr auto; gap: 10px; align-items: center; }
+  .line__img { width: 52px; height: 52px; border-radius: var(--radius-sm); overflow: hidden;
+    display: grid; place-items: center; padding: 3px;
+    background: linear-gradient(150deg,#fdf9f2,#eee2cf); }
+  .line__img svg { width: 100%; height: 100%; }
+  .line h5 { margin: 0; font-size: var(--text-sm); font-weight: 600; color: var(--shop-text); }
+  .line small { font-size: var(--text-xs); color: #8a807d; }
+  .qty { display: inline-flex; align-items: center; border: 1px solid var(--shop-border);
+    border-radius: var(--radius-pill); background: #fff; margin-top: 4px; }
+  .qty button { width: 26px; height: 26px; border: 0; background: none; color: #6b6360; }
+  .qty span { min-width: 22px; text-align: center; font-size: var(--text-sm); font-variant-numeric: tabular-nums; }
+  .line .money { font-size: var(--text-sm); font-weight: 700; color: var(--shop-text); font-variant-numeric: tabular-nums; }
+
+  .engrave { border: 1px solid var(--shop-border); border-radius: var(--radius-md); background: #fff; padding: var(--space-4); }
+  .engrave > header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; }
+  .engrave h4 { margin: 0; font-size: var(--text-xs); font-weight: 700; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--shop-text); }
+  .engrave .opt { display: inline-flex; align-items: center; gap: 7px; font-size: var(--text-sm); margin-right: var(--space-4); }
+  .radio { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--shop-border); display: inline-grid; place-items: center; }
+  .radio.is-on { border-color: var(--shop-primary); }
+  .radio.is-on::after { content:""; width: 8px; height: 8px; border-radius: 50%; background: var(--shop-primary); }
+  .engrave .grid2 { display: grid; grid-template-columns: 1.3fr 1fr; gap: 10px; margin-top: 10px; }
+  .engrave input { width: 100%; min-height: 40px; padding: 8px 10px; border: 1px solid var(--shop-border);
+    border-radius: var(--radius-sm); font: inherit; color: var(--shop-text); background: #fff; }
+  .engrave label { font-size: var(--text-xs); color: #857b78; display: block; margin-bottom: 4px; }
+  .engrave .counter { font-size: 11px; color: #9a908d; margin-top: 6px; }
+
+  .totals { padding: var(--space-4) var(--space-5); border-top: 1px solid var(--shop-border); display: grid; gap: 8px; }
+  .totals .row { justify-content: space-between; font-size: var(--text-sm); color: #6b6360; }
+  .totals .row strong { color: var(--shop-text); font-variant-numeric: tabular-nums; }
+  .totals .grand { display: flex; justify-content: space-between; align-items: baseline;
+    padding-top: 10px; border-top: 1px solid var(--shop-border); }
+  .totals .grand span { font-size: var(--text-sm); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .totals .grand strong { font-family: var(--font-display); font-size: 27px; color: var(--shop-primary); font-variant-numeric: tabular-nums; }
+
+  .cart__foot { padding: 0 var(--space-5) var(--space-5); display: grid; gap: 10px; }
+  .pickup { display: flex; gap: 10px; align-items: flex-start; padding: var(--space-3);
+    border-radius: var(--radius-sm); background: #fff; border: 1px solid var(--shop-border); font-size: var(--text-xs); line-height: 17px; color: #6b6360; }
+  .btn-checkout { width: 100%; min-height: 54px; border-radius: var(--radius-md); border: 0;
+    background: var(--shop-primary); color: #fff; font-weight: 700; font-size: var(--text-body);
+    letter-spacing: .06em; text-transform: uppercase; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+  .cart__note { text-align: center; font-size: 11px; color: #8a807d; }
+
+  .legend { width: min(1320px,100%); margin-top: var(--space-5); }
+
+  @media (max-width: 1100px) {
+    .shop { grid-template-columns: 1fr; }
+    .prods { grid-template-columns: repeat(2,1fr); }
+    .cart { border-left: 0; border-top: 1px solid var(--shop-border); }
+  }
+  @media (max-width: 640px) {
+    body { display: block; padding: 0; }
+    .tablet { width: 100%; padding: 0; border-radius: 0; box-shadow: none; background: #fff; }
+    .tablet__screen { border-radius: 0; }
+    .tablet__hint { display: none; }
+    .shop { min-height: 100vh; }
+    .shop__nav { flex-wrap: wrap; gap: var(--space-3); padding: var(--space-4); }
+    .shop__tabs { order: 3; width: 100%; margin-left: 0; overflow-x: auto; padding-bottom: 2px; }
+    .shop__tabs a { flex: none; min-height: 44px; display: inline-flex; align-items: center; }
+    .shop__banner { margin: var(--space-4) var(--space-4) 0; padding: var(--space-6) var(--space-4); }
+    .shop__banner h2 { font-size: 25px; line-height: 31px; }
+    .shop__section { padding: var(--space-5) var(--space-4) 0; }
+    .prods { grid-template-columns: 1fr; }
+    .prod { grid-template-columns: 112px 1fr; align-items: center; }
+    .prod__img { grid-row: 1 / span 4; height: 112px; }
+    .prod .btn { min-height: 44px; }
+    .cart__head, .cart__body, .totals, .cart__foot { padding-left: var(--space-4); padding-right: var(--space-4); }
+    .qty button { width: 44px; height: 44px; }
+    .engrave .grid2 { grid-template-columns: 1fr; }
+    .engrave input { min-height: 44px; font-size: 16px; }
+    .legend { margin: var(--space-4); width: auto; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#conteudo">Ir para os produtos</a>
+
+<div class="tablet">
+  <div class="tablet__screen">
+    <div class="shop">
+
+      <!-- ===================== CATÁLOGO (consumidor) ===================== -->
+      <div class="shop__main" id="conteudo">
+        <nav class="shop__nav">
+          <span class="shop__logo"><strong>TOMAZELLI</strong><small>ALIANÇAS</small></span>
+          <span class="shop__tabs">
+            <a href="mapa.html#portal-vitrine" class="is-active">Todos os produtos</a>
+            <a href="mapa.html#portal-vitrine">Alianças</a>
+            <a href="mapa.html#portal-vitrine">Solitários</a>
+            <a href="mapa.html#portal-vitrine">Acessórios</a>
+          </span>
+          <span class="shop__navicons">
+            <svg class="ic" style="color:inherit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-3.6-3.6"/></svg>
+            <svg class="ic" style="color:inherit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20s-7-4.4-7-9a4 4 0 017-2.6A4 4 0 0119 11c0 4.6-7 9-7 9z"/></svg>
+          </span>
+        </nav>
+
+        <div class="shop__banner">
+          <h2>Símbolos de amor<br>para toda a vida</h2>
+          <p>Alianças que unem histórias e eternizam momentos.</p>
+          <a class="btn btn--sm" href="mapa.html#portal-vitrine">Conheça nossa coleção</a>
+        </div>
+
+        <section class="shop__section">
+          <h3>Todos os produtos</h3>
+          <div class="prods">
+            <div class="prod">
+              <div class="prod__img"><svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="120" cy="134" rx="86" ry="9" fill="#000" opacity=".16"/><linearGradient id="g20a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(-14 92 70)"><path d="M 48,70 a 44,48 0 1,0 88,0 a 44,48 0 1,0 -88,0 Z M 58.0,70 a 34.0,38.0 0 1,0 68.0,0 a 34.0,38.0 0 1,0 -68.0,0 Z" fill="url(#g20a)" fill-rule="evenodd"/><ellipse cx="92" cy="70" rx="34.0" ry="38.0" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="92" cy="70" rx="44" ry="48" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 53.0,70 a 39.0,43.0 0 0,1 39.0,-43.0" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.4" stroke-linecap="round"/></g><linearGradient id="g20b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(8 152 78)"><path d="M 104,78 a 48,52 0 1,0 96,0 a 48,52 0 1,0 -96,0 Z M 115.0,78 a 37.0,41.0 0 1,0 74.0,0 a 37.0,41.0 0 1,0 -74.0,0 Z" fill="url(#g20b)" fill-rule="evenodd"/><ellipse cx="152" cy="78" rx="37.0" ry="41.0" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="152" cy="78" rx="48" ry="52" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 109.5,78 a 42.5,46.5 0 0,1 42.5,-46.5" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.7" stroke-linecap="round"/></g></svg></div>
+              <h4>Aliança Clássica 4mm</h4><small>Ouro 18k · Anel · Polido<br>Aro: 18</small>
+              <span class="price num">R$ 200,00</span>
+              <button class="btn btn--secondary btn--sm">Ver detalhes</button>
+            </div>
+            <div class="prod">
+              <div class="prod__img"><svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="120" cy="134" rx="86" ry="9" fill="#000" opacity=".16"/><linearGradient id="g21a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(-14 92 70)"><path d="M 48,70 a 44,48 0 1,0 88,0 a 44,48 0 1,0 -88,0 Z M 58.0,70 a 34.0,38.0 0 1,0 68.0,0 a 34.0,38.0 0 1,0 -68.0,0 Z" fill="url(#g21a)" fill-rule="evenodd"/><ellipse cx="92" cy="70" rx="34.0" ry="38.0" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="92" cy="70" rx="44" ry="48" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 53.0,70 a 39.0,43.0 0 0,1 39.0,-43.0" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.4" stroke-linecap="round"/></g><linearGradient id="g21b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(8 152 78)"><path d="M 104,78 a 48,52 0 1,0 96,0 a 48,52 0 1,0 -96,0 Z M 115.0,78 a 37.0,41.0 0 1,0 74.0,0 a 37.0,41.0 0 1,0 -74.0,0 Z" fill="url(#g21b)" fill-rule="evenodd"/><ellipse cx="152" cy="78" rx="37.0" ry="41.0" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="152" cy="78" rx="48" ry="52" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 109.5,78 a 42.5,46.5 0 0,1 42.5,-46.5" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.7" stroke-linecap="round"/><g transform="translate(112.1,62.1) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(123.6,43.4) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(141.7,32.9) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(162.3,32.9) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(180.4,43.4) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(191.9,62.1) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g></g></svg></div>
+              <h4>Aliança Diamantada 6mm</h4><small>Ouro 18k · Anel · Diamantado<br>Aro: 18</small>
+              <span class="price num">R$ 265,00</span>
+              <button class="btn btn--secondary btn--sm">Ver detalhes</button>
+            </div>
+            <div class="prod">
+              <div class="prod__img"><svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="120" cy="134" rx="86" ry="9" fill="#000" opacity=".16"/><linearGradient id="g22a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#e6d3ae"/><stop offset="22%" stop-color="#c9ae7d"/><stop offset="46%" stop-color="#a08a5f"/><stop offset="70%" stop-color="#c9ae7d"/><stop offset="100%" stop-color="#dbc69c"/></linearGradient><g transform="rotate(-14 92 70)"><path d="M 48,70 a 44,48 0 1,0 88,0 a 44,48 0 1,0 -88,0 Z M 58.0,70 a 34.0,38.0 0 1,0 68.0,0 a 34.0,38.0 0 1,0 -68.0,0 Z" fill="url(#g22a)" fill-rule="evenodd"/><ellipse cx="92" cy="70" rx="34.0" ry="38.0" fill="none" stroke="#a08a5f" stroke-opacity=".55" stroke-width="1"/><ellipse cx="92" cy="70" rx="44" ry="48" fill="none" stroke="#e6d3ae" stroke-opacity=".45" stroke-width=".8"/><path d="M 53.0,70 a 39.0,43.0 0 0,1 39.0,-43.0" fill="none" stroke="#e6d3ae" stroke-opacity=".7" stroke-width="3.4" stroke-linecap="round"/></g><linearGradient id="g22b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#e6d3ae"/><stop offset="22%" stop-color="#c9ae7d"/><stop offset="46%" stop-color="#a08a5f"/><stop offset="70%" stop-color="#c9ae7d"/><stop offset="100%" stop-color="#dbc69c"/></linearGradient><g transform="rotate(8 152 78)"><path d="M 104,78 a 48,52 0 1,0 96,0 a 48,52 0 1,0 -96,0 Z M 115.0,78 a 37.0,41.0 0 1,0 74.0,0 a 37.0,41.0 0 1,0 -74.0,0 Z" fill="url(#g22b)" fill-rule="evenodd"/><ellipse cx="152" cy="78" rx="37.0" ry="41.0" fill="none" stroke="#a08a5f" stroke-opacity=".55" stroke-width="1"/><ellipse cx="152" cy="78" rx="48" ry="52" fill="none" stroke="#e6d3ae" stroke-opacity=".45" stroke-width=".8"/><path d="M 109.5,78 a 42.5,46.5 0 0,1 42.5,-46.5" fill="none" stroke="#e6d3ae" stroke-opacity=".7" stroke-width="3.7" stroke-linecap="round"/></g></svg></div>
+              <h4>Aliança Fosca 6mm</h4><small>Ouro 18k · Anel · Fosca<br>Aro: 18</small>
+              <span class="price num">R$ 165,00</span>
+              <button class="btn btn--secondary btn--sm">Ver detalhes</button>
+            </div>
+            <div class="prod">
+              <div class="prod__img"><svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="120" cy="134" rx="86" ry="9" fill="#000" opacity=".16"/><linearGradient id="g23a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(-14 92 70)"><path d="M 48,70 a 44,48 0 1,0 88,0 a 44,48 0 1,0 -88,0 Z M 58.0,70 a 34.0,38.0 0 1,0 68.0,0 a 34.0,38.0 0 1,0 -68.0,0 Z" fill="url(#g23a)" fill-rule="evenodd"/><ellipse cx="92" cy="70" rx="34.0" ry="38.0" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="92" cy="70" rx="44" ry="48" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 53.0,70 a 39.0,43.0 0 0,1 39.0,-43.0" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.4" stroke-linecap="round"/><ellipse cx="92" cy="70" rx="39.0" ry="43.0" fill="none" stroke="#c9ae7d" stroke-width="3.5"/><path d="M 53.0,70 a 39.0,43.0 0 0,1 39.0,-43.0" fill="none" stroke="#e6d3ae" stroke-opacity=".5" stroke-width="1"/></g><linearGradient id="g23b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(8 152 78)"><path d="M 104,78 a 48,52 0 1,0 96,0 a 48,52 0 1,0 -96,0 Z M 115.0,78 a 37.0,41.0 0 1,0 74.0,0 a 37.0,41.0 0 1,0 -74.0,0 Z" fill="url(#g23b)" fill-rule="evenodd"/><ellipse cx="152" cy="78" rx="37.0" ry="41.0" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="152" cy="78" rx="48" ry="52" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 109.5,78 a 42.5,46.5 0 0,1 42.5,-46.5" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.7" stroke-linecap="round"/><ellipse cx="152" cy="78" rx="42.5" ry="46.5" fill="none" stroke="#c9ae7d" stroke-width="3.5"/><path d="M 109.5,78 a 42.5,46.5 0 0,1 42.5,-46.5" fill="none" stroke="#e6d3ae" stroke-opacity=".5" stroke-width="1"/></g></svg></div>
+              <h4>Aliança Trabalhada 6mm</h4><small>Ouro 18k · Anel · Trabalhada<br>Aro: 18</small>
+              <span class="price num">R$ 210,00</span>
+              <button class="btn btn--secondary btn--sm">Ver detalhes</button>
+            </div>
+            <div class="prod">
+              <div class="prod__img"><svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="120" cy="134" rx="86" ry="9" fill="#000" opacity=".16"/><linearGradient id="g24a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(-14 92 70)"><path d="M 48,70 a 44,48 0 1,0 88,0 a 44,48 0 1,0 -88,0 Z M 62.5,70 a 29.5,33.5 0 1,0 59.0,0 a 29.5,33.5 0 1,0 -59.0,0 Z" fill="url(#g24a)" fill-rule="evenodd"/><ellipse cx="92" cy="70" rx="29.5" ry="33.5" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="92" cy="70" rx="44" ry="48" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 55.25,70 a 36.75,40.75 0 0,1 36.75,-40.75" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="4.9" stroke-linecap="round"/></g><linearGradient id="g24b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(8 152 78)"><path d="M 104,78 a 48,52 0 1,0 96,0 a 48,52 0 1,0 -96,0 Z M 119.95,78 a 32.05,36.05 0 1,0 64.1,0 a 32.05,36.05 0 1,0 -64.1,0 Z" fill="url(#g24b)" fill-rule="evenodd"/><ellipse cx="152" cy="78" rx="32.05" ry="36.05" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="152" cy="78" rx="48" ry="52" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 111.975,78 a 40.025,44.025 0 0,1 40.025,-44.025" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="5.4" stroke-linecap="round"/></g></svg></div>
+              <h4>Aliança Conforto 4mm</h4><small>Ouro 18k · Anel · Conforto<br>Aro: 18</small>
+              <span class="price num">R$ 190,00</span>
+              <button class="btn btn--secondary btn--sm">Ver detalhes</button>
+            </div>
+            <div class="prod">
+              <div class="prod__img"><svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="120" cy="134" rx="86" ry="9" fill="#000" opacity=".16"/><linearGradient id="g25a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(-14 92 70)"><path d="M 65.6,22.0 H 118.4 A 17.6,17.6 0 0 1 136.0,39.6 V 100.4 A 17.6,17.6 0 0 1 118.4,118.0 H 65.6 A 17.6,17.6 0 0 1 48.0,100.4 V 39.6 A 17.6,17.6 0 0 1 65.6,22.0 Z M 71.6,32.0 H 112.4 A 13.6,13.6 0 0 1 126.0,45.6 V 94.4 A 13.6,13.6 0 0 1 112.4,108.0 H 71.6 A 13.6,13.6 0 0 1 58.0,94.4 V 45.6 A 13.6,13.6 0 0 1 71.6,32.0 Z" fill="url(#g25a)" fill-rule="evenodd"/><path d="M 71.6,32.0 H 112.4 A 13.6,13.6 0 0 1 126.0,45.6 V 94.4 A 13.6,13.6 0 0 1 112.4,108.0 H 71.6 A 13.6,13.6 0 0 1 58.0,94.4 V 45.6 A 13.6,13.6 0 0 1 71.6,32.0 Z" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><path d="M 65.6,22.0 H 118.4 A 17.6,17.6 0 0 1 136.0,39.6 V 100.4 A 17.6,17.6 0 0 1 118.4,118.0 H 65.6 A 17.6,17.6 0 0 1 48.0,100.4 V 39.6 A 17.6,17.6 0 0 1 65.6,22.0 Z" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 53.0,70 a 39.0,43.0 0 0,1 39.0,-43.0" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.4" stroke-linecap="round"/></g><linearGradient id="g25b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(8 152 78)"><path d="M 123.2,26.0 H 180.8 A 19.2,19.2 0 0 1 200.0,45.2 V 110.8 A 19.2,19.2 0 0 1 180.8,130.0 H 123.2 A 19.2,19.2 0 0 1 104.0,110.8 V 45.2 A 19.2,19.2 0 0 1 123.2,26.0 Z M 129.8,37.0 H 174.2 A 14.8,14.8 0 0 1 189.0,51.8 V 104.2 A 14.8,14.8 0 0 1 174.2,119.0 H 129.8 A 14.8,14.8 0 0 1 115.0,104.2 V 51.8 A 14.8,14.8 0 0 1 129.8,37.0 Z" fill="url(#g25b)" fill-rule="evenodd"/><path d="M 129.8,37.0 H 174.2 A 14.8,14.8 0 0 1 189.0,51.8 V 104.2 A 14.8,14.8 0 0 1 174.2,119.0 H 129.8 A 14.8,14.8 0 0 1 115.0,104.2 V 51.8 A 14.8,14.8 0 0 1 129.8,37.0 Z" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><path d="M 123.2,26.0 H 180.8 A 19.2,19.2 0 0 1 200.0,45.2 V 110.8 A 19.2,19.2 0 0 1 180.8,130.0 H 123.2 A 19.2,19.2 0 0 1 104.0,110.8 V 45.2 A 19.2,19.2 0 0 1 123.2,26.0 Z" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 109.5,78 a 42.5,46.5 0 0,1 42.5,-46.5" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.7" stroke-linecap="round"/></g></svg></div>
+              <h4>Aliança Aro Quadrado 5mm</h4><small>Ouro 18k · Anel · Polido<br>Aro: 18</small>
+              <span class="price num">R$ 220,00</span>
+              <button class="btn btn--secondary btn--sm">Ver detalhes</button>
+            </div>
+            <div class="prod">
+              <div class="prod__img"><svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="120" cy="134" rx="86" ry="9" fill="#000" opacity=".16"/><linearGradient id="g26a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f9e0d1"/><stop offset="22%" stop-color="#dda07f"/><stop offset="46%" stop-color="#96583e"/><stop offset="70%" stop-color="#dda07f"/><stop offset="100%" stop-color="#f2c8ae"/></linearGradient><g transform="rotate(-14 92 70)"><path d="M 48,70 a 44,48 0 1,0 88,0 a 44,48 0 1,0 -88,0 Z M 58.0,70 a 34.0,38.0 0 1,0 68.0,0 a 34.0,38.0 0 1,0 -68.0,0 Z" fill="url(#g26a)" fill-rule="evenodd"/><ellipse cx="92" cy="70" rx="34.0" ry="38.0" fill="none" stroke="#96583e" stroke-opacity=".55" stroke-width="1"/><ellipse cx="92" cy="70" rx="44" ry="48" fill="none" stroke="#f9e0d1" stroke-opacity=".45" stroke-width=".8"/><path d="M 53.0,70 a 39.0,43.0 0 0,1 39.0,-43.0" fill="none" stroke="#f9e0d1" stroke-opacity=".7" stroke-width="3.4" stroke-linecap="round"/></g><linearGradient id="g26b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#ffffff"/><stop offset="22%" stop-color="#dbe0e4"/><stop offset="46%" stop-color="#8b959c"/><stop offset="70%" stop-color="#dbe0e4"/><stop offset="100%" stop-color="#f0f3f5"/></linearGradient><g transform="rotate(8 152 78)"><path d="M 104,78 a 48,52 0 1,0 96,0 a 48,52 0 1,0 -96,0 Z M 115.0,78 a 37.0,41.0 0 1,0 74.0,0 a 37.0,41.0 0 1,0 -74.0,0 Z" fill="url(#g26b)" fill-rule="evenodd"/><ellipse cx="152" cy="78" rx="37.0" ry="41.0" fill="none" stroke="#8b959c" stroke-opacity=".55" stroke-width="1"/><ellipse cx="152" cy="78" rx="48" ry="52" fill="none" stroke="#ffffff" stroke-opacity=".45" stroke-width=".8"/><path d="M 109.5,78 a 42.5,46.5 0 0,1 42.5,-46.5" fill="none" stroke="#ffffff" stroke-opacity=".7" stroke-width="3.7" stroke-linecap="round"/></g></svg></div>
+              <h4>Aliança Tricolor 6mm</h4><small>Ouro 18k · Anel · Polido<br>Aro: 18</small>
+              <span class="price num">R$ 310,00</span>
+              <button class="btn btn--secondary btn--sm">Ver detalhes</button>
+            </div>
+            <div class="prod">
+              <div class="prod__img"><svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="120" cy="134" rx="86" ry="9" fill="#000" opacity=".16"/><linearGradient id="g27a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(-14 92 70)"><path d="M 48,70 a 44,48 0 1,0 88,0 a 44,48 0 1,0 -88,0 Z M 58.0,70 a 34.0,38.0 0 1,0 68.0,0 a 34.0,38.0 0 1,0 -68.0,0 Z" fill="url(#g27a)" fill-rule="evenodd"/><ellipse cx="92" cy="70" rx="34.0" ry="38.0" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="92" cy="70" rx="44" ry="48" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 53.0,70 a 39.0,43.0 0 0,1 39.0,-43.0" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.4" stroke-linecap="round"/></g><linearGradient id="g27b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(8 152 78)"><path d="M 104,78 a 48,52 0 1,0 96,0 a 48,52 0 1,0 -96,0 Z M 115.0,78 a 37.0,41.0 0 1,0 74.0,0 a 37.0,41.0 0 1,0 -74.0,0 Z" fill="url(#g27b)" fill-rule="evenodd"/><ellipse cx="152" cy="78" rx="37.0" ry="41.0" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="152" cy="78" rx="48" ry="52" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 109.5,78 a 42.5,46.5 0 0,1 42.5,-46.5" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.7" stroke-linecap="round"/><g transform="translate(112.1,62.1) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(118.3,49.7) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(127.6,39.9) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(139.2,33.7) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(152.0,31.5) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(164.8,33.7) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(176.4,39.9) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(185.7,49.7) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(191.9,62.1) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g></g></svg></div>
+              <h4>Aliança Cravejada 4mm</h4><small>Ouro 18k · Anel · Cravejada<br>Aro: 18</small>
+              <span class="price num">R$ 340,00</span>
+              <button class="btn btn--secondary btn--sm">Ver detalhes</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ===================== CARRINHO (PDV) ===================== -->
+      <aside class="cart">
+        <header class="cart__head">
+          <svg class="ic" style="color:var(--shop-primary)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 5h2l2.2 10.2a1.5 1.5 0 001.5 1.2h8.1a1.5 1.5 0 001.5-1.1L20 8H6"/><circle cx="9.5" cy="20" r="1.4"/><circle cx="17" cy="20" r="1.4"/></svg>
+          <h3>Carrinho de compras</h3>
+          <span class="chip chip--flat chip--neutral push">4 itens</span>
+        </header>
+
+        <div class="cart__body">
+          <div class="line">
+            <span class="line__img"><svg viewBox="0 0 132 132" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="66" cy="119" rx="45" ry="6" fill="#000" opacity=".14"/><linearGradient id="g40a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(-14 50.160000000000004 60.720000000000006)"><path d="M 14.520000000000003,60.720000000000006 a 35.64,38.279999999999994 0 1,0 71.28,0 a 35.64,38.279999999999994 0 1,0 -71.28,0 Z M 22.704,60.720000000000006 a 27.456000000000003,30.095999999999997 0 1,0 54.912000000000006,0 a 27.456000000000003,30.095999999999997 0 1,0 -54.912000000000006,0 Z" fill="url(#g40a)" fill-rule="evenodd"/><ellipse cx="50.160000000000004" cy="60.720000000000006" rx="27.456000000000003" ry="30.095999999999997" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="50.160000000000004" cy="60.720000000000006" rx="35.64" ry="38.279999999999994" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 18.612000000000002,60.720000000000006 a 31.548000000000002,34.187999999999995 0 0,1 31.548000000000002,-34.187999999999995" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="2.8" stroke-linecap="round"/></g><linearGradient id="g40b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(8 81.84 68.64)"><path d="M 43.56000000000001,68.64 a 38.279999999999994,40.92 0 1,0 76.55999999999999,0 a 38.279999999999994,40.92 0 1,0 -76.55999999999999,0 Z M 52.53600000000001,68.64 a 29.303999999999995,31.944000000000003 0 1,0 58.60799999999999,0 a 29.303999999999995,31.944000000000003 0 1,0 -58.60799999999999,0 Z" fill="url(#g40b)" fill-rule="evenodd"/><ellipse cx="81.84" cy="68.64" rx="29.303999999999995" ry="31.944000000000003" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="81.84" cy="68.64" rx="38.279999999999994" ry="40.92" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 48.04800000000001,68.64 a 33.791999999999994,36.432 0 0,1 33.791999999999994,-36.432" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.1" stroke-linecap="round"/></g></svg></span>
+            <div><h5>Aliança Clássica 4mm</h5><small>Ouro 18k · Anel · Polido · Aro 18</small>
+              <span class="qty"><button>−</button><span class="num">1</span><button>+</button></span></div>
+            <span class="money">R$ 200,00</span>
+          </div>
+          <div class="line">
+            <span class="line__img"><svg viewBox="0 0 132 132" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="66" cy="119" rx="45" ry="6" fill="#000" opacity=".14"/><linearGradient id="g41a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(-14 50.160000000000004 60.720000000000006)"><path d="M 14.520000000000003,60.720000000000006 a 35.64,38.279999999999994 0 1,0 71.28,0 a 35.64,38.279999999999994 0 1,0 -71.28,0 Z M 22.704,60.720000000000006 a 27.456000000000003,30.095999999999997 0 1,0 54.912000000000006,0 a 27.456000000000003,30.095999999999997 0 1,0 -54.912000000000006,0 Z" fill="url(#g41a)" fill-rule="evenodd"/><ellipse cx="50.160000000000004" cy="60.720000000000006" rx="27.456000000000003" ry="30.095999999999997" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="50.160000000000004" cy="60.720000000000006" rx="35.64" ry="38.279999999999994" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 18.612000000000002,60.720000000000006 a 31.548000000000002,34.187999999999995 0 0,1 31.548000000000002,-34.187999999999995" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="2.8" stroke-linecap="round"/></g><linearGradient id="g41b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(8 81.84 68.64)"><path d="M 43.56000000000001,68.64 a 38.279999999999994,40.92 0 1,0 76.55999999999999,0 a 38.279999999999994,40.92 0 1,0 -76.55999999999999,0 Z M 52.53600000000001,68.64 a 29.303999999999995,31.944000000000003 0 1,0 58.60799999999999,0 a 29.303999999999995,31.944000000000003 0 1,0 -58.60799999999999,0 Z" fill="url(#g41b)" fill-rule="evenodd"/><ellipse cx="81.84" cy="68.64" rx="29.303999999999995" ry="31.944000000000003" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="81.84" cy="68.64" rx="38.279999999999994" ry="40.92" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 48.04800000000001,68.64 a 33.791999999999994,36.432 0 0,1 33.791999999999994,-36.432" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.1" stroke-linecap="round"/><g transform="translate(50.1,56.2) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(59.2,41.6) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(73.7,33.3) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(90.0,33.3) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(104.5,41.6) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(113.6,56.2) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g></g></svg></span>
+            <div><h5>Aliança Diamantada 6mm</h5><small>Ouro 18k · Anel · Diamantado · Aro 18</small>
+              <span class="qty"><button>−</button><span class="num">1</span><button>+</button></span></div>
+            <span class="money">R$ 265,00</span>
+          </div>
+          <div class="line">
+            <span class="line__img"><svg viewBox="0 0 132 132" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="66" cy="119" rx="45" ry="6" fill="#000" opacity=".14"/><linearGradient id="g42a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#e6d3ae"/><stop offset="22%" stop-color="#c9ae7d"/><stop offset="46%" stop-color="#a08a5f"/><stop offset="70%" stop-color="#c9ae7d"/><stop offset="100%" stop-color="#dbc69c"/></linearGradient><g transform="rotate(-14 50.160000000000004 60.720000000000006)"><path d="M 14.520000000000003,60.720000000000006 a 35.64,38.279999999999994 0 1,0 71.28,0 a 35.64,38.279999999999994 0 1,0 -71.28,0 Z M 22.704,60.720000000000006 a 27.456000000000003,30.095999999999997 0 1,0 54.912000000000006,0 a 27.456000000000003,30.095999999999997 0 1,0 -54.912000000000006,0 Z" fill="url(#g42a)" fill-rule="evenodd"/><ellipse cx="50.160000000000004" cy="60.720000000000006" rx="27.456000000000003" ry="30.095999999999997" fill="none" stroke="#a08a5f" stroke-opacity=".55" stroke-width="1"/><ellipse cx="50.160000000000004" cy="60.720000000000006" rx="35.64" ry="38.279999999999994" fill="none" stroke="#e6d3ae" stroke-opacity=".45" stroke-width=".8"/><path d="M 18.612000000000002,60.720000000000006 a 31.548000000000002,34.187999999999995 0 0,1 31.548000000000002,-34.187999999999995" fill="none" stroke="#e6d3ae" stroke-opacity=".7" stroke-width="2.8" stroke-linecap="round"/></g><linearGradient id="g42b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#e6d3ae"/><stop offset="22%" stop-color="#c9ae7d"/><stop offset="46%" stop-color="#a08a5f"/><stop offset="70%" stop-color="#c9ae7d"/><stop offset="100%" stop-color="#dbc69c"/></linearGradient><g transform="rotate(8 81.84 68.64)"><path d="M 43.56000000000001,68.64 a 38.279999999999994,40.92 0 1,0 76.55999999999999,0 a 38.279999999999994,40.92 0 1,0 -76.55999999999999,0 Z M 52.53600000000001,68.64 a 29.303999999999995,31.944000000000003 0 1,0 58.60799999999999,0 a 29.303999999999995,31.944000000000003 0 1,0 -58.60799999999999,0 Z" fill="url(#g42b)" fill-rule="evenodd"/><ellipse cx="81.84" cy="68.64" rx="29.303999999999995" ry="31.944000000000003" fill="none" stroke="#a08a5f" stroke-opacity=".55" stroke-width="1"/><ellipse cx="81.84" cy="68.64" rx="38.279999999999994" ry="40.92" fill="none" stroke="#e6d3ae" stroke-opacity=".45" stroke-width=".8"/><path d="M 48.04800000000001,68.64 a 33.791999999999994,36.432 0 0,1 33.791999999999994,-36.432" fill="none" stroke="#e6d3ae" stroke-opacity=".7" stroke-width="3.1" stroke-linecap="round"/></g></svg></span>
+            <div><h5>Aliança Fosca 6mm</h5><small>Ouro 18k · Anel · Fosca · Aro 18</small>
+              <span class="qty"><button>−</button><span class="num">1</span><button>+</button></span></div>
+            <span class="money">R$ 165,00</span>
+          </div>
+          <div class="line">
+            <span class="line__img"><svg viewBox="0 0 132 132" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="66" cy="119" rx="45" ry="6" fill="#000" opacity=".14"/><linearGradient id="g43a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(-14 50.160000000000004 60.720000000000006)"><path d="M 14.520000000000003,60.720000000000006 a 35.64,38.279999999999994 0 1,0 71.28,0 a 35.64,38.279999999999994 0 1,0 -71.28,0 Z M 22.704,60.720000000000006 a 27.456000000000003,30.095999999999997 0 1,0 54.912000000000006,0 a 27.456000000000003,30.095999999999997 0 1,0 -54.912000000000006,0 Z" fill="url(#g43a)" fill-rule="evenodd"/><ellipse cx="50.160000000000004" cy="60.720000000000006" rx="27.456000000000003" ry="30.095999999999997" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="50.160000000000004" cy="60.720000000000006" rx="35.64" ry="38.279999999999994" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 18.612000000000002,60.720000000000006 a 31.548000000000002,34.187999999999995 0 0,1 31.548000000000002,-34.187999999999995" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="2.8" stroke-linecap="round"/></g><linearGradient id="g43b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(8 81.84 68.64)"><path d="M 43.56000000000001,68.64 a 38.279999999999994,40.92 0 1,0 76.55999999999999,0 a 38.279999999999994,40.92 0 1,0 -76.55999999999999,0 Z M 52.53600000000001,68.64 a 29.303999999999995,31.944000000000003 0 1,0 58.60799999999999,0 a 29.303999999999995,31.944000000000003 0 1,0 -58.60799999999999,0 Z" fill="url(#g43b)" fill-rule="evenodd"/><ellipse cx="81.84" cy="68.64" rx="29.303999999999995" ry="31.944000000000003" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="81.84" cy="68.64" rx="38.279999999999994" ry="40.92" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 48.04800000000001,68.64 a 33.791999999999994,36.432 0 0,1 33.791999999999994,-36.432" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.1" stroke-linecap="round"/><g transform="translate(50.1,56.2) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(55.0,46.5) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(62.5,38.8) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(71.7,33.9) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(81.8,32.2) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(92.0,33.9) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(101.2,38.8) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(108.6,46.5) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g><g transform="translate(113.6,56.2) rotate(45)"><rect x="-1.9" y="-1.9" width="3.8" height="3.8" rx=".5" fill="#ffffff" opacity=".95"/><rect x="-1.0" y="-1.0" width="2.0" height="2.0" fill="#ffffff"/></g></g></svg></span>
+            <div><h5>Aliança Cravejada 4mm</h5><small>Ouro 18k · Anel · Cravejada · Aro 18</small>
+              <span class="qty"><button>−</button><span class="num">1</span><button>+</button></span></div>
+            <span class="money">R$ 340,00</span>
+          </div>
+
+          <div class="engrave">
+            <header><h4>Gravação adicional</h4><span style="font-size:11px;color:#9a908d">(opcional)</span></header>
+            <p style="margin:0 0 10px;font-size:var(--text-sm);color:#6b6360">Deseja gravação adicional?</p>
+            <span class="opt"><span class="radio is-on"></span> Sim, desejo gravação</span>
+            <span class="opt"><span class="radio"></span> Não, obrigado</span>
+            <div class="grid2">
+              <div><label>Texto / nome</label><input value="Ana ❤ Pedro"></div>
+              <div><label>Data</label><input value="12/05/2026"></div>
+            </div>
+            <div class="spread" style="margin-top:8px">
+              <span class="counter">Limite: 20 caracteres · cobrada à parte por aliança.</span>
+              <strong style="font-size:var(--text-sm);color:var(--shop-text)" class="num">R$ 30,00</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="totals">
+          <div class="row"><span>Subtotal</span><strong>R$ 970,00</strong></div>
+          <div class="row"><span>Adicional de gravação</span><strong>R$ 30,00</strong></div>
+          <div class="row"><span>Frete</span><strong style="color:#0a7a48">Retirada na loja</strong></div>
+          <div class="row"><span>Descontos</span><strong>R$ 0,00</strong></div>
+          <div class="grand"><span>Total</span><strong>R$ 1.000,00</strong></div>
+        </div>
+
+        <div class="cart__foot">
+          <p class="pickup">
+            <svg class="ic" style="color:var(--shop-secondary)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9l1.5-4h13L20 9M4 9h16v10H4z"/><path d="M9 19v-6h6v6"/></svg>
+            <span><strong style="color:var(--shop-text)">Retirada exclusiva na loja.</strong> Seu pedido estará disponível para retirada na loja Tomazelli Alianças.</span>
+          </p>
+          <button class="btn-checkout">
+            <svg class="ic" style="color:currentColor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M3 11h18M7 15h4"/></svg>
+            Pagamento realizado no caixa da loja
+          </button>
+          <p class="cart__note">A vitrine não processa Pix, cartão ou link de pagamento. O recebimento é feito diretamente pelo revendedor.</p>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+  <p class="tablet__hint">Ambiente 3 · Vitrine white label + carrinho PDV — atendimento presencial em tablet na loja do revendedor</p>
+</div>
+
+<div class="legend">
+  <p class="notice" style="background:#fff">
+    <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 3v6c0 5-3.4 7.7-8 9-4.6-1.3-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+    <span><strong>Zero vazamento de marca.</strong> Esta tela não referencia Velaro nem SVD em nenhum ponto — logo, cores, textos, e-mails e domínio vêm de <code>reseller_stores</code>. As variáveis <code>--shop-*</code> no topo do CSS são o único ponto de pintura da vitrine.</span>
+  </p>
+</div>
+
+
+<style>
+  /* Barra de navegação dos mockups — auxiliar de revisão, não faz parte do produto. */
+  .mocknav {
+    position: fixed; right: 16px; bottom: 16px; z-index: 999;
+    display: flex; align-items: center; gap: 4px;
+    padding: 7px 9px; border-radius: 999px;
+    background: rgba(1,26,29,.94); border: 1px solid rgba(219,167,101,.34);
+    box-shadow: 0 10px 30px rgba(0,0,0,.30); backdrop-filter: blur(6px);
+    font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  }
+  .mocknav > span { font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+    color: rgba(255,255,255,.42); padding: 0 6px 0 4px; }
+  .mocknav a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,.74); white-space: nowrap; }
+  .mocknav a:hover { background: rgba(255,255,255,.10); color: #fff; }
+  .mocknav a.is-on { background: var(--color-gold-500); color: #06110f; font-weight: 600; }
+  .mocknav a.map { border: 1px solid rgba(219,167,101,.40); color: var(--color-gold-300); }
+  .mocknav a.map:hover { background: rgba(219,167,101,.16); color: #fff; }
+  @media print { .mocknav { display: none; } }
+  @media (max-width: 620px) { .mocknav > span { display: none; } .mocknav a { padding: 5px 8px; font-size: 11px; } }
+</style>
+<nav class="mocknav" aria-label="Navegação entre os mockups">
+  <span>Velaro</span>
+  <a href="index.html">Índice</a>
+  <a href="01-site-publico.html" data-p="01">Site</a>
+  <a href="02-portal-lojista.html" data-p="02">Portal</a>
+  <a href="03-vitrine-pdv.html" data-p="03">Vitrine</a>
+  <a href="04-painel-master.html" data-p="04">Master</a>
+  <a class="map" href="mapa.html">Mapa · 31 telas</a>
+</nav>
+<script>
+(function(){
+  var f = (location.pathname.split('/').pop() || 'index.html');
+  var a = document.querySelector('.mocknav a[href="' + f + '"]');
+  if (a) a.classList.add('is-on');
+})();
+</script>
+</body>
+</html>

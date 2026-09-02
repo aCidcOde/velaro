@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velaro · Ambiente 2 — Portal do Lojista (Dashboard)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="velaro-tokens.css">
+<link rel="stylesheet" href="velaro-ui.css">
+<style>
+  .brandbox {
+    margin-top: auto; padding: var(--space-4);
+    border: 1px solid rgba(215,166,93,.28); border-radius: var(--radius-md);
+    background: rgba(215,166,93,.05);
+  }
+  .brandbox__logo { display: flex; align-items: center; gap: 10px; padding-bottom: var(--space-3);
+    border-bottom: 1px solid rgba(215,166,93,.20); margin-bottom: var(--space-3); }
+  .brandbox dt { font-size: var(--text-xs); color: rgba(255,255,255,.45); }
+  .brandbox dd { margin: 0 0 8px; font-size: var(--text-sm); color: #fff; font-weight: 600; }
+
+  .hero-strip {
+    position: relative; overflow: hidden; border-radius: var(--radius-lg);
+    padding: var(--space-6) var(--space-8);
+    background: var(--silk);
+    color: #fff;
+  }
+  .hero-strip::after { content:""; position:absolute; right:-70px; top:-70px; width:340px; height:340px;
+    border-radius:50%; background: radial-gradient(circle at 40% 40%, rgba(219,167,101,.26), transparent 62%); }
+  .hero-strip > * { position: relative; z-index: 1; }
+  .hero-strip .display-md { color: #fff; }
+
+  .kpi-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(186px,1fr)); gap: var(--space-3); }
+  .kpi-card { background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: var(--space-4); display: grid; gap: 10px; }
+  .kpi-card a { font-size: var(--text-xs); font-weight: 600; color: var(--action-link); }
+
+  .quick { display: grid; grid-template-columns: repeat(auto-fit, minmax(228px,1fr)); gap: var(--space-3); }
+  .quick a {
+    display: flex; align-items: center; gap: var(--space-3);
+    padding: var(--space-4); border-radius: var(--radius-md);
+    background: var(--color-onyx-900); border: 1px solid rgba(215,166,93,.22); color: #fff;
+    transition: border-color .16s ease, transform .16s ease;
+  }
+  .quick a:hover { border-color: var(--color-gold-400); transform: translateY(-2px); }
+  .quick strong { display: block; font-size: var(--text-body); font-weight: 600; }
+  .quick small { display: block; font-size: var(--text-xs); color: rgba(255,255,255,.58); line-height: 16px; margin-top: 2px; }
+  .quick .push { color: var(--color-gold-400); }
+
+  .cols { display: grid; grid-template-columns: minmax(0,1.55fr) minmax(0,1.1fr) minmax(0,1fr); gap: var(--space-4); align-items: start; }
+  .cols > * { min-width: 0; }
+  .quick a { min-width: 0; }
+  .quick span { min-width: 0; }
+
+  .todo { display: grid; gap: var(--space-3); }
+  .todo li { display: flex; align-items: center; gap: var(--space-3); list-style: none;
+    padding: var(--space-3); border: 1px solid var(--border); border-radius: var(--radius-md); }
+  .todo h4 { margin: 0; font-family: var(--font-sans); font-size: var(--text-body); color: var(--ink); font-weight: 600; }
+  .todo p { margin: 2px 0 0; font-size: var(--text-xs); color: var(--ink-muted); }
+  ul.todo { padding: 0; margin: 0; }
+
+  .storecard { border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+  .storecard__bar { background: #1b1113; color: #fff; padding: 10px var(--space-4);
+    display: flex; align-items: center; justify-content: space-between; }
+  .storecard__brand { font-family: var(--font-display); font-size: 15px; letter-spacing: .16em; }
+  .storecard__banner { padding: var(--space-5) var(--space-4);
+    background: linear-gradient(120deg,#2a0f14,#6d1c26); color: #fff;
+    display: grid; grid-template-columns: 1fr 88px; gap: var(--space-3); align-items: center; }
+  .storecard__banner h4 { margin: 0; font-family: var(--font-display); font-size: 17px; line-height: 24px; font-weight: 500; }
+  .storecard__banner > div { min-width: 0; }
+  .storecard__art svg { width: 100%; height: auto; }
+
+  .setup { display: grid; gap: 10px; }
+  .setup li { display: flex; align-items: center; gap: 10px; list-style: none; font-size: var(--text-sm); }
+  ul.setup { padding: 0; margin: 0; }
+  .dot-ok { width: 18px; height: 18px; border-radius: 50%; background: var(--color-success-100);
+    color: var(--color-success-700); display: grid; place-items: center; font-size: 11px; flex: none; }
+  .dot-todo { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--color-gray-300); flex: none; }
+  .bar { height: 6px; border-radius: 999px; background: var(--color-gray-200); overflow: hidden; }
+  .bar > i { display: block; height: 100%; width: 66%; background: var(--color-success-500); }
+
+  @media (max-width: 1340px) { .cols { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+<div class="shell">
+
+  <!-- ============================ SIDEBAR ============================ -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <svg width="30" height="30" viewBox="0 0 40 40" fill="none"><path d="M6 9h28l-14 22z" stroke="var(--color-gold-300)" stroke-width="1.6" stroke-linejoin="round"/><path d="M13 9l7 11 7-11M6 9l14 8 14-8" stroke="var(--color-gold-400)" stroke-width="1.1"/></svg>
+      <span style="display:grid;line-height:1">
+        <strong style="font-family:var(--font-display);font-size:19px;letter-spacing:.30em;color:#fff;font-weight:400">VELARO</strong>
+        <small style="font-size:8px;letter-spacing:.34em;color:var(--color-gold-400);margin-top:4px">ALIANÇAS</small>
+      </span>
+    </div>
+
+    <nav class="nav">
+      <a href="02-portal-lojista.html" class="is-active"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z"/></svg> Dashboard</a>
+      <a href="mapa.html#portal-catalogo"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 5.5h7a2 2 0 012 2V19a2.4 2.4 0 00-2-1.4H3zM21 5.5h-7a2 2 0 00-2 2V19a2.4 2.4 0 012-1.4h7z"/></svg> Catálogo Revendedor</a>
+      <a href="mapa.html#portal-clientes"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M4.5 20a7.5 7.5 0 0115 0"/></svg> Clientes</a>
+      <a href="mapa.html#portal-financeiro"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5A2.5 2.5 0 0012 8.6c-1.4 0-2.5.8-2.5 1.9 0 2.6 5 1.4 5 4 0 1.1-1.1 1.9-2.5 1.9a2.5 2.5 0 01-2.5-.9M12 7v10"/></svg> Financeiro</a>
+      <a href="mapa.html#portal-pedidos"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 4h8l1 3H7zM6 7h12l1 12a1 1 0 01-1 1H6a1 1 0 01-1-1z"/></svg> Pedidos</a>
+      <a href="mapa.html#portal-loja"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9l1.5-4h13L20 9M4 9h16v10H4zM9 19v-6h6v6"/></svg> Personalização da loja</a>
+      <a href="mapa.html#portal-precos"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12l9-9 9 9-9 9z"/><circle cx="9" cy="9" r="1"/></svg> Preços e margens</a>
+      <a href="mapa.html#portal-suporte"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13v-1a8 8 0 0116 0v1M4 13h3v6H5a1 1 0 01-1-1zM20 13h-3v6h2a1 1 0 001-1z"/></svg> Suporte</a>
+      <a href="03-vitrine-pdv.html"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 8h16v11a1 1 0 01-1 1H5a1 1 0 01-1-1zM4 8l2-4h12l2 4M9 12h6"/></svg> Vitrine para clientes</a>
+    </nav>
+
+    <div class="brandbox">
+      <div class="brandbox__logo">
+        <span style="width:32px;height:32px;border-radius:50%;border:1px solid var(--color-gold-400);display:grid;place-items:center;font-family:var(--font-display);color:var(--color-gold-300);font-size:15px">T</span>
+        <span style="display:grid;line-height:1.1">
+          <strong style="font-family:var(--font-display);font-size:14px;letter-spacing:.22em;color:var(--color-gold-200);font-weight:500">TOMAZELLI</strong>
+          <small style="font-size:8px;letter-spacing:.28em;color:rgba(255,255,255,.42)">ALIANÇAS</small>
+        </span>
+      </div>
+      <dl style="margin:0">
+        <dt>Cód. revendedor</dt><dd class="num">00876</dd>
+        <dt>Plano</dt><dd>Parceiro Premium ◆</dd>
+      </dl>
+    </div>
+  </aside>
+
+  <!-- ============================ CONTEÚDO ============================ -->
+  <div>
+    <header class="topbar">
+      <details class="mobile-navigation">
+        <summary aria-label="Abrir navegação"></summary>
+        <div class="mobile-navigation__panel">
+          <nav class="nav" aria-label="Navegação principal">
+            <a href="02-portal-lojista.html" class="is-active">Dashboard</a>
+            <a href="mapa.html#portal-catalogo">Catálogo Revendedor</a>
+            <a href="mapa.html#portal-clientes">Clientes</a>
+            <a href="mapa.html#portal-financeiro">Financeiro</a>
+            <a href="mapa.html#portal-pedidos">Pedidos</a>
+            <a href="mapa.html#portal-loja">Personalização da loja</a>
+            <a href="mapa.html#portal-precos">Preços e margens</a>
+            <a href="mapa.html#portal-suporte">Suporte</a>
+            <a href="03-vitrine-pdv.html">Vitrine para clientes</a>
+          </nav>
+        </div>
+      </details>
+      <span class="eyebrow topbar__identity" style="color:var(--color-gold-300)">Portal do Lojista</span>
+      <div class="topbar__search">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-3.6-3.6"/></svg>
+        Buscar pedido, cliente ou produto…
+        <span class="kbd">Ctrl K</span>
+      </div>
+      <div class="row push topbar__actions">
+        <a class="btn btn--gold btn--sm" href="mapa.html#portal-suporte">Solicitar atendimento</a>
+        <span class="avatar" style="background:var(--color-gold-500);color:#06110f">TA</span>
+        <span style="display:grid;line-height:1.2">
+          <strong style="font-size:var(--text-sm);color:#fff">Tomazelli Alianças</strong>
+          <small style="font-size:var(--text-xs);color:rgba(255,255,255,.5)">Parceiro Premium</small>
+        </span>
+      </div>
+    </header>
+
+    <main class="main" id="conteudo">
+
+      <section class="hero-strip">
+        <h1 class="display-md" style="letter-spacing:.02em">Dashboard do Lojista</h1>
+        <p class="lede gold" style="margin-top:6px">Bem-vindo à sua plataforma B2B Velaro.</p>
+      </section>
+
+      <!-- KPIs -->
+      <section class="kpi-strip">
+        <div class="kpi-card">
+          <div class="kpi"><span class="kpi__icon"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 4h8l1 3H7zM6 7h12l1 12a1 1 0 01-1 1H6a1 1 0 01-1-1z"/></svg></span>
+            <div><div class="kpi__label">Pedidos em andamento</div><div class="kpi__value">18</div></div></div>
+          <a href="mapa.html#portal-pedidos">Ver pedidos →</a>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi"><span class="kpi__icon"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg></span>
+            <div><div class="kpi__label">Em produção</div><div class="kpi__value">12</div></div></div>
+          <a href="mapa.html#portal-pedidos">Ver pedidos →</a>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi"><span class="kpi__icon"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg></span>
+            <div><div class="kpi__label">Prontos para retirada</div><div class="kpi__value">7</div></div></div>
+          <a href="mapa.html#portal-pedidos">Ver pedidos →</a>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi"><span class="kpi__icon" style="background:var(--color-error-50);color:var(--color-error-700)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span>
+            <div><div class="kpi__label">Aguardando pagamento à Velaro</div><div class="kpi__value">6</div></div></div>
+          <a href="mapa.html#portal-financeiro">Ver detalhes →</a>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi"><span class="kpi__icon"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13v-1a8 8 0 0116 0v1M4 13h3v6H5a1 1 0 01-1-1zM20 13h-3v6h2a1 1 0 001-1z"/></svg></span>
+            <div><div class="kpi__label">Chamados abertos</div><div class="kpi__value">3</div></div></div>
+          <a href="mapa.html#portal-suporte">Ver chamados →</a>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi"><span class="kpi__icon"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.3"/><path d="M3 19a6 6 0 0112 0M15 19a5 5 0 016-4.6"/></svg></span>
+            <div><div class="kpi__label">Clientes cadastrados</div><div class="kpi__value">248</div></div></div>
+          <a href="mapa.html#portal-clientes">Ver clientes →</a>
+        </div>
+      </section>
+
+      <!-- Atalhos -->
+      <section class="quick">
+        <a href="mapa.html#portal-pedidos"><svg class="ic" style="width:24px;height:24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 4h8l1 3H7zM6 7h12l1 12a1 1 0 01-1 1H6a1 1 0 01-1-1z"/><path d="M12 11v5M9.5 13.5h5"/></svg>
+          <span><strong>Novo pedido</strong><small>Criar um novo pedido para seu cliente</small></span><span class="push">›</span></a>
+        <a href="mapa.html#portal-catalogo"><svg class="ic" style="width:24px;height:24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5.5h7a2 2 0 012 2V19a2.4 2.4 0 00-2-1.4H3zM21 5.5h-7a2 2 0 00-2 2V19a2.4 2.4 0 012-1.4h7z"/></svg>
+          <span><strong>Catálogo Revendedor</strong><small>Acesse o catálogo completo de alianças</small></span><span class="push">›</span></a>
+        <a href="03-vitrine-pdv.html"><svg class="ic" style="width:24px;height:24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 9l1.5-4h13L20 9M4 9h16v10H4zM9 19v-6h6v6"/></svg>
+          <span><strong>Vitrine da loja</strong><small>Visualize sua vitrine para clientes</small></span><span class="push">›</span></a>
+        <a href="mapa.html#portal-financeiro"><svg class="ic" style="width:24px;height:24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M14.5 9.5A2.5 2.5 0 0012 8.6c-1.4 0-2.5.8-2.5 1.9 0 2.6 5 1.4 5 4 0 1.1-1.1 1.9-2.5 1.9a2.5 2.5 0 01-2.5-.9"/></svg>
+          <span><strong>Financeiro</strong><small>Acompanhe pagamentos e cobranças com a Velaro</small></span><span class="push">›</span></a>
+        <a href="mapa.html#portal-clientes"><svg class="ic" style="width:24px;height:24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="8" r="3.2"/><path d="M3.5 20a6.5 6.5 0 0113 0M18 9v6M15 12h6"/></svg>
+          <span><strong>Cadastrar cliente</strong><small>Adicione um novo cliente final</small></span><span class="push">›</span></a>
+      </section>
+
+      <!-- 3 colunas -->
+      <section class="cols">
+
+        <div class="card">
+          <div class="card__head">
+            <h2 class="title">Últimos pedidos</h2>
+            <a href="mapa.html#portal-pedidos" class="link-gold">Ver todos →</a>
+          </div>
+          <div class="table-scroll" tabindex="0" aria-label="Últimos pedidos; deslize horizontalmente para ver todas as colunas">
+            <table class="table">
+              <thead><tr><th>Pedido</th><th>Cliente final</th><th>Status do pedido</th><th>Status do pagamento</th><th class="cell-num">Custo Velaro</th><th>Previsão</th></tr></thead>
+              <tbody>
+                <tr><td class="cell-strong">#2412</td><td>Maria Silva</td><td><span class="chip chip--violet">Em produção</span></td><td><span class="chip chip--ok">Pago</span></td><td class="cell-num cell-strong">R$ 2.980,00</td><td class="num">28/05/2026</td></tr>
+                <tr><td class="cell-strong">#2418</td><td>João Souza</td><td><span class="chip chip--ok">Pronto para retirada</span></td><td><span class="chip chip--ok">Pago</span></td><td class="cell-num cell-strong">R$ 3.450,00</td><td class="num">24/05/2026</td></tr>
+                <tr><td class="cell-strong">#2420</td><td>Ana Costa</td><td><span class="chip chip--neutral">Pedido registrado</span></td><td><span class="chip chip--warn">Aguardando pagamento</span></td><td class="cell-num cell-strong">R$ 1.890,00</td><td class="muted">—</td></tr>
+                <tr><td class="cell-strong">#2421</td><td>Carlos Pereira</td><td><span class="chip chip--violet">Em produção</span></td><td><span class="chip chip--ok">Pago</span></td><td class="cell-num cell-strong">R$ 2.560,00</td><td class="num">31/05/2026</td></tr>
+                <tr><td class="cell-strong">#2422</td><td>Juliana Lima</td><td><span class="chip chip--info">Em transporte</span></td><td><span class="chip chip--warn">Aguardando compensação</span></td><td class="cell-num cell-strong">R$ 1.450,00</td><td class="num">05/06/2026</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="notice" style="margin-top:var(--space-4)">
+            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+            <span><strong>Status do pedido</strong> e <strong>status do pagamento</strong> são independentes: o pedido só entra em produção após a quitação do lote.</span>
+          </p>
+        </div>
+
+        <div class="card">
+          <div class="card__head">
+            <h2 class="title">Ações pendentes</h2>
+            <a href="mapa.html#portal-pedidos" class="link-gold">Ver todas →</a>
+          </div>
+          <ul class="todo">
+            <li><span class="kpi__icon" style="width:34px;height:34px;border-radius:var(--radius-sm)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9l1.5-4h13L20 9M4 9h16v10H4z"/></svg></span>
+              <div style="flex:1"><h4>Cadastrar logo da loja</h4><p>Personalize sua vitrine com sua marca.</p></div>
+              <a class="btn btn--secondary btn--sm" href="mapa.html#portal-loja">Fazer agora</a></li>
+            <li><span class="kpi__icon" style="width:34px;height:34px;border-radius:var(--radius-sm)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12l9-9 9 9-9 9z"/></svg></span>
+              <div style="flex:1"><h4>Definir markup padrão</h4><p>Configure sua margem padrão de venda.</p></div>
+              <a class="btn btn--secondary btn--sm" href="mapa.html#portal-precos">Configurar</a></li>
+            <li><span class="kpi__icon" style="width:34px;height:34px;border-radius:var(--radius-sm);background:var(--color-warning-50);color:var(--color-warning-700)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 13v-1a8 8 0 0116 0v1M4 13h3v6H5a1 1 0 01-1-1zM20 13h-3v6h2a1 1 0 001-1z"/></svg></span>
+              <div style="flex:1"><h4>Responder chamado #673</h4><p>Cliente solicitou alteração no pedido.</p></div>
+              <a class="btn btn--secondary btn--sm" href="mapa.html#portal-suporte">Ver chamado</a></li>
+            <li><span class="kpi__icon" style="width:34px;height:34px;border-radius:var(--radius-sm);background:var(--color-error-50);color:var(--color-error-700)"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg></span>
+              <div style="flex:1"><h4>Confirmar pagamento do pedido #2420</h4><p>Aguardando confirmação para liberar produção.</p></div>
+              <a class="btn btn--primary btn--sm" href="mapa.html#portal-pedidos">Ver pedido</a></li>
+          </ul>
+        </div>
+
+        <div class="stack">
+          <div class="card card--compact">
+            <div class="card__head"><h2 class="title">Vitrine da sua loja</h2></div>
+            <div class="storecard">
+              <div class="storecard__bar">
+                <span class="storecard__brand">TOMAZELLI</span>
+                <span style="font-size:var(--text-xs);color:rgba(255,255,255,.6)">Alianças · Coleções · Contato</span>
+              </div>
+              <div class="storecard__banner">
+                <div>
+                  <h4>Símbolo de amor.<br>Feito para a vida toda.</h4>
+                  <a class="btn btn--gold btn--sm" style="margin-top:12px" href="mapa.html#env-2">Conheça nossas alianças</a>
+                </div>
+                <span class="storecard__art"><svg viewBox="0 0 240 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Par de alianças" preserveAspectRatio="xMidYMid meet"><defs></defs><ellipse cx="120" cy="134" rx="86" ry="9" fill="#000" opacity=".16"/><linearGradient id="g60a" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(-14 92 70)"><path d="M 48,70 a 44,48 0 1,0 88,0 a 44,48 0 1,0 -88,0 Z M 58,70 a 34,38 0 1,0 68,0 a 34,38 0 1,0 -68,0 Z" fill="url(#g60a)" fill-rule="evenodd"/><ellipse cx="92" cy="70" rx="34" ry="38" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="92" cy="70" rx="44" ry="48" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 53.0,70 a 39.0,43.0 0 0,1 39.0,-43.0" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.4" stroke-linecap="round"/></g><linearGradient id="g60b" x1="0%" y1="0%" x2="82%" y2="100%"><stop offset="0%" stop-color="#f8ead0"/><stop offset="22%" stop-color="#d8ae57"/><stop offset="46%" stop-color="#8a6224"/><stop offset="70%" stop-color="#d8ae57"/><stop offset="100%" stop-color="#f0d59b"/></linearGradient><g transform="rotate(8 152 78)"><path d="M 104,78 a 48,52 0 1,0 96,0 a 48,52 0 1,0 -96,0 Z M 115,78 a 37,41 0 1,0 74,0 a 37,41 0 1,0 -74,0 Z" fill="url(#g60b)" fill-rule="evenodd"/><ellipse cx="152" cy="78" rx="37" ry="41" fill="none" stroke="#8a6224" stroke-opacity=".55" stroke-width="1"/><ellipse cx="152" cy="78" rx="48" ry="52" fill="none" stroke="#f8ead0" stroke-opacity=".45" stroke-width=".8"/><path d="M 109.5,78 a 42.5,46.5 0 0,1 42.5,-46.5" fill="none" stroke="#f8ead0" stroke-opacity=".7" stroke-width="3.7" stroke-linecap="round"/></g></svg></span>
+              </div>
+                            </div>
+            <div class="spread" style="margin-top:var(--space-4)">
+              <span class="row" style="font-size:var(--text-sm)">
+                <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="var(--ink-muted)" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18a15 15 0 010-18"/></svg>
+                tomazellialiancas.com.br
+              </span>
+              <a class="btn btn--secondary btn--sm" href="03-vitrine-pdv.html">Acessar vitrine →</a>
+            </div>
+            <p class="notice" style="margin-top:var(--space-3)">
+              <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l8 3v6c0 5-3.4 7.7-8 9-4.6-1.3-8-4-8-9V6z"/></svg>
+              <span>A vitrine é <strong>100% white label</strong>: o consumidor final não vê a marca Velaro.</span>
+            </p>
+          </div>
+
+          <div class="card card--compact">
+            <div class="spread" style="margin-bottom:var(--space-3)">
+              <h2 class="title">Configuração da loja</h2>
+              <span class="chip chip--flat chip--neutral num">2 de 3</span>
+            </div>
+            <div class="bar"><i></i></div>
+            <ul class="setup" style="margin-top:var(--space-4)">
+              <li><span class="dot-ok">✓</span> <span style="flex:1;color:var(--ink)">Personalizar logo da loja</span> <a class="btn btn--secondary btn--sm" href="mapa.html#portal-loja">Editar</a></li>
+              <li><span class="dot-ok">✓</span> <span style="flex:1;color:var(--ink)">Definir margem padrão</span> <a class="btn btn--secondary btn--sm" href="mapa.html#portal-precos">Configurar</a></li>
+              <li><span class="dot-todo"></span> <span style="flex:1">Ativar vitrine para clientes</span> <a class="btn btn--primary btn--sm" href="mapa.html#portal-vitrine">Ativar</a></li>
+            </ul>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+</div>
+
+<style>
+  /* Barra de navegação dos mockups — auxiliar de revisão, não faz parte do produto. */
+  .mocknav {
+    position: fixed; right: 16px; bottom: 16px; z-index: 999;
+    display: flex; align-items: center; gap: 4px;
+    padding: 7px 9px; border-radius: 999px;
+    background: rgba(1,26,29,.94); border: 1px solid rgba(219,167,101,.34);
+    box-shadow: 0 10px 30px rgba(0,0,0,.30); backdrop-filter: blur(6px);
+    font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+  }
+  .mocknav > span { font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+    color: rgba(255,255,255,.42); padding: 0 6px 0 4px; }
+  .mocknav a { padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 500;
+    color: rgba(255,255,255,.74); white-space: nowrap; }
+  .mocknav a:hover { background: rgba(255,255,255,.10); color: #fff; }
+  .mocknav a.is-on { background: var(--color-gold-500); color: #06110f; font-weight: 600; }
+  .mocknav a.map { border: 1px solid rgba(219,167,101,.40); color: var(--color-gold-300); }
+  .mocknav a.map:hover { background: rgba(219,167,101,.16); color: #fff; }
+  @media print { .mocknav { display: none; } }
+  @media (max-width: 620px) { .mocknav > span { display: none; } .mocknav a { padding: 5px 8px; font-size: 11px; } }
+</style>
+<nav class="mocknav" aria-label="Navegação entre os mockups">
+  <span>Velaro</span>
+  <a href="index.html">Índice</a>
+  <a href="01-site-publico.html" data-p="01">Site</a>
+  <a href="02-portal-lojista.html" data-p="02">Portal</a>
+  <a href="03-vitrine-pdv.html" data-p="03">Vitrine</a>
+  <a href="04-painel-master.html" data-p="04">Master</a>
+  <a class="map" href="mapa.html">Mapa · 31 telas</a>
+</nav>
+<script>
+(function(){
+  var f = (location.pathname.split('/').pop() || 'index.html');
+  var a = document.querySelector('.mocknav a[href="' + f + '"]');
+  if (a) a.classList.add('is-on');
+})();
+</script>
+</body>
+</html>

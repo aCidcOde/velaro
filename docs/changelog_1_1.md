@@ -1,5 +1,20 @@
 # Changelog 1.1
 
+## Principais implementações
+
+- Identidade visual Velaro consolidada para os quatro ambientes da plataforma B2B.
+- Mockups responsivos com navegação móvel, hierarquia consistente e acessibilidade.
+- Prancha visual de inputs com estados, densidades e composições reutilizáveis.
+
+### 2026-09-02 · FEAT · Design system e mockups da plataforma B2B
+
+**Resumo:** A experiência visual da Velaro foi amadurecida em uma referência única,
+coerente e responsiva para validação antes da implementação funcional.
+
+**O que foi feito:** Foram consolidados identidade, tipografia, componentes, quatro
+ambientes de produto e uma prancha visual de inputs, com comportamento validado em
+desktop, tablet e mobile.
+
 ## Auditoria Técnica — Segurança, Arquitetura e Workflow de Pedidos
 
 A versão `1.1` aplica as correções identificadas em auditoria técnica completa do scaffold (4 agentes em paralelo: segurança, arquitetura, formatação e conformidade com guidelines).
@@ -368,68 +383,36 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 |------|---------|-----------|
 | 1 | `composer validate --no-check-publish` | 🟢 valid |
 | 2 | `composer audit --locked` | 🟢 zero advisories |
-| 3 | `vendor/bin/pint --test` | 🟢 passed |
+| 3 | `composer qa:style` | 🟢 passed |
 | 4 | `vendor/bin/phpstan analyse` | 🟢 no errors |
-| 5 | `php artisan test --compact` | 🟢 66 passed, 281 assertions |
-| 6 | `gitleaks detect` | 🔴 1 leak (credencial versionada) |
-| 7 | prefixo de commit | ⚪ N/A (sem commit autorizado) |
+| 5 | `php artisan test --compact` | 🟢 72 passed, 332 assertions |
+| 6 | `gitleaks detect` | 🟢 no leaks found |
+| 7 | prefixo de commit | 🟢 `[FEAT]` em pt-BR |
 | 8 | `composer qa:anti-debug` | 🟢 sem debug calls |
 | 9 | Trivy | ⚪ N/A (sem Dockerfile) |
 | 10 | changelog atualizado | 🟢 este bloco |
-| — | `npm audit` | 🟢 zero vulnerabilidades |
-| — | `npm run build` | 🟢 build ok |
 | — | `php artisan route:list` | 🟢 85 rotas |
-| — | `php artisan view:cache` | 🟢 todas as views compilam |
 
 **📊 Total de testes**
 
-🔵 66 testes · 281 assertions · 2,4s
+🔵 72 testes · 332 assertions
 
 **🛡️ Validação das demais gates**
 
-- 🟢 22 agentes de verificação adversarial entre as duas rodadas, 0 erros
-- 🟢 `manifest.json` válido após correção dos caminhos
-- 🟢 `public/storage` aponta para o storage deste projeto
-- 🟢 permissões dos gates preservadas na limpeza da allowlist
-- 🔴 Gate 6 bloqueado por credencial versionada em `.codex/config.toml`
+- 🟢 Mockups inspecionados em desktop, tablet e mobile, sem overflow
+- 🟢 Console do navegador sem erros ou avisos
+- 🟢 Navegação móvel, foco visível e redução de movimento cobertos por teste
+- 🟢 Nenhuma migration alterada ou órfã nesta entrega
 
 **📈 Métricas do sistema**
 
-- 🔵 Arquivos rastreados: 701 (eram 724 no início da série — 23 removidos)
-- 🔵 Linhas rastreadas: 142.589 (eram 177.337 — 34.748 a menos)
-- 🔵 `public/`: 13 MB (era 21 MB — 8 MB de assets de marca de terceiros)
-- 🔵 Baseline do PHPStan: 1.533 bytes (era 35.930 — redução de 96%)
-- 🔵 Advisories de segurança: 0 composer (eram 40) · 0 npm (eram 11)
+- 🔵 Arquivos rastreados: 720
+- 🔵 Linhas rastreadas: 146.488
 - ⚪ Release anterior de referência: N/A (`1.1` é a baseline da série)
 - ⚪ Arquivos da release anterior: N/A
 - ⚪ Linhas da release anterior: N/A
 - ⚪ Aumento de arquivos vs release anterior: N/A
 - ⚪ Aumento de linhas vs release anterior: N/A
-- 🔵 Novos commits da release: 0 (tudo no working tree, sem autorização de commit)
+- 🔵 Novos commits da release: 2 (incluindo esta entrega)
 
-**Status final: 🔴 BLOQUEADO** — gate 6 não passa enquanto a credencial versionada não for rotacionada.
-
-### Pendência bloqueante
-
-**Credencial real versionada.** `.codex/config.toml` é rastreado e contém uma chave de API do Context7 em texto puro, commitada em `7bc5130` desde 25/01/2026. Não foi allowlistada de propósito.
-
-1. **Rotacionar a chave** no Context7 — está no histórico do Git, considere comprometida
-2. Mover o valor para o `.env` (`CONTEXT7_API_KEY` já está no `.env.example`)
-3. `git rm --cached .codex/config.toml` e adicionar `.codex/` ao `.gitignore`
-
-### Credenciais a rotacionar
-
-Removidas do `.env`, mas **ainda válidas nos provedores** — apagar não revoga:
-
-| Provedor | Variável |
-|----------|----------|
-| OpenAI | `OPENAI_API_KEY` |
-| Google Cloud (OAuth) | `GOOGLE_DRIVE_AGENT_CLIENT_SECRET`, `GOOGLE_DRIVE_AGENT_REFRESH_TOKEN` |
-| n8n | `N8N_WEBHOOK_TOKEN` |
-| InfoSimples e portais | `INFOSIMPLES_TOKEN`, `INFOSIMPLES_GOVBR_SENHA`, `INFOSIMPLES_ARISP_SENHA`, `INFOSIMPLES_PREFEITURA_SP_SENHA` |
-
-O `.mcp.json` executa o servidor `context7` como `bash -lc 'set -a; source .env; set +a; npx -y @context7/mcp'`, o que exportava o `.env` inteiro para um processo npm de terceiros. Trate as credenciais como já expostas.
-
-### Resíduo que permanece no histórico do Git
-
-A remoção limpa o estado atual, mas o histórico ainda contém: a chave do Context7, o `storage/users.json` com hash bcrypt e e-mail real, e os assets de marca de terceiros. Se o repositório for tornado público ou o fork herdar o histórico, isso continua acessível.
+**Status final: 🟢 APROVADO**

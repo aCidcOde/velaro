@@ -1,0 +1,80 @@
+/* =========================================================================
+   VELARO — Opções de tipografia (para escolha)
+   Cada opção define o par Display (voz da marca) + Sans (voz operacional)
+   e o ajuste fino que aquela fonte exige. Aplicar via <html data-font="x">.
+   Ao decidir, o par vencedor vira --font-display/--font-sans em
+   velaro-tokens.css e este arquivo é descartado.
+   ========================================================================= */
+
+/* ---- A · DIDONE — "Alta joalheria" ------------------------------------ */
+[data-font="a"] {
+  --font-display: "Bodoni Moda", Didot, Georgia, serif;
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+}
+[data-font="a"] .display-lg,
+[data-font="a"] .display-md,
+[data-font="a"] .display-sm,
+[data-font="a"] .title,
+[data-font="a"] .page-title,
+[data-font="a"] .wordmark { font-weight: 600; letter-spacing: 0; }
+[data-font="a"] .kpi__value,
+[data-font="a"] .kpi-box span { font-weight: 600; }
+[data-font="a"] .hero h1,
+[data-font="a"] .hero-h1 { font-weight: 500; letter-spacing: -.01em; }
+
+/* ---- B · GEOMÉTRICA — "Minimal contemporâneo" ------------------------- */
+[data-font="b"] {
+  --font-display: "Jost", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
+}
+[data-font="b"] .display-lg,
+[data-font="b"] .display-md,
+[data-font="b"] .display-sm,
+[data-font="b"] .title,
+[data-font="b"] .page-title { font-weight: 500; letter-spacing: -.015em; }
+[data-font="b"] .wordmark { font-weight: 400; letter-spacing: .30em; }
+[data-font="b"] .kpi__value,
+[data-font="b"] .kpi-box span { font-weight: 500; letter-spacing: -.02em; }
+[data-font="b"] .hero h1,
+[data-font="b"] .hero-h1 { font-weight: 300; letter-spacing: -.03em; }
+[data-font="b"] .hero h1 em,
+[data-font="b"] .hero-h1 em { font-style: normal; font-weight: 500; }
+
+/* ---- C · EDITORIAL — "Serifada moderna apertada" ---------------------- */
+[data-font="c"] {
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-sans: "Schibsted Grotesk", ui-sans-serif, system-ui, sans-serif;
+}
+[data-font="c"] .display-lg,
+[data-font="c"] .display-md,
+[data-font="c"] .display-sm,
+[data-font="c"] .title,
+[data-font="c"] .page-title,
+[data-font="c"] .kpi__value,
+[data-font="c"] .kpi-box span { font-weight: 400; letter-spacing: -.015em; }
+[data-font="c"] .wordmark { font-weight: 400; letter-spacing: .24em; }
+[data-font="c"] .hero h1,
+[data-font="c"] .hero-h1 { font-weight: 400; letter-spacing: -.025em; }
+
+/* ---- D · SERIFADA QUENTE — "Caráter sem nostalgia" -------------------- */
+[data-font="d"] {
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+}
+[data-font="d"] .display-lg,
+[data-font="d"] .display-md,
+[data-font="d"] .display-sm,
+[data-font="d"] .title,
+[data-font="d"] .page-title { font-weight: 600; letter-spacing: -.018em;
+  font-variation-settings: "SOFT" 0, "WONK" 1; }
+[data-font="d"] .wordmark { font-weight: 500; letter-spacing: .22em; }
+[data-font="d"] .kpi__value,
+[data-font="d"] .kpi-box span { font-weight: 600; letter-spacing: -.02em; }
+[data-font="d"] .hero h1,
+[data-font="d"] .hero-h1 { font-weight: 500; letter-spacing: -.03em; }
+
+/* ---- E · ATUAL — Playfair Display + Outfit (referência de comparação) -- */
+[data-font="e"] {
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+}
