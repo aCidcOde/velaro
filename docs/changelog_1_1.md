@@ -7,6 +7,34 @@
 - Documentação por tela com campos, permissões, regras de negócio e critérios de aceite.
 - Sistema de design registrado como referência única e já aplicado à aplicação em funcionamento.
 
+### 2026-09-03 · CHORE · Higiene do repositório
+
+**Resumo:** Arquivos gerados automaticamente pela execução das ferramentas internas
+deixaram de ser versionados, evitando conflito recorrente entre quem trabalha no projeto.
+
+**O que foi feito:** Os artefatos temporários criados ao rodar os geradores de
+documentação foram removidos do controle de versão e passaram a ser ignorados
+permanentemente.
+
+### 2026-09-02 · FEAT · Telas internas, medição no mobile e diagrama do banco
+
+**Resumo:** O detalhamento das telas avançou dos fluxos principais para os níveis
+internos, cobrindo o que o usuário encontra depois do primeiro clique.
+
+**O que foi feito:** Foram desenhadas as telas de segundo nível de cada ambiente —
+detalhes de pedido, de chamado e de produto, as áreas de configuração e as páginas
+institucionais. O comportamento no celular foi medido e um diagrama do banco de dados
+foi produzido para apoiar a etapa de implementação.
+
+### 2026-09-02 · FIX · Tipografia da marca bloqueada pela política de segurança
+
+**Resumo:** A tipografia aprovada não estava chegando ao usuário: a política de segurança
+da plataforma bloqueava o provedor externo em silêncio, e o texto saía numa fonte genérica.
+
+**O que foi feito:** As fontes passaram a ser servidas pelo próprio domínio, em vez de
+abrir exceção na política de segurança para um terceiro. Foram embarcados apenas os
+recortes de caracteres usados pelo português, mantendo o peso do carregamento baixo.
+
 ### 2026-09-02 · FEAT · Identidade visual aplicada à aplicação
 
 **Resumo:** A identidade aprovada saiu da prancheta e passou a valer no produto em
@@ -409,13 +437,11 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 | 4 | `composer qa:static` | 🟢 no errors (109 arquivos) |
 | 5 | `composer qa:test` | 🟢 72 passed, 332 assertions |
 | 6 | `composer qa:secrets` | 🟢 no leaks found |
-| 7 | prefixo de commit | 🟢 `[FEAT]` com descrição em pt-BR |
+| 7 | prefixo de commit | 🟢 `[CHORE]` com descrição em pt-BR |
 | 8 | `composer qa:anti-debug` | 🟢 sem debug calls |
 | 9 | Trivy | ⚪ N/A (sem Dockerfile) |
 | 10 | changelog atualizado | 🟢 este bloco |
 | — | `php artisan route:list --except-vendor` | 🟢 85 rotas |
-| — | `php artisan migrate --pretend` | 🟢 nothing to migrate |
-| — | `npm run build` | 🟢 build concluído |
 
 **📊 Total de testes**
 
@@ -423,22 +449,22 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 
 **🛡️ Validação das demais gates**
 
+- 🟢 Geradores de documentação reexecutados após a limpeza, sem alteração de resultado
+- 🟢 Artefatos temporários confirmados fora do controle de versão após nova execução
 - 🟢 Contraste medido par a par: 12 combinações em uso aprovadas nos dois temas
 - 🟢 Identidade verificada na aplicação em execução, em tema claro e escuro
-- 🟢 Cores fixas fora do sistema de design eliminadas das telas, do site e dos e-mails
-- 🟢 Todas as telas do escopo navegáveis entre si — 942 destinos verificados
 - 🟢 Nenhuma migration alterada, criada ou órfã nesta entrega
-- 🟢 Núcleo compartilhado preservado: os componentes existentes herdaram a marca sem reescrita
+- ⚪ Tipografia do site institucional segue no fallback do sistema — decisão em aberto
 
 **📈 Métricas do sistema**
 
-- 🔵 Arquivos rastreados: 788
-- 🔵 Linhas rastreadas: 156.811
+- 🔵 Arquivos rastreados: 832
+- 🔵 Linhas rastreadas: 166.876
 - ⚪ Release anterior de referência: N/A (`1.1` é a baseline da série)
 - ⚪ Arquivos da release anterior: N/A
 - ⚪ Linhas da release anterior: N/A
 - ⚪ Aumento de arquivos vs release anterior: N/A
 - ⚪ Aumento de linhas vs release anterior: N/A
-- 🔵 Novos commits da release: 4 (incluindo esta entrega)
+- 🔵 Novos commits da release: 7 (incluindo esta entrega)
 
 **Status final: 🟢 APROVADO**
