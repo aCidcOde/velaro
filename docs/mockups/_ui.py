@@ -2,7 +2,8 @@
 """Biblioteca de componentes dos mockups Velaro.
 Um shell por ambiente + blocos reutilizáveis. Cada tela vira só conteúdo."""
 
-import html as _h, importlib.util as _il
+import html as _h
+import re, importlib.util as _il
 
 _spec = _il.spec_from_file_location("rings", "_gen_rings.py")
 rings = _il.module_from_spec(_spec); _spec.loader.exec_module(rings)
@@ -131,6 +132,15 @@ SITE_NAV = [("Início","01-site-publico.html"),("Sobre nós","10-site-sobre.html
             ("Catálogo","11-site-catalogo.html"),("Seja um revendedor","12-site-cadastro.html"),
             ("Fale conosco","11-site-catalogo.html#contato")]
 
+def _sitenav_mobile(links):
+    """Menu do site no celular. .site-nav__links some abaixo de 1100px e nada
+    tomava o lugar dela: 9 das 10 telas do site ficavam sem navegacao nenhuma no
+    telefone. Mesmo <details> do painel — sem JS."""
+    return ('<details class="site-nav__mobile">'
+            '<summary aria-label="Abrir navegação"></summary>'
+            f'<nav class="site-nav__mobile__panel">{links}</nav>'
+            '</details>')
+
 def site_shell(active, hero, body, autenticado=None, foot_pillars=None):
     def _lnk(t, h):
         cls = ' class="is-active"' if t == active else ''
@@ -152,6 +162,7 @@ def site_shell(active, hero, body, autenticado=None, foot_pillars=None):
 <header class="site-nav">
   <a class="row" href="01-site-publico.html" style="gap:12px">{logo(34)}{wordmark(23)}</a>
   <nav class="site-nav__links">{links}</nav>
+  {_sitenav_mobile(links)}
   <div class="site-nav__account">
     {conta}
     <a class="btn btn--gold" href="12-site-cadastro.html">{ic("user")}
@@ -221,6 +232,29 @@ MASTER_NAV = [
  ("support","Suporte","60-master-suporte.html"),
 ]
 
+def _busca(placeholder):
+    """Busca do topo. No desktop e a barra de sempre; no celular vira so o icone,
+    que abre o campo ao toque. E um <details>, o mesmo recurso do hamburger:
+    funciona sem JS, que o prototipo nao tem."""
+    return ('<details class="topbar__search">'
+            f'<summary>{ic("search")}'
+            f'<span class="topbar__search__ph">{e(placeholder)}</span>'
+            '<span class="kbd">Ctrl K</span></summary>'
+            '<div class="topbar__search__panel">'
+            f'<span class="input-fake">{e(placeholder)}</span>'
+            '</div></details>')
+
+def _mobilenav(items, active):
+    """Hamburger do topo. As 4 telas originais (01-04) tinham este bloco escrito a
+    mao; portal_shell e master_shell nao, e por isso as outras 31 telas ficavam
+    SEM navegacao nenhuma no celular — a .sidebar some abaixo de 1100px e nada
+    tomava o lugar dela."""
+    return ('<details class="mobile-navigation">'
+            '<summary aria-label="Abrir navegação"></summary>'
+            '<div class="mobile-navigation__panel">'
+            f'<nav class="nav" aria-label="Navegação principal">{_nav(items, active)}</nav>'
+            '</div></details>')
+
 def _nav(items, active):
     return "".join(
       f'<a href="{h}" class="{"is-active" if h==active else ""}">{ic(i)} {e(t)}</a>'
@@ -246,9 +280,10 @@ def portal_shell(active, body, titulo="Portal do Lojista"):
   </aside>
   <div>
     <header class="topbar">
-      <span class="eyebrow" style="color:var(--color-gold-300)">{e(titulo)}</span>
-      <div class="topbar__search">{ic("search")} Buscar pedido, cliente ou produto…<span class="kbd">Ctrl K</span></div>
-      <div class="row push">
+      {_mobilenav(PORTAL_NAV, active)}
+      <span class="eyebrow topbar__identity" style="color:var(--color-gold-300)">{e(titulo)}</span>
+      {_busca("Buscar pedido, cliente ou produto…")}
+      <div class="row push topbar__actions">
         <a class="btn btn--gold btn--sm" href="36-portal-suporte.html">Solicitar atendimento</a>
         <span class="avatar" style="background:var(--color-gold-500);color:#06110f">TA</span>
         <span style="display:grid;line-height:1.2">
@@ -275,12 +310,13 @@ def master_shell(active, body):
   </aside>
   <div>
     <header class="topbar">
-      <span class="row" style="gap:10px">{ic("shield", style="color:var(--color-gold-400)")}
+      {_mobilenav(MASTER_NAV, active)}
+      <span class="row topbar__identity" style="gap:10px">{ic("shield", style="color:var(--color-gold-400)")}
         <span style="display:grid;line-height:1.25">
           <strong style="font-size:var(--text-sm);color:#fff">Painel Interno</strong>
           <small style="font-size:11px;color:rgba(255,255,255,.5)">Gestão de Revendedores</small></span></span>
-      <div class="topbar__search">{ic("search")} Buscar revendedor, pedido, cliente…<span class="kbd">Ctrl K</span></div>
-      <div class="row push" style="gap:var(--space-4)">
+      {_busca("Buscar revendedor, pedido, cliente…")}
+      <div class="row push topbar__actions" style="gap:var(--space-4)">
         <a class="storeswitch" href="03-vitrine-pdv.html"><small>Acessar loja</small><strong>Tomazelli Alianças ↗</strong></a>
         <a class="impersonate" href="02-portal-lojista.html" title="Ação auditada">{ic("store")}
           <span><strong>Painel Revendedor</strong><small>Ver como revendedor</small></span></a>
@@ -444,3 +480,161 @@ def prodcard(variant, uid, sku, nome, specs, preco, extra="", chip_html="", acoe
   <span class="prod__price">{e(preco)}</span>{chip_html}{extra}
   <div class="prod__acts">{acoes}</div>
 </div>'''
+
+
+# ═══════════════════════════ RELIGAÇÃO DOS BOTÕES (pós-processamento) ═══════════════════════════
+#
+# Todo botão nasce com href="#" (o default de btn()). Este passo, rodado por W()
+# ao gravar cada tela, decide o destino de cada um:
+#
+#   1. se o rótulo estiver em DESTINOS (por tela) ou DESTINOS_GLOBAIS, aponta para a TELA;
+#   2. senão, aponta para mapa.html#<slug-da-tela> — que é a decisão consciente para
+#      botão de AÇÃO (Salvar, Exportar, Aprovar): num protótipo estático ele não navega,
+#      e o mapa explica em que tela aquilo vive.
+#
+# Sem este passo o HTML gerado sai com href="#" e o protótipo fica mudo. Ele existia
+# antes só no HTML versionado, não no gerador: regenerar a pasta apagava os links.
+
+DESTINOS_GLOBAIS = {
+    "Política de Privacidade": "17-site-privacidade.html",
+    "Termos de Uso":           "18-site-termos.html",
+    "Esqueci minha senha":     "21-login-senha.html",
+}
+
+DESTINOS = {
+  "11-site-catalogo.html": {
+    "Ver detalhes": "16-site-produto.html",
+  },
+  "03-vitrine-pdv.html": {
+    "Ver detalhes": "07-vitrine-produto.html",
+    "Pagamento realizado no caixa da loja": "08-vitrine-pedido-confirmado.html",
+    "Finalizar pedido": "08-vitrine-pedido-confirmado.html",
+  },
+  "14-site-status.html": {
+    "Falar com nossa equipe": "11-site-catalogo.html#contato",
+  },
+  "32-portal-financeiro.html": {
+    "Ver todas as notas fiscais emitidas": "40-portal-notas.html",
+    "Realizar pagamento à Velaro":         "41-portal-pagamento.html",
+  },
+  "33-portal-pedidos.html": {
+    "Ver detalhes": "39-portal-pedido.html",
+  },
+  "35-portal-precos.html": {
+    "Saiba mais sobre precificação": "43-portal-ajuda.html",
+  },
+  "36-portal-suporte.html": {
+    "Abrir chamado":            "42-portal-chamado.html",
+    "Perguntas frequentes":     "43-portal-ajuda.html",
+    "Guias e manuais":          "43-portal-ajuda.html",
+    "Vídeos tutoriais":         "43-portal-ajuda.html",
+    "Acessar central de ajuda": "43-portal-ajuda.html",
+  },
+  "51-master-config.html": {
+    "Perfil da empresa":        "51h-master-config-empresa.html",
+    "Usuários e permissões":    "51a-master-config-usuarios.html",
+    "Notificações":             "51b-master-config-notificacoes.html",
+    "Integrações":              "51c-master-config-integracoes.html",
+    "Segurança":                "51d-master-config-seguranca.html",
+    "Financeiro":               "51e-master-config-financeiro.html",
+    "Personalização":           "51f-master-config-personalizacao.html",
+    "Backup e dados":           "51g-master-config-backup.html",
+    "Configurar notas fiscais": "51e-master-config-financeiro.html",
+    "Gerenciar formas de pagamento": "51e-master-config-financeiro.html",
+  },
+  "52-master-estoque.html": {
+    "+ Nova movimentação": "52a-master-estoque-movimentacao.html",
+    "Ajustar estoque":     "52a-master-estoque-movimentacao.html",
+    "Registrar entrada":   "52a-master-estoque-movimentacao.html",
+    "Solicitar produção":  "52a-master-estoque-movimentacao.html",
+    "Gerar pedido":        "52a-master-estoque-movimentacao.html",
+    "Ver reservas":        "52b-master-estoque-historico.html",
+    "Ver todas":           "52b-master-estoque-historico.html",
+  },
+  "53-master-financeiro.html": {
+    "+ Novo recebimento": "53a-master-financeiro-recebimento.html",
+    "Ver nota fiscal":    "53b-master-financeiro-nota.html",
+  },
+  "54-master-pedidos.html": { "+ Novo pedido":  "61-master-pedido-novo.html" },
+  "55-master-produtos.html": { "+ Novo produto": "62-master-produto-novo.html" },
+  "56-master-promocoes.html": {
+    "+ Nova promoção":         "63-master-promocao-nova.html",
+    "Relatório de desempenho": "64-master-promocao-desempenho.html",
+  },
+  "57-master-relatorios.html": {
+    "Agendar relatórios":               "68-master-relatorios-agendados.html",
+    "Gerenciar agendamentos":           "68-master-relatorios-agendados.html",
+    "Ver ranking completo":             "66-master-relatorio-revendedores.html",
+    "Ver todos os produtos":            "67-master-relatorio-produtos.html",
+    "Ver todos os relatórios":          "69-master-relatorios-biblioteca.html",
+    "Vendas por período":               "65-master-relatorio-vendas.html",
+    "Top produtos":                     "67-master-relatorio-produtos.html",
+    "Produtos mais vendidos":           "67-master-relatorio-produtos.html",
+    "Ranking de revendedores":          "66-master-relatorio-revendedores.html",
+    "Ver relatório financeiro completo":"53-master-financeiro.html",
+    "Pedidos por status":               "54-master-pedidos.html",
+    "Estoque atual":                    "52-master-estoque.html",
+    "Financeiro":                       "53-master-financeiro.html",
+  },
+  "60-master-suporte.html": {
+    "Voltar para todas as solicitações": "70-master-suporte-lista.html",
+    "← Voltar para todas as solicitações": "70-master-suporte-lista.html",
+  },
+}
+
+_A_STUB = re.compile(r'<a\b([^>]*?)href="#"([^>]*?)>(.*?)</a>', re.S)
+
+def _rotulo(interno):
+    """Texto visível de um <a>: tira as tags (o ícone SVG entra como espaço)."""
+    return " ".join(re.sub(r"<[^>]+>", " ", interno).split())
+
+# Tela nova -> a tela CONTRATADA de que ela e o detalhe. O mapa documenta so as
+# 31 do escopo, entao a ancora de acao das internas aponta para o verbete do pai.
+# Sem isto, 29 telas mandavam o leitor para uma ancora que nao existe.
+PAI_NO_MAPA = {
+  "vitrine-produto": "portal-vitrine",          "vitrine-pedido-confirmado": "portal-carrinho",
+  "site-produto": "site-catalogo",           "site-privacidade": "site-home",
+  "site-termos": "site-home",             "login-senha": "login",
+  "portal-pedido": "portal-pedidos",         "portal-notas": "portal-financeiro",
+  "portal-pagamento": "portal-financeiro",   "portal-chamado": "portal-suporte",
+  "portal-ajuda": "portal-suporte",
+  "master-estoque-movimentacao": "master-estoque",
+  "master-estoque-historico": "master-estoque",
+  "master-financeiro-recebimento": "master-financeiro",
+  "master-financeiro-nota": "master-financeiro",
+  "master-pedido-novo": "master-pedidos",    "master-produto-novo": "master-produtos",
+  "master-promocao-nova": "master-promocoes","master-promocao-desempenho": "master-promocoes",
+  "master-relatorio-vendas": "master-relatorios",
+  "master-relatorio-revendedores": "master-relatorios",
+  "master-relatorio-produtos": "master-relatorios",
+  "master-relatorios-agendados": "master-relatorios",
+  "master-relatorios-biblioteca": "master-relatorios",
+  "master-suporte-lista": "master-suporte",
+}
+
+def slug_da_tela(arquivo):
+    """'33-portal-pedidos.html' -> 'portal-pedidos' (a âncora no mapa)."""
+    return re.sub(r"^\d+[a-z]?-", "", arquivo).replace(".html", "")
+
+def religar(html, arquivo):
+    tabela = DESTINOS.get(arquivo, {})
+    bruto = slug_da_tela(arquivo)
+    # As subtelas de Configuracoes (51a..51h) caem todas no verbete master-config.
+    pai = PAI_NO_MAPA.get(bruto) or ("master-config" if bruto.startswith("master-config-") else bruto)
+    ancora = "mapa.html#" + pai
+
+    def destino(rot):
+        for fonte in (tabela, DESTINOS_GLOBAIS):
+            if rot in fonte:
+                return fonte[rot]
+            # Os cards levam título e subtítulo no mesmo <a> ("Segurança Senha, 2FA
+            # e sessões ativas"), e alguns rótulos terminam com seta. Casa por prefixo.
+            for chave, alvo in fonte.items():
+                if rot.startswith(chave):
+                    return alvo
+        return ancora
+
+    def troca(m):
+        return f'<a{m.group(1)}href="{destino(_rotulo(m.group(3)))}"{m.group(2)}>{m.group(3)}</a>'
+
+    return _A_STUB.sub(troca, html)

@@ -277,12 +277,19 @@ table { border-collapse: collapse; width: 100%; }
   background: var(--color-onyx-950); color: #fff;
   border-bottom: 1px solid rgba(255,255,255,.06);
 }
-.topbar__search {
-  flex: 1; max-width: 460px; min-height: 40px; display: flex; align-items: center; gap: 10px;
+/* A busca e um <details>: barra inteira no desktop, icone que abre no celular.
+   No desktop o summary NAO deve abrir nada, entao ele nao recebe clique. */
+.topbar__search { flex: 1; max-width: 460px; position: relative; }
+.topbar__search > summary {
+  min-height: 40px; display: flex; align-items: center; gap: 10px;
   padding: 0 var(--space-3); border-radius: var(--radius-md);
   background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
   color: rgba(255,255,255,.55); font-size: var(--text-sm);
+  list-style: none; cursor: default; pointer-events: none;
 }
+.topbar__search > summary::-webkit-details-marker { display: none; }
+.topbar__search__ph { flex: 1; }
+.topbar__search__panel { display: none; }
 .topbar__identity, .topbar__actions { flex: none; }
 .mobile-navigation { display: none; position: relative; flex: none; }
 .mobile-navigation summary {
@@ -365,7 +372,22 @@ table { border-collapse: collapse; width: 100%; }
 @media (max-width: 640px) {
   .g5, .g4 { grid-template-columns: 1fr; }
   .main { padding: var(--space-4); }
-  .topbar__search { order: 3; flex-basis: 100%; }
+  /* No celular a barra de busca sozinha custava ~65px de altura — mais de um
+     terco do topo — para mostrar um campo que ninguem usa antes de precisar.
+     Vira um botao de 44px na mesma linha do menu e do avatar; ao toque, o campo
+     abre por cima do conteudo. */
+  .topbar__search { flex: 0 0 auto; order: 0; margin-left: auto; }
+  .topbar__search > summary { pointer-events: auto; cursor: pointer;
+    width: 44px; min-height: 44px; justify-content: center; padding: 0; }
+  .topbar__search .topbar__search__ph, .topbar__search .kbd { display: none; }
+  .topbar__search[open] > summary { background: var(--color-brand-800); color: var(--color-gold-300); }
+  .topbar__search[open] .topbar__search__panel {
+    display: block; position: absolute; z-index: 60; right: 0; top: calc(100% + 8px);
+    width: min(78vw, 320px); padding: var(--space-3);
+    background: var(--color-brand-900); border: 1px solid rgba(219,167,101,.28);
+    border-radius: var(--radius-md); box-shadow: 0 18px 40px rgba(0,0,0,.42);
+  }
+  .topbar__search[open] .input-fake { width: 100%; }
   .topbar__actions { margin-left: auto; }
   .topbar__actions > :not(.avatar) { display: none !important; }
   .display-md { font-size: var(--text-display-sm); line-height: var(--text-display-sm--lh); }
@@ -375,6 +397,39 @@ table { border-collapse: collapse; width: 100%; }
   .input, .select, .textarea { font-size: 16px; }
   .field--half, .field--third, .field--two-thirds { grid-column: 1 / -1; }
   .segmented { display: grid; grid-auto-flow: row; grid-template-columns: 1fr; width: 100%; }
+
+  /* Alvo de toque. O minimo recomendado e 44px; .btn--sm nascia com 30-32px de
+     altura, o que no celular vira erro de clique. Vale para todo botao, chip e
+     aba — nao so para os campos de formulario, que ja tinham tratamento. */
+  .btn { min-height: 44px; }
+  .btn--sm { min-height: 40px; padding-block: 9px; }
+  .tabs a, .chip { min-height: 32px; display: inline-flex; align-items: center; }
+
+  /* Texto miudo demais para celular: havia corpo em 8px e 9px em varias telas
+     do painel. 11px e o piso. */
+  small, .kpi__label, .datarow small, td small, .chip { font-size: max(11px, var(--text-xs)); }
+
+  /* Um grid filho de .main podia estourar: .main tem min-width:0, mas os filhos
+     dele nao herdam isso e cresciam ate o min-content do conteudo. */
+  .main > * { min-width: 0; }
+
+  /* .spread e um flex de extremidades (titulo a esquerda, acoes a direita).
+     Sem quebra de linha, no celular a acao da direita sai da tela. */
+  .spread { flex-wrap: wrap; }
+  .spread > * { min-width: 0; }
+
+  /* .row nao quebra linha por padrao (existe .row--wrap para isso). Em tela
+     de 360px a soma dos itens passa da largura, entao no celular todo .row
+     quebra e o .push para de empurrar para a direita. */
+  .row { flex-wrap: wrap; }
+  .row > * { min-width: 0; }
+  .push { margin-left: 0; }
+
+  /* Mesmo caso do .row: o cabecalho de card poe titulo e acao nas pontas.
+     Uma acao de rotulo longo ("Gerenciar formas de pagamento") nao cabe
+     ao lado do titulo num celular estreito. */
+  .card__head { flex-wrap: wrap; }
+  .card__head > * { min-width: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

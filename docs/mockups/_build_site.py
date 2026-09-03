@@ -8,7 +8,7 @@ site_shell, site_hero, kpis, tabela, stepper, timeline = u.site_shell, u.site_he
 linha_dado, checklist, prodcard, filtros, toggle, drawer = u.linha_dado, u.checklist, u.prodcard, u.filtros, u.toggle, u.drawer
 rings = u.rings
 
-W = lambda f, c: (open(f, "w").write(c), print("  ✓", f))
+W = lambda f, c: (open(f, "w", encoding="utf-8").write(religar(c, f)), print("  ✓", f))
 
 # ══════════════════════════ 1.2 SOBRE NÓS ══════════════════════════
 hero = site_hero(
@@ -45,7 +45,7 @@ numeros = "".join(
 
 body = f'''
 <section class="band-light"><div class="band__inner">
-  <div class="split" style="grid-template-columns:minmax(0,.9fr) minmax(0,1.6fr);gap:var(--space-8)">
+  <div class="split" style="--gcols:minmax(0,.9fr) minmax(0,1.6fr);gap:var(--space-8)">
     <div>
       <span class="eyebrow" style="color:var(--color-gold-700)">Nossa história</span>
       <h2 class="display-md" style="margin-top:var(--space-3)">Feita para lojistas.<br>Feita para durar.</h2>
@@ -60,7 +60,7 @@ body = f'''
 </div></section>
 
 <section class="band-dark"><div class="band__inner">
-  <div class="split" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-8)">
+  <div class="split" style="--gcols:minmax(0,1fr) minmax(0,1fr);gap:var(--space-8)">
     <div>
       <span class="eyebrow" style="color:var(--color-gold-300)">Pensado para o seu negócio</span>
       <h2 class="display-md" style="margin-top:var(--space-3)">Pensado para abastecer vitrines com qualidade,
@@ -358,7 +358,7 @@ body = f'''
         ("Aprovação final Velaro","todo","Aguardando"),
         ("Acesso liberado","locked","Bloqueado até aprovação")]))}
       <div class="card">
-        <div class="split" style="grid-template-columns:180px minmax(0,1fr);gap:var(--space-6);align-items:center">
+        <div class="split" style="--gcols:180px minmax(0,1fr);gap:var(--space-6);align-items:center">
           <div style="display:grid;place-items:center;gap:10px;text-align:center">
             {ic("brain", style="width:46px;height:46px;color:var(--color-gold-600)")}
             <strong style="font-size:var(--text-sm);color:var(--ink)">Validação<br>automática com IA</strong>
@@ -366,7 +366,7 @@ body = f'''
           <div>{ia}</div>
         </div>
       </div>
-      <div class="split" style="grid-template-columns:1fr 1fr">
+      <div class="split" style="--gcols:1fr 1fr">
         {card("Linha do tempo da solicitação", tl)}
         {card("Dados da solicitação", dados)}
       </div>

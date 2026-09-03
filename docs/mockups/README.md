@@ -37,14 +37,60 @@ Fontes de geração (não são entregáveis — são o como):
 | `_notas.md` | Transcrição literal, campo a campo, das 30 telas do protótipo. Base de tudo. |
 | `_ui.py` | Biblioteca de componentes: shells dos 4 ambientes + 20 blocos reutilizáveis. |
 | `_gen_rings.py` | Placeholders de aliança em SVG, por acabamento. |
-| `_build_site.py` · `_build_portal.py` · `_build_master.py` | Geram as telas. |
+| `_build_site.py` · `_build_portal.py` · `_build_master.py` | Geram as 31 telas contratadas. |
+| `_build_novas_site.py` · `_build_novas_portal.py` · `_build_novas_config.py` · `_build_novas_master.py` | Geram as 33 telas internas (detalhe, formulário de criação, subtela de configuração, relatório) — os destinos dos botões das 31. |
 | `_mapa.py` | Dados das 31 telas → `mapa.html`. |
 | `_build_docs.py` | Gera `docs/telas/*.md` a partir de `_mapa.py` + `_notas.md`. |
+| `_build_er.py` | Diagrama do banco (`er-banco.html`) a partir das tabelas declaradas no `_mapa.py`. |
 
 ```bash
-python3 _gen_rings.py && python3 _build_site.py && python3 _build_portal.py \
-  && python3 _build_master.py && python3 _mapa.py && python3 _build_docs.py
+python3 _gen_rings.py \
+  && python3 _build_site.py && python3 _build_portal.py && python3 _build_master.py \
+  && python3 _build_novas_site.py && python3 _build_novas_portal.py \
+  && python3 _build_novas_config.py && python3 _build_novas_master.py \
+  && python3 _mapa.py && python3 _build_docs.py && python3 _build_er.py
 ```
+
+### As telas 01–06 são escritas à mão
+
+`01-site-publico`, `02-portal-lojista`, `03-vitrine-pdv`, `04-painel-master`, `05-tipografia`
+e `06-mapa-inputs` **não têm gerador**: nenhum `_build_*.py` as escreve. Regenerar a pasta não
+as toca, e `religar()` não passa por elas — os links delas são literais no HTML.
+
+Consequência prática: toda mudança em `_ui.py` que altere a marcação de um shell precisa ser
+repetida à mão nessas seis. Foi o que aconteceu quando a busca do topo virou `<details>`: as
+geradas acompanharam, as seis ficaram com a marcação antiga e a busca perdeu a caixa.
+
+### Para onde cada botão aponta
+
+Todo botão nasce com `href="#"` (o default de `btn()`). Na hora de gravar a tela, `W()`
+chama `religar()` do `_ui.py`, que decide o destino de cada um:
+
+1. se o rótulo estiver na tabela `DESTINOS` (por tela) ou `DESTINOS_GLOBAIS`, aponta para a **tela**;
+2. senão, aponta para `mapa.html#<slug-da-tela>`.
+
+O caso 2 é decisão consciente, não esquecimento: botão de **ação** (Salvar, Exportar, Aprovar)
+não navega num protótipo estático, e o mapa explica em que tela aquilo vive. Hoje são
+**2.232 links para telas** e **350 para o mapa**, com **zero** `href="#"` e zero link quebrado.
+
+> Este passo existia só no HTML versionado, não no gerador. Quem regenerasse a pasta
+> perdia os 191 links de uma vez, sem erro nenhum. Se for mexer em `W()`, mantenha o `religar()`.
+
+### Responsividade
+
+O alvo é **não haver rolagem horizontal de 360px para cima**. Isso é medido, não estimado:
+
+```bash
+cd /tmp && node audita-mobile.js 390 844   # o script vive no scratchpad da sessão
+```
+
+Duas armadilhas que já custaram caro e estão travadas por convenção:
+
+- **Nunca emita `style="grid-template-columns:…"`.** Estilo inline vence media query, e por
+  causa disso o colapso mobile de `.split`/`.split3` era ignorado em 15 telas. Use
+  `style="--gcols:…"` — o CSS lê a variável e a neutraliza no celular.
+- **Tabela larga vai dentro de `.table-scroll`** (é o que `tabela()` já faz). Sem isso o
+  `min-width: 680px` da `.table` estica a página inteira em vez de rolar por dentro.
 
 ---
 

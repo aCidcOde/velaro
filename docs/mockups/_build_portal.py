@@ -3,7 +3,7 @@
 import importlib.util as il
 s = il.spec_from_file_location("u", "_ui.py"); u = il.module_from_spec(s); s.loader.exec_module(u)
 g = globals(); g.update({k: getattr(u, k) for k in dir(u) if not k.startswith("__")})
-W = lambda f, c: (open(f, "w").write(c), print("  ✓", f))
+W = lambda f, c: (open(f, "w", encoding="utf-8").write(religar(c, f)), print("  ✓", f))
 P = lambda a, b: page("Velaro · " + a.split("|")[0].strip(), portal_shell(a.split("|")[1].strip(), b))
 
 # ══════════════════════════ 2.2 CATÁLOGO REVENDEDOR ══════════════════════════
@@ -272,7 +272,7 @@ body = f'''
 <div class="split split--wide">
   <div class="stack">
     {card("① Identidade da loja",
-      '<div class="split" style="grid-template-columns:210px minmax(0,1fr);gap:var(--space-5)">'
+      '<div class="split" style="--gcols:210px minmax(0,1fr);gap:var(--space-5)">'
       + f'<div class="logobox"><span class="logobox__mark">T</span><strong>TOMAZELLI</strong><small>ALIANÇAS</small>'
         f'<span class="logobox__up">{ic("upload")} Enviar nova logo</span><small>PNG ou JPG · Máx. 2MB</small></div>'
       + '<div>' + form([
@@ -293,7 +293,7 @@ body = f'''
       + toggle("Ocultar marca do fornecedor","Remover qualquer menção à Velaro Alianças"))}
 
     {card("② Regra de preços",
-      '<div class="split" style="grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-5)">'
+      '<div class="split" style="--gcols:minmax(0,1fr) minmax(0,1fr);gap:var(--space-5)">'
       + '<div><span class="eyebrow">Modelo de precificação</span><div class="stack" style="margin-top:8px">'
         '<label class="payopt is-on"><span class="radio is-on"></span>' + ic("tag") + '<strong>Multiplicador</strong>'
         '<small>Aplicar um fator multiplicador</small></label>'

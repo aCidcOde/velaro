@@ -73,6 +73,14 @@
     color: var(--ink-muted); margin: 0 0 var(--space-2); }
 
   .tb { font-size: var(--text-sm); }
+  /* As rotas sao strings sem espaco ("GET /solicitacao/{protocolo}/aprovar")
+     e por isso nao quebravam em celular estreito. */
+  code { overflow-wrap: anywhere; word-break: break-word; }
+  .tela__rota { min-width: 0; }
+  /* A tabela de campos e larga de proposito; no celular ela rola por
+     dentro em vez de esticar a pagina inteira. */
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  @media (max-width: 640px) { .tb { min-width: 520px; } }
   .tb td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--border); vertical-align: top; }
   .tb tr:last-child td { border-bottom: 0; }
   .tb code { font-size: 12px; color: var(--ink); }
@@ -142,7 +150,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>users</code></td><td><span class="orig orig--core">core</span></td><td class="campos">email, password, is_admin, two_factor_*, google_id</td></tr><tr><td><code>users</code></td><td><span class="orig orig--extensao">extensão</span></td><td class="campos">reseller_id — vínculo com o Parceiro Premium</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>users</code></td><td><span class="orig orig--core">core</span></td><td class="campos">email, password, is_admin, two_factor_*, google_id</td></tr><tr><td><code>users</code></td><td><span class="orig orig--extensao">extensão</span></td><td class="campos">reseller_id — vínculo com o Parceiro Premium</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>gate <code>access-backend</code> decide o destino do Master</li></ul>
@@ -171,7 +179,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>collections</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug, description, cover_path, position, is_active</td></tr><tr><td><code>settings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">company.*, contact.* — telefone, e-mail, horário de atendimento</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>collections</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug, description, cover_path, position, is_active</td></tr><tr><td><code>settings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">company.*, contact.* — telefone, e-mail, horário de atendimento</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>—</li></ul>
@@ -192,7 +200,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>settings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">about.* — história, fábrica própria, diferenciais, mídia</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>settings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">about.* — história, fábrica própria, diferenciais, mídia</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>—</li></ul>
@@ -213,7 +221,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>products</code></td><td><span class="orig orig--core">core</span></td><td class="campos">name, slug, description, is_active</td></tr><tr><td><code>product_attributes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">collection_id, category_id, material_id, finish_id, largura_mm, formato, permite_gravacao</td></tr><tr><td><code>product_variants</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">sku, aro (tamanho)</td></tr><tr><td><code>product_images</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">path, position, is_primary</td></tr><tr><td><code>collections</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug, position, is_active</td></tr><tr><td><code>categories</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug, parent_id, position</td></tr><tr><td><code>materials</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug — ex.: Ouro 18K, Ouro branco, Prata 950</td></tr><tr><td><code>finishes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug — ex.: polido, fosco, diamantado, trabalhado</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>products</code></td><td><span class="orig orig--core">core</span></td><td class="campos">name, slug, description, is_active</td></tr><tr><td><code>product_attributes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">collection_id, category_id, material_id, finish_id, largura_mm, formato, permite_gravacao</td></tr><tr><td><code>product_variants</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">sku, aro (tamanho)</td></tr><tr><td><code>product_images</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">path, position, is_primary</td></tr><tr><td><code>collections</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug, position, is_active</td></tr><tr><td><code>categories</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug, parent_id, position</td></tr><tr><td><code>materials</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug — ex.: Ouro 18K, Ouro branco, Prata 950</td></tr><tr><td><code>finishes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug — ex.: polido, fosco, diamantado, trabalhado</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>—</li></ul>
@@ -234,7 +242,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">razao_social, nome_fantasia, cnpj, inscricao_estadual, responsavel_nome, responsavel_cpf, email, telefone, whatsapp, cep, logradouro, numero, complemento, bairro, cidade, uf, origem_contato, observacoes, status, protocolo</td></tr><tr><td><code>reseller_documents</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type (contrato_social|documento_socio|cartao_cnpj), original_name, disk, path, size_bytes, mime</td></tr><tr><td><code>reseller_cnaes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, description, is_primary, compatible</td></tr><tr><td><code>users</code></td><td><span class="orig orig--core">core</span></td><td class="campos">name, email, password — criado em estado de pré-cadastro</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">razao_social, nome_fantasia, cnpj, inscricao_estadual, responsavel_nome, responsavel_cpf, email, telefone, whatsapp, cep, logradouro, numero, complemento, bairro, cidade, uf, origem_contato, observacoes, status, protocolo</td></tr><tr><td><code>reseller_documents</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type (contrato_social|documento_socio|cartao_cnpj), original_name, disk, path, size_bytes, mime</td></tr><tr><td><code>reseller_cnaes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, description, is_primary, compatible</td></tr><tr><td><code>users</code></td><td><span class="orig orig--core">core</span></td><td class="campos">name, email, password — criado em estado de pré-cadastro</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>—</li></ul>
@@ -255,7 +263,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">protocolo, created_at</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">protocolo, created_at</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>—</li></ul>
@@ -276,7 +284,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">status, approved_at, rejected_at, rejection_reason</td></tr><tr><td><code>reseller_verifications</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">status, cnpj_valido, empresa_ativa, cnaes_compativeis, score, checked_at</td></tr><tr><td><code>reseller_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">from_status, to_status, actor_id, note, created_at — alimenta a linha do tempo</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">status, approved_at, rejected_at, rejection_reason</td></tr><tr><td><code>reseller_verifications</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">status, cnpj_valido, empresa_ativa, cnaes_compativeis, score, checked_at</td></tr><tr><td><code>reseller_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">from_status, to_status, actor_id, note, created_at — alimenta a linha do tempo</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>—</li></ul>
@@ -297,7 +305,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">status = aprovado, approved_at, approved_by, code</td></tr><tr><td><code>notification_logs</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type, channel (email|whatsapp), recipient, sent_at, provider_message_id, status</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">status = aprovado, approved_at, approved_by, code</td></tr><tr><td><code>notification_logs</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type, channel (email|whatsapp), recipient, sent_at, provider_message_id, status</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>—</li></ul>
@@ -326,7 +334,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>orders + order_velaro_details</code></td><td><span class="orig orig--extensao">extensão</span></td><td class="campos">agregações por operational_status e payment_status</td></tr><tr><td><code>support_tickets</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">contagem de chamados abertos</td></tr><tr><td><code>customers + customer_velaro_details</code></td><td><span class="orig orig--extensao">extensão</span></td><td class="campos">contagem por reseller_id</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>orders + order_velaro_details</code></td><td><span class="orig orig--extensao">extensão</span></td><td class="campos">agregações por operational_status e payment_status</td></tr><tr><td><code>support_tickets</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">contagem de chamados abertos</td></tr><tr><td><code>customers + customer_velaro_details</code></td><td><span class="orig orig--extensao">extensão</span></td><td class="campos">contagem por reseller_id</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>policy <code>ResellerScope</code> em toda query</li></ul>
@@ -347,7 +355,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>products</code></td><td><span class="orig orig--core">core</span></td><td class="campos">price — <strong>custo B2B</strong>, visível só aqui</td></tr><tr><td><code>product_attributes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">filtros: coleção, material, acabamento, largura, formato</td></tr><tr><td><code>product_variants</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">sku, aro — disponibilidade por tamanho</td></tr><tr><td><code>stock_items</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">disponivel — o portal apenas consulta</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>products</code></td><td><span class="orig orig--core">core</span></td><td class="campos">price — <strong>custo B2B</strong>, visível só aqui</td></tr><tr><td><code>product_attributes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">filtros: coleção, material, acabamento, largura, formato</td></tr><tr><td><code>product_variants</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">sku, aro — disponibilidade por tamanho</td></tr><tr><td><code>stock_items</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">disponivel — o portal apenas consulta</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>policy: revendedor aprovado</li></ul>
@@ -368,7 +376,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>customers</code></td><td><span class="orig orig--core">core</span></td><td class="campos">name, email, phone, document (CPF), notes</td></tr><tr><td><code>customer_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">reseller_id, cidade, uf, endereco, data_nascimento, data_casamento, data_namoro, origem_contato</td></tr><tr><td><code>customer_consents</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type (marketing|transacional), granted, granted_at, revoked_at, channel, evidence</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>customers</code></td><td><span class="orig orig--core">core</span></td><td class="campos">name, email, phone, document (CPF), notes</td></tr><tr><td><code>customer_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">reseller_id, cidade, uf, endereco, data_nascimento, data_casamento, data_namoro, origem_contato</td></tr><tr><td><code>customer_consents</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type (marketing|transacional), granted, granted_at, revoked_at, channel, evidence</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>policy <code>ResellerScope</code></li></ul>
@@ -389,7 +397,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>order_batches</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, cut_date, due_date, status, total_amount</td></tr><tr><td><code>payments</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">method (pix|boleto|transferencia), amount, due_date, paid_at, status, external_id, receipt_path</td></tr><tr><td><code>invoices</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">number, series, amount, issued_at, pdf_path, xml_path</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>order_batches</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, cut_date, due_date, status, total_amount</td></tr><tr><td><code>payments</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">method (pix|boleto|transferencia), amount, due_date, paid_at, status, external_id, receipt_path</td></tr><tr><td><code>invoices</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">number, series, amount, issued_at, pdf_path, xml_path</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>policy <code>ResellerScope</code></li></ul>
@@ -410,7 +418,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>orders</code></td><td><span class="orig orig--core">core</span></td><td class="campos">public_number, customer_id, total_amount, notes</td></tr><tr><td><code>order_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">reseller_id, batch_id, operational_status, payment_status, previsao, retirado_em, retirado_por</td></tr><tr><td><code>order_items</code></td><td><span class="orig orig--core">core</span></td><td class="campos">product_id, quantity, unit_price (snapshot imutável)</td></tr><tr><td><code>order_item_engravings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">enabled, text, date, chars, price</td></tr><tr><td><code>order_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">from, to, actor_id, note, created_at — timeline</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>orders</code></td><td><span class="orig orig--core">core</span></td><td class="campos">public_number, customer_id, total_amount, notes</td></tr><tr><td><code>order_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">reseller_id, batch_id, operational_status, payment_status, previsao, retirado_em, retirado_por</td></tr><tr><td><code>order_items</code></td><td><span class="orig orig--core">core</span></td><td class="campos">product_id, quantity, unit_price (snapshot imutável)</td></tr><tr><td><code>order_item_engravings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">enabled, text, date, chars, price</td></tr><tr><td><code>order_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">from, to, actor_id, note, created_at — timeline</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>policy <code>ResellerScope</code></li></ul>
@@ -431,7 +439,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>reseller_stores</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slogan, logo_path, banner_path, slug, domain, phone, whatsapp, email, endereco, color_primary, color_secondary, color_background, color_text, is_active, published_at</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>reseller_stores</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slogan, logo_path, banner_path, slug, domain, phone, whatsapp, email, endereco, color_primary, color_secondary, color_background, color_text, is_active, published_at</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>policy <code>ResellerScope</code></li></ul>
@@ -452,7 +460,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>reseller_price_rules</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">scope (global|collection|product), collection_id, product_id, mode (multiplier|percent|manual|promo), value, rounding, priority, is_active</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>reseller_price_rules</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">scope (global|collection|product), collection_id, product_id, mode (multiplier|percent|manual|promo), value, rounding, priority, is_active</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>policy <code>ResellerScope</code></li></ul>
@@ -473,7 +481,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>support_tickets</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, reseller_id, order_id, customer_id, subject, category, priority, status, assignee_id, channel</td></tr><tr><td><code>support_messages</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">author_id, author_role (revendedor|velaro), body, is_internal_note</td></tr><tr><td><code>support_attachments</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">original_name, path, size_bytes, mime</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>support_tickets</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, reseller_id, order_id, customer_id, subject, category, priority, status, assignee_id, channel</td></tr><tr><td><code>support_messages</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">author_id, author_role (revendedor|velaro), body, is_internal_note</td></tr><tr><td><code>support_attachments</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">original_name, path, size_bytes, mime</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>policy <code>ResellerScope</code></li></ul>
@@ -494,7 +502,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>order_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">operational_status = pronto_retirada, arrived_at, retirado_em, retirado_por</td></tr><tr><td><code>notification_logs</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type = pedido_pronto, channel, recipient_type (revendedor|cliente), sent_at, status</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>order_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">operational_status = pronto_retirada, arrived_at, retirado_em, retirado_por</td></tr><tr><td><code>notification_logs</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type = pedido_pronto, channel, recipient_type (revendedor|cliente), sent_at, status</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>policy <code>ResellerScope</code></li></ul>
@@ -523,7 +531,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>reseller_stores</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">logo, cores, banner, domínio — pinta 100% da tela</td></tr><tr><td><code>products</code></td><td><span class="orig orig--core">core</span></td><td class="campos">catálogo exposto ao consumidor</td></tr><tr><td><code>product_attributes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">categorias, destaques, características técnicas</td></tr><tr><td><code>reseller_price_rules</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">resolve o <strong>preço B2C</strong></td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>reseller_stores</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">logo, cores, banner, domínio — pinta 100% da tela</td></tr><tr><td><code>products</code></td><td><span class="orig orig--core">core</span></td><td class="campos">catálogo exposto ao consumidor</td></tr><tr><td><code>product_attributes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">categorias, destaques, características técnicas</td></tr><tr><td><code>reseller_price_rules</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">resolve o <strong>preço B2C</strong></td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>—</li></ul>
@@ -544,7 +552,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>orders + order_velaro_details</code></td><td><span class="orig orig--core">core + novo</span></td><td class="campos">nasce em <code>draft</code>, vinculado a reseller_id e customer_id</td></tr><tr><td><code>order_items</code></td><td><span class="orig orig--core">core</span></td><td class="campos">unit_price = snapshot do preço B2C no momento da seleção</td></tr><tr><td><code>order_item_engravings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">enabled, text, date, chars, price</td></tr><tr><td><code>settings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">gravacao.max_chars, gravacao.preco — parametrizáveis</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>orders + order_velaro_details</code></td><td><span class="orig orig--core">core + novo</span></td><td class="campos">nasce em <code>draft</code>, vinculado a reseller_id e customer_id</td></tr><tr><td><code>order_items</code></td><td><span class="orig orig--core">core</span></td><td class="campos">unit_price = snapshot do preço B2C no momento da seleção</td></tr><tr><td><code>order_item_engravings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">enabled, text, date, chars, price</td></tr><tr><td><code>settings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">gravacao.max_chars, gravacao.preco — parametrizáveis</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li>—</li></ul>
@@ -573,7 +581,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>agregações</code></td><td><span class="orig orig--—">—</span></td><td class="campos">pedidos, pré-cadastros, produção, pendências financeiras, NF, solicitações, suporte</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>agregações</code></td><td><span class="orig orig--—">—</span></td><td class="campos">pedidos, pré-cadastros, produção, pendências financeiras, NF, solicitações, suporte</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.dashboard.view</code></li></ul>
@@ -594,7 +602,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>customers + customer_velaro_details</code></td><td><span class="orig orig--core">core + novo</span></td><td class="campos">sempre com <code>reseller_id</code> visível</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>customers + customer_velaro_details</code></td><td><span class="orig orig--core">core + novo</span></td><td class="campos">sempre com <code>reseller_id</code> visível</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.customers.view</code></li><li><code>velaro.customers.update</code></li></ul>
@@ -615,7 +623,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>settings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">grupos: empresa, notificações, integrações, segurança, financeiro/fiscal, personalização, backup, parâmetros de pedido, meios de pagamento B2B</td></tr><tr><td><code>users / acl_*</code></td><td><span class="orig orig--core">core</span></td><td class="campos">usuários e permissões</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>settings</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">grupos: empresa, notificações, integrações, segurança, financeiro/fiscal, personalização, backup, parâmetros de pedido, meios de pagamento B2B</td></tr><tr><td><code>users / acl_*</code></td><td><span class="orig orig--core">core</span></td><td class="campos">usuários e permissões</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.settings.manage</code></li></ul>
@@ -636,7 +644,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>stock_items</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">product_variant_id, atual, reservado, disponivel, minimo, reposicao</td></tr><tr><td><code>stock_movements</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type (entrada|saida|ajuste|reserva|producao), qty, before, after, reason, actor_id, order_id</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>stock_items</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">product_variant_id, atual, reservado, disponivel, minimo, reposicao</td></tr><tr><td><code>stock_movements</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type (entrada|saida|ajuste|reserva|producao), qty, before, after, reason, actor_id, order_id</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.stock.view</code></li><li><code>velaro.stock.adjust</code></li><li><code>velaro.stock.request_production</code></li></ul>
@@ -657,7 +665,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>order_batches</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, reseller_id, cut_date, due_date, status, total_amount, paid_at, shipped_at</td></tr><tr><td><code>payments</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">method, amount, paid_at, status, external_id, receipt_path</td></tr><tr><td><code>invoices</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">number, series, amount, issued_at, pdf_path, xml_path, provider</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>order_batches</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, reseller_id, cut_date, due_date, status, total_amount, paid_at, shipped_at</td></tr><tr><td><code>payments</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">method, amount, paid_at, status, external_id, receipt_path</td></tr><tr><td><code>invoices</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">number, series, amount, issued_at, pdf_path, xml_path, provider</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.finance.view</code></li><li><code>velaro.finance.reconcile</code></li><li><code>velaro.finance.issue_invoice</code></li><li><code>velaro.finance.release_shipment</code></li></ul>
@@ -678,7 +686,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>orders</code></td><td><span class="orig orig--core">core</span></td><td class="campos">public_number, customer_id, total_amount</td></tr><tr><td><code>order_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">reseller_id, batch_id, operational_status, payment_status, previsao, arrived_at, retirado_em, retirado_por</td></tr><tr><td><code>order_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">timeline completa com ator e nota</td></tr><tr><td><code>order_batches</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">confirmação de chegada/retirada <strong>por lote inteiro</strong></td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>orders</code></td><td><span class="orig orig--core">core</span></td><td class="campos">public_number, customer_id, total_amount</td></tr><tr><td><code>order_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">reseller_id, batch_id, operational_status, payment_status, previsao, arrived_at, retirado_em, retirado_por</td></tr><tr><td><code>order_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">timeline completa com ator e nota</td></tr><tr><td><code>order_batches</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">confirmação de chegada/retirada <strong>por lote inteiro</strong></td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.orders.view</code></li><li><code>velaro.orders.update_status</code></li><li><code>velaro.orders.confirm_pickup</code></li><li><code>velaro.orders.confirm_batch_pickup</code></li></ul>
@@ -699,7 +707,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>products</code></td><td><span class="orig orig--core">core</span></td><td class="campos">name, slug, sku, description, price (B2B), is_active</td></tr><tr><td><code>product_attributes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">collection_id, category_id, material_id, finish_id, largura_mm, formato, permite_gravacao, gravacao_max_chars</td></tr><tr><td><code>product_variants</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">sku, aro/tamanho, is_active</td></tr><tr><td><code>product_images</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">path, position, is_primary</td></tr><tr><td><code>collections</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">abas do protótipo — tabela própria, não enum</td></tr><tr><td><code>categories</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug, parent_id</td></tr><tr><td><code>materials</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug</td></tr><tr><td><code>finishes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug</td></tr><tr><td><code>product_revisions</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">histórico de alterações</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>products</code></td><td><span class="orig orig--core">core</span></td><td class="campos">name, slug, sku, description, price (B2B), is_active</td></tr><tr><td><code>product_attributes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">collection_id, category_id, material_id, finish_id, largura_mm, formato, permite_gravacao, gravacao_max_chars</td></tr><tr><td><code>product_variants</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">sku, aro/tamanho, is_active</td></tr><tr><td><code>product_images</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">path, position, is_primary</td></tr><tr><td><code>collections</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">abas do protótipo — tabela própria, não enum</td></tr><tr><td><code>categories</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug, parent_id</td></tr><tr><td><code>materials</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug</td></tr><tr><td><code>finishes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, slug</td></tr><tr><td><code>product_revisions</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">histórico de alterações</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.products.view</code></li><li><code>velaro.products.manage</code></li><li><code>velaro.products.duplicate</code></li><li><code>velaro.products.deactivate</code></li></ul>
@@ -720,7 +728,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>promotions</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, name, type (desconto_progressivo|preco_especial|frete_gratis|desconto_fixo|lancamento), starts_at, ends_at, status (rascunho|agendada|ativa|pausada|encerrada), priority, show_badge, budget</td></tr><tr><td><code>promotion_rules</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">tiers — acima de X → Y% de desconto</td></tr><tr><td><code>promotion_products</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">pivot produto/coleção</td></tr><tr><td><code>promotion_audiences</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">público-alvo e canais</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>promotions</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, name, type (desconto_progressivo|preco_especial|frete_gratis|desconto_fixo|lancamento), starts_at, ends_at, status (rascunho|agendada|ativa|pausada|encerrada), priority, show_badge, budget</td></tr><tr><td><code>promotion_rules</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">tiers — acima de X → Y% de desconto</td></tr><tr><td><code>promotion_products</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">pivot produto/coleção</td></tr><tr><td><code>promotion_audiences</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">público-alvo e canais</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.promotions.view</code></li><li><code>velaro.promotions.manage</code></li></ul>
@@ -741,7 +749,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>report_schedules</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, type, cron, recipients, format, is_active, last_run_at</td></tr><tr><td><code>report_exports</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type, filters (json), file_path, generated_by, generated_at</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>report_schedules</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">name, type, cron, recipients, format, is_active, last_run_at</td></tr><tr><td><code>report_exports</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">type, filters (json), file_path, generated_by, generated_at</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.reports.view</code></li><li><code>velaro.reports.export</code></li><li><code>velaro.reports.schedule</code></li></ul>
@@ -762,7 +770,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">todos os campos empresariais + code, status, approved_at, approved_by</td></tr><tr><td><code>reseller_cnaes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, description, compatible</td></tr><tr><td><code>reseller_documents</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">contrato social, doc do sócio, cartão CNPJ</td></tr><tr><td><code>reseller_verifications</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">resultado da IA, score, checked_at</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">todos os campos empresariais + code, status, approved_at, approved_by</td></tr><tr><td><code>reseller_cnaes</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, description, compatible</td></tr><tr><td><code>reseller_documents</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">contrato social, doc do sócio, cartão CNPJ</td></tr><tr><td><code>reseller_verifications</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">resultado da IA, score, checked_at</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.resellers.view</code></li><li><code>velaro.resellers.create</code></li><li><code>velaro.resellers.approve</code></li><li><code>velaro.resellers.impersonate</code></li></ul>
@@ -783,7 +791,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">status, protocolo, observacoes_internas, rejection_reason</td></tr><tr><td><code>reseller_verifications</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">cnpj_valido, empresa_ativa, cnaes_compativeis, documentacao_enviada, score, result (json), raw_payload</td></tr><tr><td><code>reseller_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">histórico e justificativa de cada decisão</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">status, protocolo, observacoes_internas, rejection_reason</td></tr><tr><td><code>reseller_verifications</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">cnpj_valido, empresa_ativa, cnaes_compativeis, documentacao_enviada, score, result (json), raw_payload</td></tr><tr><td><code>reseller_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">histórico e justificativa de cada decisão</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.prospects.view</code></li><li><code>velaro.prospects.approve</code></li><li><code>velaro.prospects.reject</code></li><li><code>velaro.prospects.request_info</code></li></ul>
@@ -804,7 +812,7 @@
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody><tr><td><code>support_tickets</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, reseller_id, order_id, customer_id, subject, category, priority, status, assignee_id</td></tr><tr><td><code>support_messages</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">author_role, body, is_internal_note</td></tr><tr><td><code>support_attachments</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">original_name, path, size_bytes</td></tr></tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody><tr><td><code>support_tickets</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">code, reseller_id, order_id, customer_id, subject, category, priority, status, assignee_id</td></tr><tr><td><code>support_messages</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">author_role, body, is_internal_note</td></tr><tr><td><code>support_attachments</code></td><td><span class="orig orig--novo">novo</span></td><td class="campos">original_name, path, size_bytes</td></tr></tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst"><li><code>velaro.support.view</code></li><li><code>velaro.support.reply</code></li><li><code>velaro.support.assign</code></li><li><code>velaro.support.resolve</code></li></ul>
@@ -822,10 +830,12 @@
       <span class="orig orig--core">core</span> já existe no scaffold.
       Nenhuma tabela do núcleo é mutada: o domínio Velaro entra em tabelas 1:1 e tabelas próprias.
     </p>
-    <table class="table">
-      <thead><tr><th>Tabela</th><th>Origem</th><th class="cell-num">Telas</th><th>Aparece em</th></tr></thead>
-      <tbody><tr><td><code>categories</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.3, 3.7</td></tr><tr><td><code>collections</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">1.1, 1.3, 3.7</td></tr><tr><td><code>customer_consents</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">2.3</td></tr><tr><td><code>customer_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">2.3</td></tr><tr><td><code>finishes</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.3, 3.7</td></tr><tr><td><code>invoices</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.4, 3.5</td></tr><tr><td><code>materials</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.3, 3.7</td></tr><tr><td><code>notification_logs</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.7, 2.11</td></tr><tr><td><code>order_batches</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">2.4, 3.5, 3.6</td></tr><tr><td><code>order_item_engravings</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.10, 2.5</td></tr><tr><td><code>order_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.5, 3.6</td></tr><tr><td><code>order_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">2.11, 2.5, 3.6</td></tr><tr><td><code>payments</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.4, 3.5</td></tr><tr><td><code>product_attributes</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">4</td><td class="campos">1.3, 2.2, 2.9, 3.7</td></tr><tr><td><code>product_images</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.3, 3.7</td></tr><tr><td><code>product_revisions</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.7</td></tr><tr><td><code>product_variants</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">1.3, 2.2, 3.7</td></tr><tr><td><code>promotion_audiences</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.8</td></tr><tr><td><code>promotion_products</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.8</td></tr><tr><td><code>promotion_rules</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.8</td></tr><tr><td><code>promotions</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.8</td></tr><tr><td><code>report_exports</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.9</td></tr><tr><td><code>report_schedules</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.9</td></tr><tr><td><code>reseller_cnaes</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.4, 3.10</td></tr><tr><td><code>reseller_documents</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.4, 3.10</td></tr><tr><td><code>reseller_price_rules</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.7, 2.9</td></tr><tr><td><code>reseller_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.6, 3.11</td></tr><tr><td><code>reseller_stores</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.6, 2.9</td></tr><tr><td><code>reseller_verifications</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">1.6, 3.10, 3.11</td></tr><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">6</td><td class="campos">1.4, 1.5, 1.6, 1.7, 3.10, 3.11</td></tr><tr><td><code>settings</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">4</td><td class="campos">1.1, 1.2, 2.10, 3.3</td></tr><tr><td><code>stock_items</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.2, 3.4</td></tr><tr><td><code>stock_movements</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.4</td></tr><tr><td><code>support_attachments</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.8, 3.12</td></tr><tr><td><code>support_messages</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.8, 3.12</td></tr><tr><td><code>support_tickets</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">2.1, 2.8, 3.12</td></tr><tr><td><code>customers</code></td><td><span class="orig orig--core">core</span></td><td class="num">1</td><td class="campos">2.3</td></tr><tr><td><code>customers + customer_velaro_details</code></td><td><span class="orig orig--extensao">extensão</span></td><td class="num">2</td><td class="campos">2.1, 3.2</td></tr><tr><td><code>order_items</code></td><td><span class="orig orig--core">core</span></td><td class="num">2</td><td class="campos">2.10, 2.5</td></tr><tr><td><code>orders</code></td><td><span class="orig orig--core">core</span></td><td class="num">2</td><td class="campos">2.5, 3.6</td></tr><tr><td><code>orders + order_velaro_details</code></td><td><span class="orig orig--extensao">extensão</span></td><td class="num">2</td><td class="campos">2.1, 2.10</td></tr><tr><td><code>products</code></td><td><span class="orig orig--core">core</span></td><td class="num">4</td><td class="campos">1.3, 2.2, 2.9, 3.7</td></tr><tr><td><code>users</code></td><td><span class="orig orig--core">core</span></td><td class="num">2</td><td class="campos">0, 1.4</td></tr><tr><td><code>users / acl_*</code></td><td><span class="orig orig--core">core</span></td><td class="num">1</td><td class="campos">3.3</td></tr></tbody>
-    </table>
+    <div class="table-scroll">
+      <table class="table">
+        <thead><tr><th>Tabela</th><th>Origem</th><th class="cell-num">Telas</th><th>Aparece em</th></tr></thead>
+        <tbody><tr><td><code>categories</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.3, 3.7</td></tr><tr><td><code>collections</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">1.1, 1.3, 3.7</td></tr><tr><td><code>customer_consents</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">2.3</td></tr><tr><td><code>customer_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">2.3</td></tr><tr><td><code>finishes</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.3, 3.7</td></tr><tr><td><code>invoices</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.4, 3.5</td></tr><tr><td><code>materials</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.3, 3.7</td></tr><tr><td><code>notification_logs</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.7, 2.11</td></tr><tr><td><code>order_batches</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">2.4, 3.5, 3.6</td></tr><tr><td><code>order_item_engravings</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.10, 2.5</td></tr><tr><td><code>order_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.5, 3.6</td></tr><tr><td><code>order_velaro_details</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">2.11, 2.5, 3.6</td></tr><tr><td><code>payments</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.4, 3.5</td></tr><tr><td><code>product_attributes</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">4</td><td class="campos">1.3, 2.2, 2.9, 3.7</td></tr><tr><td><code>product_images</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.3, 3.7</td></tr><tr><td><code>product_revisions</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.7</td></tr><tr><td><code>product_variants</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">1.3, 2.2, 3.7</td></tr><tr><td><code>promotion_audiences</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.8</td></tr><tr><td><code>promotion_products</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.8</td></tr><tr><td><code>promotion_rules</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.8</td></tr><tr><td><code>promotions</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.8</td></tr><tr><td><code>report_exports</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.9</td></tr><tr><td><code>report_schedules</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.9</td></tr><tr><td><code>reseller_cnaes</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.4, 3.10</td></tr><tr><td><code>reseller_documents</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.4, 3.10</td></tr><tr><td><code>reseller_price_rules</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.7, 2.9</td></tr><tr><td><code>reseller_status_events</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">1.6, 3.11</td></tr><tr><td><code>reseller_stores</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.6, 2.9</td></tr><tr><td><code>reseller_verifications</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">1.6, 3.10, 3.11</td></tr><tr><td><code>resellers</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">6</td><td class="campos">1.4, 1.5, 1.6, 1.7, 3.10, 3.11</td></tr><tr><td><code>settings</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">4</td><td class="campos">1.1, 1.2, 2.10, 3.3</td></tr><tr><td><code>stock_items</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.2, 3.4</td></tr><tr><td><code>stock_movements</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">1</td><td class="campos">3.4</td></tr><tr><td><code>support_attachments</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.8, 3.12</td></tr><tr><td><code>support_messages</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">2</td><td class="campos">2.8, 3.12</td></tr><tr><td><code>support_tickets</code></td><td><span class="orig orig--novo">novo</span></td><td class="num">3</td><td class="campos">2.1, 2.8, 3.12</td></tr><tr><td><code>customers</code></td><td><span class="orig orig--core">core</span></td><td class="num">1</td><td class="campos">2.3</td></tr><tr><td><code>customers + customer_velaro_details</code></td><td><span class="orig orig--extensao">extensão</span></td><td class="num">2</td><td class="campos">2.1, 3.2</td></tr><tr><td><code>order_items</code></td><td><span class="orig orig--core">core</span></td><td class="num">2</td><td class="campos">2.10, 2.5</td></tr><tr><td><code>orders</code></td><td><span class="orig orig--core">core</span></td><td class="num">2</td><td class="campos">2.5, 3.6</td></tr><tr><td><code>orders + order_velaro_details</code></td><td><span class="orig orig--extensao">extensão</span></td><td class="num">2</td><td class="campos">2.1, 2.10</td></tr><tr><td><code>products</code></td><td><span class="orig orig--core">core</span></td><td class="num">4</td><td class="campos">1.3, 2.2, 2.9, 3.7</td></tr><tr><td><code>users</code></td><td><span class="orig orig--core">core</span></td><td class="num">2</td><td class="campos">0, 1.4</td></tr><tr><td><code>users / acl_*</code></td><td><span class="orig orig--core">core</span></td><td class="num">1</td><td class="campos">3.3</td></tr></tbody>
+      </table>
+    </div>
   </section>
 </div>
 

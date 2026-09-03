@@ -3,7 +3,7 @@
 import importlib.util as il
 s = il.spec_from_file_location("u", "_ui.py"); u = il.module_from_spec(s); s.loader.exec_module(u)
 g = globals(); g.update({k: getattr(u, k) for k in dir(u) if not k.startswith("__")})
-W = lambda f, c: (open(f, "w").write(c), print("  ✓", f))
+W = lambda f, c: (open(f, "w", encoding="utf-8").write(religar(c, f)), print("  ✓", f))
 M = lambda a, b: page("Velaro · " + a.split("|")[0].strip(), master_shell(a.split("|")[1].strip(), b))
 
 # ══════════════════════════ 3.2 CLIENTES ══════════════════════════
@@ -89,11 +89,11 @@ pagamentos = tabela([("Forma de pagamento",""),("Status","")],
 
 body = f'''
 {head("Configurações","Gerencie as preferências e parâmetros da sua conta e da plataforma.")}
-<div class="split3" style="grid-template-columns:300px minmax(0,1fr)">
+<div class="split3" style="--gcols:300px minmax(0,1fr)">
   <div class="stack">{secoes}</div>
   <div class="stack">
     {card("Perfil da empresa",
-      '<div class="split" style="grid-template-columns:minmax(0,1fr) 220px;gap:var(--space-5)">'
+      '<div class="split" style="--gcols:minmax(0,1fr) 220px;gap:var(--space-5)">'
       + '<div class="fgrid fgrid--2">'
       + "".join(campo(k, v) for k, v in [
           ("Nome fantasia","Velaro Alianças"),("Razão social","Velaro Alianças Ltda"),
@@ -105,7 +105,7 @@ body = f'''
         f'<span class="logobox__up">{ic("edit")} Alterar logo</span></div></div>',
       acao=btn("Editar informações","secondary","edit"))}
 
-    <div class="split" style="grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)">
+    <div class="split" style="--gcols:minmax(0,1.35fr) minmax(0,1fr)">
       {card("Configurações gerais",
         '<div class="fgrid fgrid--1" style="max-width:320px">'
         + campo("Moeda padrão","Real (R$)",tipo="select")
@@ -125,7 +125,7 @@ body = f'''
         + campo("Vencimento do lote","7 dias após o corte",tipo="select"))}
     </div>
 
-    <div class="split3" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+    <div class="split3" style="--gcols:repeat(3,minmax(0,1fr))">
       {card("Informações fiscais",
         campo("Regime tributário","Simples Nacional",tipo="select")
         + campo("Série da nota fiscal","1",tipo="select")
@@ -358,7 +358,7 @@ body = f'''
                        ("Total do pedido","R$ 3.240,00"),("Forma de pagamento","PIX"),("Lote","L-2026-0312")])
       + '</div>')}
     {card("Itens do pedido (3)", itens)}
-    <div class="split" style="grid-template-columns:1fr 1fr">
+    <div class="split" style="--gcols:1fr 1fr">
       {card("Endereço de entrega (loja do revendedor)",
         '<p class="lede" style="font-size:var(--text-sm)">João Ferreira Joias &amp; Cia<br>'
         'Rua das Joias, 145 - Centro<br>São Paulo / SP - 01000-000</p>')}
@@ -491,7 +491,7 @@ body = f'''
           campo("Tipo de promoção","Desconto progressivo",True,"select",hint="Descontos aplicados conforme o valor total do pedido."),
           campo("Prioridade de exibição","Alta",False,"select",hint="Define a ordem de destaque da promoção na loja."),
         ], 2)
-      + '<div class="split" style="grid-template-columns:minmax(0,1fr) 280px;gap:var(--space-5);margin-top:var(--space-4)">'
+      + '<div class="split" style="--gcols:minmax(0,1fr) 280px;gap:var(--space-5);margin-top:var(--space-4)">'
       + campo("Descrição","Aproveite descontos progressivos em alianças selecionadas. Quanto maior o pedido, maior o desconto!",tipo="textarea",hint="Caracteres: 89/500")
       + '<div>' + toggle("Exibir selo na loja","Mostrar selo de destaque na vitrine da loja") + '</div></div></div>'
       + notice("Esta promoção está ativa e visível para todos os revendedores elegíveis.")
@@ -583,7 +583,7 @@ body = f'''
        ("user-plus","Novos clientes","34",up("21,4% vs período anterior"),"info")], "g5")}
 <div class="split split--wide">
   <div class="stack">
-    <div class="split" style="grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)">
+    <div class="split" style="--gcols:minmax(0,1.3fr) minmax(0,1fr)">
       {card("Faturamento ao longo do tempo",
         '<div class="chartlegend"><span><i style="background:var(--action)"></i>Período atual</span>'
         '<span><i class="dash"></i>Período anterior</span></div>' + spark
@@ -592,7 +592,7 @@ body = f'''
         acao='<span class="select-fake">Diário</span>')}
       {card("Pedidos por status", donut, acao='<span class="select-fake">Diário</span>')}
     </div>
-    <div class="split" style="grid-template-columns:1fr 1fr">
+    <div class="split" style="--gcols:1fr 1fr">
       {card("Top revendedores por faturamento", toprev)}
       {card("Top produtos por quantidade", topprod)}
     </div>
@@ -666,7 +666,7 @@ novo = drawer("Cadastro manual de revendedor", "".join([
         campo("Bairro","Centro",True),
         campo("Cidade","São José do Rio Preto",True),
         campo("UF","SP",True,"select")], 2),
-  f'<div class="split" style="grid-template-columns:1fr 1fr;gap:var(--space-4)">'
+  f'<div class="split" style="--gcols:1fr 1fr;gap:var(--space-4)">'
   f'<div><span class="eyebrow">CNAEs informados</span><ul class="cklist" style="margin-top:8px">{cnaes}</ul></div>'
   f'<div><span class="eyebrow">Verificação por IA</span>'
   + checklist([("ok","CNPJ válido",""),("ok","Empresa ativa",""),("ok","CNAEs compatíveis","")])
@@ -729,7 +729,7 @@ det = drawer("Detalhes da solicitação", "".join([
     ("E-mail","contato@tomazellialiancas.com.br"),("Telefone / WhatsApp","(17) 99123-4567"),
     ("CEP","15090-070")]) + campo("Endereço","Av. Alberto Andaló, 1234 – Centro – São José do Rio Preto / SP",largura=2) + '</div>',
   f'<div><span class="eyebrow">CNAEs informados</span><ul class="cklist" style="margin-top:8px">{cnaes}</ul></div>',
-  '<div class="split" style="grid-template-columns:1fr 1fr;gap:var(--space-4)">'
+  '<div class="split" style="--gcols:1fr 1fr;gap:var(--space-4)">'
   + '<div><span class="eyebrow">Validação por IA</span>'
   + checklist([("ok","CNPJ válido",""),("ok","Empresa ativa",""),("ok","CNAEs compatíveis",""),("ok","Documentação enviada","")])
   + f'<div class="airesult">{ic("sparkle")}<span><small>Resultado</small>{chip("Compatível / Pré-aprovado","ok")}</span></div></div>'
@@ -796,7 +796,7 @@ vinculos = "".join(
 
 body = f'''
 {head("Suporte","Gerencie suas solicitações de suporte e acompanhe o atendimento.")}
-<div class="split3" style="grid-template-columns:minmax(0,1.5fr) 320px 300px">
+<div class="split3" style="--gcols:minmax(0,1.5fr) 320px 300px">
   <div class="stack">
     {card(None,
       '<a class="link-gold" href="#">← Voltar para todas as solicitações</a>'

@@ -454,7 +454,7 @@ def render():
         <div class="tela__body">
           <div>
             <h4>Tabelas e campos</h4>
-            <table class="tb"><tbody>{tbs}</tbody></table>
+            <div class="table-scroll"><table class="tb"><tbody>{tbs}</tbody></table></div>
           </div>
           <div>
             <h4>Permissões</h4><ul class="lst">{perms}</ul>
@@ -555,6 +555,14 @@ def render():
     color: var(--ink-muted); margin: 0 0 var(--space-2); }}
 
   .tb {{ font-size: var(--text-sm); }}
+  /* As rotas sao strings sem espaco ("GET /solicitacao/{{protocolo}}/aprovar")
+     e por isso nao quebravam em celular estreito. */
+  code {{ overflow-wrap: anywhere; word-break: break-word; }}
+  .tela__rota {{ min-width: 0; }}
+  /* A tabela de campos e larga de proposito; no celular ela rola por
+     dentro em vez de esticar a pagina inteira. */
+  .table-scroll {{ overflow-x: auto; -webkit-overflow-scrolling: touch; }}
+  @media (max-width: 640px) {{ .tb {{ min-width: 520px; }} }}
   .tb td {{ padding: 8px 10px 8px 0; border-bottom: 1px solid var(--border); vertical-align: top; }}
   .tb tr:last-child td {{ border-bottom: 0; }}
   .tb code {{ font-size: 12px; color: var(--ink); }}
@@ -613,10 +621,12 @@ def render():
       <span class="orig orig--core">core</span> já existe no scaffold.
       Nenhuma tabela do núcleo é mutada: o domínio Velaro entra em tabelas 1:1 e tabelas próprias.
     </p>
-    <table class="table">
-      <thead><tr><th>Tabela</th><th>Origem</th><th class="cell-num">Telas</th><th>Aparece em</th></tr></thead>
-      <tbody>{linhas}</tbody>
-    </table>
+    <div class="table-scroll">
+      <table class="table">
+        <thead><tr><th>Tabela</th><th>Origem</th><th class="cell-num">Telas</th><th>Aparece em</th></tr></thead>
+        <tbody>{linhas}</tbody>
+      </table>
+    </div>
   </section>
 </div>
 {MOCKNAV}</body>
