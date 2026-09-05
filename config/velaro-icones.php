@@ -1,4 +1,5 @@
 <?php
+
 /* Mapa de ícones do design system Velaro — espelho literal do _IC de
    docs/mockups/_ui.py. Se mudar lá, muda aqui. */
 return [
