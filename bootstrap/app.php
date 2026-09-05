@@ -4,6 +4,7 @@ use App\Http\Middleware\AuthenticateAndEnsureUserIsNotBlocked;
 use App\Http\Middleware\AuthenticateMobileToken;
 use App\Http\Middleware\EnsureAgentAccess;
 use App\Http\Middleware\EnsureUserIsNotBlocked;
+use App\Http\Middleware\EnsureUserIsReseller;
 use App\Http\Middleware\SecurityHeaders;
 use App\Support\AgentUploadLimits;
 use Illuminate\Foundation\Application;
@@ -28,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth.blocked' => AuthenticateAndEnsureUserIsNotBlocked::class,
             'mobile.auth' => AuthenticateMobileToken::class,
             'not_blocked' => EnsureUserIsNotBlocked::class,
+            'reseller' => EnsureUserIsReseller::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

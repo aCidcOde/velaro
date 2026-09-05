@@ -1,0 +1,12 @@
+/*
+ * Design system Velaro — o mesmo dos mockups em docs/mockups/, sem cópia
+ * divergente: velaro-tokens/ui/screens.css são espelhos dos arquivos de lá.
+ * Quando o design mudar, muda-se em docs/mockups e copia-se para cá
+ * (php artisan velaro:sync-css faz isso). As fontes já são auto-hospedadas
+ * em resources/css/fonts.css.
+ */
+@import "./fonts.css";
+@import "./velaro/velaro-tokens.css";
+@import "./velaro/velaro-ui.css";
+@import "./velaro/velaro-screens.css";
+@import "./velaro/vitrine.css";
