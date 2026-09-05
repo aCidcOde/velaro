@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AgentConversationController;
 use App\Http\Controllers\AgentConversationDeleteController;
 use App\Http\Controllers\AgentConversationListController;
@@ -21,22 +20,13 @@ use App\Http\Controllers\Backend\DashboardController as BackendDashboardControll
 use App\Http\Controllers\Backend\OrderController as BackendOrderController;
 use App\Http\Controllers\Backend\ProductController as BackendProductController;
 use App\Http\Controllers\Backend\UserController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ServicesController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
-
-Route::get('/', HomeController::class)->name('home');
-Route::get('sobre', AboutController::class)->name('public.about');
-Route::get('servicos', ServicesController::class)->name('public.services');
-Route::get('contato', [ContactController::class, 'create'])->name('public.contact');
-Route::post('contato', [ContactController::class, 'store'])->name('public.contact.store');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('auth/google/redirect', [GoogleAuthController::class, 'redirect'])->name('auth.google.redirect');

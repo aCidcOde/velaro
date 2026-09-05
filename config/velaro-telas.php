@@ -17,6 +17,7 @@ return [
     'site.solicitacao.enviada' => ['1.5', 'Solicitação enviada',              '13-site-enviada.html',   '1-5-site-enviada.md'],
     'site.solicitacao.status' => ['1.6', 'Status da solicitação',            '14-site-status.html',    '1-6-site-status.md'],
     'site.solicitacao.aprovado' => ['1.7', 'Cadastro aprovado e liberação',    '15-site-aprovado.html',  '1-7-site-aprovado.md'],
+    'site.contato' => ['1.8', 'Fale conosco', '19-site-contato.html', '1-8-site-contato.md'],
     'site.privacidade' => ['1.2', 'Política de Privacidade',          '17-site-privacidade.html', '1-2-site-sobre.md'],
     'site.termos' => ['1.2', 'Termos de Uso',                    '18-site-termos.html',    '1-2-site-sobre.md'],
     // Login (Fortify)

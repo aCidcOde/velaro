@@ -7,6 +7,31 @@
 - Documentação por tela com campos, permissões, regras de negócio e critérios de aceite.
 - Sistema de design registrado como referência única e já aplicado à aplicação em funcionamento.
 
+### 2026-09-05 · FEAT · Site publico no ar
+
+**Resumo:** O primeiro dos quatro ambientes saiu do protótipo e virou sistema. Quem chega pelo
+endereço da Velaro agora navega o site de verdade — conhece a empresa, percorre o catálogo e pede
+para virar lojista — e o pedido de cadastro entra na base com a trilha que a lei exige.
+
+**O que foi feito:** As dez páginas públicas foram construídas sobre os dados reais do sistema, e
+não mais sobre texto fixo: catálogo com busca e filtros por coleção, material, acabamento e
+largura, ficha de produto com a especificação técnica, páginas institucionais e a tela de contato.
+O preço não aparece em lugar nenhum do site — é condição comercial, liberada só depois da
+aprovação do lojista.
+
+O cadastro de lojista funciona de ponta a ponta: valida os documentos da empresa, recebe os três
+anexos obrigatórios, gera o protocolo de acompanhamento e registra os aceites com data, endereço
+de origem e a versão do texto vigente. O interessado acompanha o andamento pelo protocolo, com a
+linha do tempo da análise.
+
+As páginas institucionais que vinham da base reutilizável foram substituídas pelas da Velaro, e o
+material antigo saiu do projeto. O conteúdo que alimenta o site — dados da empresa, canais de
+atendimento, coleções e catálogo de demonstração — passou a ter carga inicial própria.
+
+Também foi corrigido um defeito de estilo que afetava o site inteiro: as regras da vitrine do
+lojista estavam vazando para fora dela e apagando o fundo dos cartões de coleção, além de deixar
+um texto com contraste abaixo do mínimo de acessibilidade.
+
 ### 2026-09-05 · FEAT · Base do sistema em ingles, tres idiomas e a tela de contato
 
 **Resumo:** O sistema passou a ser escrito em ingles por dentro e a falar tres idiomas por fora.
@@ -490,7 +515,7 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 | 2 | `composer qa:security` | 🟢 zero advisories |
 | 3 | `composer qa:style` | 🟢 passed |
 | 4 | `composer qa:static` | 🟢 no errors |
-| 5 | `composer qa:test` | 🟢 94 passed, 461 assertions |
+| 5 | `composer qa:test` | 🟢 149 passed, 783 assertions |
 | 6 | `composer qa:secrets` | 🟢 no leaks found (histórico) |
 | 7 | prefixo de commit | ⚪ N/A — sem commit nesta correção |
 | 8 | `composer qa:anti-debug` | 🟢 sem debug calls |
@@ -498,11 +523,11 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 | 10 | changelog atualizado | 🟢 este bloco |
 | 11 | `composer qa:gates` | 🟢 todos os gates passaram na correção do review |
 | 12 | `npm run build` | 🟢 build concluído |
-| — | `php artisan route:list --except-vendor` | 🟢 85 rotas (inalteradas) |
+| — | `php artisan route:list --except-vendor` | 🟢 156 rotas (80 do scaffold + 76 do Velaro) |
 
 **📊 Total de testes**
 
-🔵 94 testes · 461 assertions, incluindo 22 testes novos de regressão
+🔵 149 testes · 783 assertions, incluindo 22 testes novos de regressão
 
 **🛡️ Validação das demais gates**
 
@@ -524,13 +549,13 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 
 **📈 Métricas do sistema**
 
-- 🔵 Arquivos rastreados: 983
+- 🔵 Arquivos rastreados: 1.133
 - 🔵 Linhas rastreadas: 177.404 (medição antes da atualização deste fechamento; exclui arquivos novos não rastreados)
 - ⚪ Release anterior de referência: N/A (`1.1` é a baseline da série)
 - ⚪ Arquivos da release anterior: N/A
 - ⚪ Linhas da release anterior: N/A
 - ⚪ Aumento de arquivos vs release anterior: N/A
 - ⚪ Aumento de linhas vs release anterior: N/A
-- 🔵 Novos commits da release: 10 (incluindo esta entrega)
+- 🔵 Novos commits da release: 13 (incluindo esta entrega)
 
 **Status final: 🟢 Código e regressões validados · ⚪ Aplicação da nova migration ao banco local pendente**

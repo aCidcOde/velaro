@@ -11,6 +11,7 @@ return [
         ['info', 'Sobre nós', 'site.sobre'],
         ['book', 'Catálogo', 'site.catalogo'],
         ['user-plus', 'Seja um revendedor', 'site.cadastro'],
+        ['mail', 'Fale conosco', 'site.contato'],
     ],
     'portal' => [
         ['home', 'Dashboard', 'portal.dashboard'],

@@ -16,6 +16,29 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * As colunas abaixo nasceram em portugues e foram renomeadas pela migration de
+ * traducao do schema; o leitor de migrations do Larastan nao acompanha o rename,
+ * entao elas precisam ser declaradas aqui para a analise estatica enxerga-las.
+ *
+ * @property string $protocol
+ * @property string $legal_name
+ * @property string|null $trade_name
+ * @property string|null $state_registration
+ * @property string $contact_name
+ * @property string|null $contact_cpf
+ * @property string|null $phone
+ * @property string|null $postal_code
+ * @property string|null $street
+ * @property string|null $street_number
+ * @property string|null $address_complement
+ * @property string|null $district
+ * @property string|null $city
+ * @property string|null $state
+ * @property string|null $contact_source
+ * @property string|null $notes
+ * @property string|null $internal_notes
+ */
 class Reseller extends Model
 {
     use HasFactory;

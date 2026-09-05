@@ -16,7 +16,7 @@
             <aside class="panel-auth-aside">
                 <div class="panel-auth-aside__inner">
                     <div class="space-y-10">
-                        <a href="{{ route('home') }}" class="panel-brand">
+                        <a href="{{ route('site.home') }}" class="panel-brand">
                             <span class="panel-brand__mark">
                                 <img src="{{ asset('logo.webp') }}" alt="{{ config('app.name', 'CodaFácil') }}" />
                             </span>

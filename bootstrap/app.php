@@ -12,12 +12,23 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Exceptions\PostTooLargeException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
+        then: function (): void {
+            // Rotas dos quatro ambientes Velaro (site, portal, vitrine, backend).
+            // Carregadas depois de web.php: o Velaro e o dono da raiz do dominio.
+            //
+            // O grupo `web` e obrigatorio aqui: `then` nao aplica grupo nenhum.
+            // Sem ele nao ha sessao, nem CSRF nos POST publicos (contato e
+            // pre-cadastro), nem `$errors` compartilhado — e toda view com
+            // @error morre com "Undefined variable $errors".
+            Route::middleware('web')->group(__DIR__.'/../routes/velaro.php');
+        },
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {

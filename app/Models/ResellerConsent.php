@@ -21,6 +21,12 @@ class ResellerConsent extends Model
 
     public const TYPE_PRIVACY_POLICY = 'privacy_policy';
 
+    /** Declaracao de que o solicitante e lojista / empresa formalizada (tela 1.4). */
+    public const TYPE_BUSINESS_DECLARATION = 'business_declaration';
+
+    /** Autorizacao para a validacao automatica de CNPJ e CNAE (tela 1.4). */
+    public const TYPE_AUTOMATED_VERIFICATION = 'automated_verification';
+
     /**
      * @var list<string>
      */

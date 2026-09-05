@@ -8,7 +8,8 @@
  * Quatro ambientes:
  *   site     — público, na raiz
  *   portal   — Parceiro Premium aprovado (middleware reseller)
- *   vitrine  — white label do revendedor, pública, em /loja/{slug}
+ *   vitrine  — white label do revendedor, pública, em /loja/{slug}.
+ *              Dominio proprio existe, mas e minoria — o caminho e o padrao.
  *   backend  — Perfil Master (gate access-backend)
  *
  * Login/senha ficam com o Fortify (/login, /forgot-password, …).
@@ -28,9 +29,11 @@ Route::name('site.')->group(function (): void {
     Route::get('produto/{product:slug}', [Site\CatalogoController::class, 'produto'])->name('produto');
     Route::get('seja-revendedor', [Site\CadastroController::class, 'create'])->name('cadastro');
     Route::post('seja-revendedor', [Site\CadastroController::class, 'store'])->name('cadastro.store');
-    Route::get('solicitacao/{reseller:protocolo}/enviada', [Site\SolicitacaoController::class, 'enviada'])->name('solicitacao.enviada');
-    Route::get('solicitacao/{reseller:protocolo}', [Site\SolicitacaoController::class, 'status'])->name('solicitacao.status');
-    Route::get('solicitacao/{reseller:protocolo}/aprovado', [Site\SolicitacaoController::class, 'aprovado'])->name('solicitacao.aprovado');
+    Route::get('solicitacao/{reseller:protocol}/enviada', [Site\SolicitacaoController::class, 'enviada'])->name('solicitacao.enviada');
+    Route::get('solicitacao/{reseller:protocol}', [Site\SolicitacaoController::class, 'status'])->name('solicitacao.status');
+    Route::get('solicitacao/{reseller:protocol}/aprovado', [Site\SolicitacaoController::class, 'aprovado'])->name('solicitacao.aprovado');
+    Route::get('contato', [Site\ContatoController::class, 'create'])->name('contato');
+    Route::post('contato', [Site\ContatoController::class, 'store'])->name('contato.store');
     Route::get('privacidade', [Site\LegalController::class, 'privacidade'])->name('privacidade');
     Route::get('termos', [Site\LegalController::class, 'termos'])->name('termos');
 });

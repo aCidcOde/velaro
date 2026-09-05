@@ -8,14 +8,12 @@
     @foreach(config('velaro-nav.site') as [$i, $rotulo, $rota])
       <a href="{{ route($rota) }}" @class(['is-active' => request()->routeIs($rota) || request()->routeIs($rota.'.*')])>{{ $rotulo }}</a>
     @endforeach
-    <a href="{{ route('site.catalogo') }}#contato">Fale conosco</a>
   </nav>
   <details class="site-nav__mobile"><summary aria-label="Abrir navegação"></summary>
     <nav class="site-nav__mobile__panel">
       @foreach(config('velaro-nav.site') as [$i, $rotulo, $rota])
-        <a href="{{ route($rota) }}" @class(['is-active' => request()->routeIs($rota)])>{{ $rotulo }}</a>
+        <a href="{{ route($rota) }}" @class(['is-active' => request()->routeIs($rota) || request()->routeIs($rota.'.*')])>{{ $rotulo }}</a>
       @endforeach
-      <a href="{{ route('site.catalogo') }}#contato">Fale conosco</a>
     </nav>
   </details>
   <div class="site-nav__account">
@@ -44,13 +42,16 @@
     <div><h4>Links rápidos</h4>
       <a href="{{ route('site.home') }}">Início</a><br><a href="{{ route('site.sobre') }}">Sobre nós</a><br>
       <a href="{{ route('site.catalogo') }}">Catálogo</a><br><a href="{{ route('site.cadastro') }}">Seja um revendedor</a><br>
-      <a href="{{ route('login') }}">Entrar</a></div>
-    <div><h4>Atendimento</h4><p>+55 (16) 99487-7800<br>vendas@velaro.com.br<br>Segunda a sexta, das 8h às 18h.</p></div>
+      <a href="{{ route('site.contato') }}">Fale conosco</a><br><a href="{{ route('login') }}">Entrar</a></div>
+    {{-- Escopo 1.1 §1: telefone, e-mail e horário saem de `settings` (grupo contact),
+         injetados no casco pelo view composer do AppServiceProvider. --}}
+    @php($fone = $rodapeContato ?? [])
+    <div><h4>Atendimento</h4><p>{{ $fone['telefone'] ?? '' }}<br>{{ $fone['email'] ?? '' }}<br>{{ $fone['horario'] ?? '' }}</p></div>
     <div><h4>Formas de pagamento B2B</h4><p>Pix · Boleto · Transferência</p>
       <p class="muted" style="font-size:var(--text-xs);line-height:18px;margin-top:8px;color:rgba(255,255,255,.42)">Cobrança exclusiva Velaro → lojista. A plataforma não processa pagamento do consumidor final.</p></div>
   </div>
   <div class="site-foot__bar">
-    <span>© {{ date('Y') }} Velaro Alianças. Todos os direitos reservados.</span>
+    <span>© {{ date('Y') }} {{ ($rodapeEmpresa ?? [])['nome'] ?? 'Velaro Alianças' }}. Todos os direitos reservados.</span>
     <span><a href="{{ route('site.privacidade') }}">Política de Privacidade</a> &nbsp;|&nbsp; <a href="{{ route('site.termos') }}">Termos de Uso</a></span>
   </div>
 </footer>

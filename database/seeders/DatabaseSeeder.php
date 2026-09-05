@@ -65,5 +65,8 @@ class DatabaseSeeder extends Seeder
         $order->update([
             'total_amount' => $order->items()->sum('total_price'),
         ]);
+
+        // Conteudo do site publico Velaro: settings, colecoes, taxonomia e catalogo demo.
+        $this->call(VelaroSeeder::class);
     }
 }

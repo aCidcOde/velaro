@@ -31,6 +31,10 @@ class ContactLead extends Model
         'status',
         'handled_by',
         'handled_at',
+        'consent_granted_at',
+        'consent_document_version',
+        'consent_ip_address',
+        'consent_user_agent',
     ];
 
     /**
@@ -40,6 +44,7 @@ class ContactLead extends Model
     {
         return [
             'handled_at' => 'datetime',
+            'consent_granted_at' => 'datetime',
         ];
     }
 
