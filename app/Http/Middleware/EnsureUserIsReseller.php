@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Reseller;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,7 @@ class EnsureUserIsReseller
     {
         $reseller = $request->user()?->reseller;
 
-        if ($reseller === null || $reseller->status !== 'aprovado') {
+        if ($reseller === null || $reseller->status !== Reseller::STATUS_APPROVED) {
             abort(403, 'Acesso restrito a revendedores aprovados.');
         }
 

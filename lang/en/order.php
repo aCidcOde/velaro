@@ -20,6 +20,7 @@ return [
 
     'payment_status' => [
         'pending' => 'Pending',
+        'awaiting_clearance' => 'Awaiting clearance',
         'paid' => 'Paid',
         'overdue' => 'Overdue',
         'refunded' => 'Refunded',

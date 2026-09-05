@@ -3,8 +3,8 @@
 | | |
 |---|---|
 | **Ambiente** | Site público |
-| **Rota** | `GET /solicitacao/{protocolo}` |
-| **Acesso** | Pré-cadastro (acesso limitado) |
+| **Rota** | `GET /solicitacao/{protocol} · POST /solicitacao/{protocol}/documentos` |
+| **Acesso** | Pré-cadastro (acesso limitado ao proprio acompanhamento) |
 | **Referência contratual** | Anexo I §3.6 · §2 |
 | **Mockup** | [`docs/mockups/14-site-status.html`](../mockups/14-site-status.html) |
 | **Mapa** | [mapa.html#site-status](../mockups/mapa.html#site-status) |
@@ -13,9 +13,10 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `resellers` | novo (módulo Velaro) | status, approved_at, rejected_at, rejection_reason |
+| `resellers` | novo (módulo Velaro) | status (pending\|awaiting_info\|approved\|rejected\|inactive), approved_at, rejected_at, rejection_reason |
 | `reseller_verifications` | novo (módulo Velaro) | status, cnpj_valido, empresa_ativa, cnaes_compativeis, score, checked_at |
 | `reseller_status_events` | novo (módulo Velaro) | from_status, to_status, actor_id, note, created_at — alimenta a linha do tempo |
+| `reseller_documents` | novo (módulo Velaro) | type, original_name, disk, path, size_bytes, mime — reenvio quando a Velaro pede informacao adicional |
 
 > O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
 > core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
@@ -29,6 +30,8 @@
 1. Linha do tempo: cadastro recebido → validação automática → aprovação final → liberação de acesso.
 2. Estado de pré-cadastro dá acesso **somente** ao acompanhamento da própria solicitação.
 3. Notificação a cada transição.
+4. Em `awaiting_info` a tela abre o reenvio de documentos: é a contraparte da ação **Solicitar informações adicionais** do Painel Master (3.11), que até aqui não tinha resposta possível.
+5. Documento reenviado registra evento em `reseller_status_events` e devolve a solicitação para `pending`.
 
 ## 4. Critérios de aceite
 
@@ -61,6 +64,12 @@
 - **Dados da solicitação**: CNPJ (32.123.456/0001-78) · Cidade/UF (Caxias do Sul / RS) ·
   Origem do contato (Indicação de lojista parceiro) · WhatsApp ((54) 9 9999-8888) · E-mail
 - **Ações**: ATUALIZAR STATUS · FALAR COM NOSSA EQUIPE
+- **Reenvio de documentos** — visível apenas quando a solicitação está em **Aguardando informações**:
+  faixa de aviso com o pedido registrado pela equipe Velaro (a justificativa da ação
+  "Solicitar informações adicionais" da tela 3.11) · campo de upload por tipo de documento
+  (contrato social, documento do sócio, cartão CNPJ) com PDF/PNG/JPG até 5MB ·
+  botão **ENVIAR DOCUMENTOS**. O envio devolve a solicitação para análise e entra na linha do tempo.
+  Fora desse estado o bloco não aparece — o lojista não reenvia documento por conta própria.
 - **Coluna direita**: card escuro "Status atual → Em validação automática" + texto ·
   "Como acompanhar" (3 itens) · "Próximas etapas" (3 itens numerados)
 - Faixa 4 selos + rodapé ampliado (Fale conosco / Institucional / Para parceiros / Siga / Formas de pagamento)

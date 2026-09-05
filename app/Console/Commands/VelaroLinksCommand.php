@@ -28,9 +28,9 @@ class VelaroLinksCommand extends Command
     public function handle(): int
     {
         $store = ResellerStore::query()->where('is_active', true)->first() ?? ResellerStore::query()->first();
-        $pre = Reseller::query()->where('status', 'pre_cadastro')->whereNotNull('protocolo')->first()
-            ?? Reseller::query()->whereNotNull('protocolo')->first();
-        $aprovado = Reseller::query()->where('status', 'aprovado')->first() ?? Reseller::query()->first();
+        $pre = Reseller::query()->where('status', Reseller::STATUS_PENDING)->whereNotNull('protocol')->first()
+            ?? Reseller::query()->whereNotNull('protocol')->first();
+        $aprovado = Reseller::query()->where('status', Reseller::STATUS_APPROVED)->first() ?? Reseller::query()->first();
 
         $exemplo = [
             'store' => $store?->slug,
@@ -58,7 +58,7 @@ class VelaroLinksCommand extends Command
             $params = [];
             foreach ($rota->parameterNames() as $p) {
                 $params[$p] = match ($p) {
-                    'reseller' => str_starts_with($nome, 'site.') ? $pre?->protocolo : $aprovado?->id,
+                    'reseller' => str_starts_with($nome, 'site.') ? $pre?->protocol : $aprovado?->id,
                     'colecao' => null,
                     'secao' => null,
                     default => $exemplo[$p] ?? null,

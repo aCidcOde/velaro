@@ -2,6 +2,7 @@
 
 namespace App\Http\Responses\Auth;
 
+use App\Models\Reseller;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -37,10 +38,20 @@ class LoginResponse implements LoginResponseContract
             return redirect()->route('backend.dashboard');
         }
 
-        if ($user->reseller?->status === 'aprovado') {
+        $reseller = $user->reseller;
+
+        if ($reseller?->status === Reseller::STATUS_APPROVED) {
             return redirect()->route('portal.dashboard');
         }
 
+        // Regra 2 da tela 1.6: pre-cadastro da acesso SOMENTE ao acompanhamento da propria
+        // solicitacao. Reprovado e inativo tambem param aqui — veem o motivo, nao o portal.
+        if ($reseller !== null && filled($reseller->protocol)) {
+            return redirect()->route('site.solicitacao.status', $reseller);
+        }
+
+        // Sem vinculo com revendedor nao ha ambiente Velaro para rotear: conta interna
+        // sem ACL e conta recem-criada em /register caem no destino padrao do Fortify.
         return redirect()->intended(Fortify::redirects('login'));
     }
 }

@@ -20,6 +20,7 @@ return [
 
     'payment_status' => [
         'pending' => 'Pendiente',
+        'awaiting_clearance' => 'Esperando compensación',
         'paid' => 'Pagado',
         'overdue' => 'Vencido',
         'refunded' => 'Reembolsado',

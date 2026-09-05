@@ -110,6 +110,12 @@ Nav: Início · Sobre Nós · Catálogo · Seja um Revendedor · Fale Conosco ·
 - **Dados da solicitação**: CNPJ (32.123.456/0001-78) · Cidade/UF (Caxias do Sul / RS) ·
   Origem do contato (Indicação de lojista parceiro) · WhatsApp ((54) 9 9999-8888) · E-mail
 - **Ações**: ATUALIZAR STATUS · FALAR COM NOSSA EQUIPE
+- **Reenvio de documentos** — visível apenas quando a solicitação está em **Aguardando informações**:
+  faixa de aviso com o pedido registrado pela equipe Velaro (a justificativa da ação
+  "Solicitar informações adicionais" da tela 3.11) · campo de upload por tipo de documento
+  (contrato social, documento do sócio, cartão CNPJ) com PDF/PNG/JPG até 5MB ·
+  botão **ENVIAR DOCUMENTOS**. O envio devolve a solicitação para análise e entra na linha do tempo.
+  Fora desse estado o bloco não aparece — o lojista não reenvia documento por conta própria.
 - **Coluna direita**: card escuro "Status atual → Em validação automática" + texto ·
   "Como acompanhar" (3 itens) · "Próximas etapas" (3 itens numerados)
 - Faixa 4 selos + rodapé ampliado (Fale conosco / Institucional / Para parceiros / Siga / Formas de pagamento)

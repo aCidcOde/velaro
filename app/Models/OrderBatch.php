@@ -9,13 +9,16 @@ Lote semanal de faturamento Velaro para o lojista: unidade de pagamento, nota fi
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToReseller;
+use App\Models\Contracts\OwnedByReseller;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class OrderBatch extends Model
+class OrderBatch extends Model implements OwnedByReseller
 {
+    use BelongsToReseller;
     use HasFactory;
 
     public const STATUS_OPEN = 'open';

@@ -4,20 +4,26 @@
 [Modulo: app/Http/Controllers/Portal]
 @Author: André Gomes ( @acidcode )
 @since 2026-09-05
-Esqueleto do Portal do Lojista: rota mapeada, tela pendente de implementacao.
+Central de ajuda do portal: biblioteca publicada, FAQ operacional da plataforma e canais de atendimento.
 */
 
 namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Http\Requests\Portal\AjudaBuscaRequest;
+use App\Services\Portal\CentralAjudaService;
+use Illuminate\View\View;
 
 class AjudaController extends Controller
 {
-    public function __invoke(): never
+    /**
+     * A central é documentação da plataforma, não dado do lojista: nada aqui é
+     * escopado por `reseller_id` porque nada aqui pertence a um revendedor. O
+     * que o middleware `reseller` garante é o público — o consumidor final não
+     * tem login e não chega a esta página.
+     */
+    public function __invoke(AjudaBuscaRequest $request, CentralAjudaService $ajuda): View
     {
-        // Esqueleto: a rota existe e esta no mapa, a tela ainda nao foi construida.
-        // O ambiente Site publico foi implementado primeiro; este entra na sequencia.
-        throw new HttpException(501, 'Tela ainda nao implementada: portal.ajuda.__invoke');
+        return view('portal.ajuda', $ajuda->montar($request->termo()));
     }
 }

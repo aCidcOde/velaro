@@ -21,6 +21,22 @@ class Invoice extends Model
     public const STATUS_PENDING = 'pending';
 
     /**
+     * Nota transmitida e autorizada pela SEFAZ — o "Autorizada" da tela 2.4. A
+     * migration só declara o default `pending`; este é o outro degrau que o
+     * faturamento já usa, e existe aqui para nenhum ponto do código precisar
+     * escrever o slug à mão.
+     */
+    public const STATUS_AUTHORIZED = 'authorized';
+
+    /**
+     * Nota cancelada junto a SEFAZ — a linha vermelha da tela de notas do Portal,
+     * onde a acao deixa de ser "baixar" e passa a ser "ver motivo". Entra aqui
+     * pelo mesmo motivo de {@see STATUS_AUTHORIZED}: e um degrau que a tela le, e
+     * nenhum ponto do codigo deve escrever o slug a mao.
+     */
+    public const STATUS_CANCELED = 'canceled';
+
+    /**
      * @var list<string>
      */
     protected $fillable = [

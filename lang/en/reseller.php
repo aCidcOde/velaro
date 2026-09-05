@@ -10,6 +10,7 @@ Rotulos em ingles dos status do revendedor, tipo de cadastro, documentos, consen
 return [
     'status' => [
         'pending' => 'Pending',
+        'awaiting_info' => 'Awaiting information',
         'approved' => 'Approved',
         'rejected' => 'Rejected',
         'inactive' => 'Inactive',

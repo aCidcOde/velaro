@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Reseller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -24,11 +25,11 @@ class PainelRedirectController extends Controller
 
         $reseller = $user->reseller;
 
-        if ($reseller?->status === 'aprovado') {
+        if ($reseller?->status === Reseller::STATUS_APPROVED) {
             return redirect()->route('portal.dashboard');
         }
 
-        if ($reseller?->protocolo) {
+        if ($reseller?->protocol) {
             return redirect()->route('site.solicitacao.status', $reseller);
         }
 

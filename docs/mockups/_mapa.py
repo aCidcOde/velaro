@@ -71,15 +71,20 @@ tela(slug="site-enviada", n="1.5", env="Site público", titulo="Solicitação en
              "Informa prazo de análise e canais de acompanhamento."])
 
 tela(slug="site-status", n="1.6", env="Site público", titulo="Status da solicitação",
-     rota="GET /solicitacao/{protocolo}", acesso="Pré-cadastro (acesso limitado)",
+     rota="GET /solicitacao/{protocol} · POST /solicitacao/{protocol}/documentos",
+     acesso="Pré-cadastro (acesso limitado ao proprio acompanhamento)",
      status="pronta", arquivo="14-site-status.html", anexo="§3.6 · §2",
-     tabelas=[("resellers","novo","status, approved_at, rejected_at, rejection_reason"),
+     tabelas=[("resellers","novo","status (pending|awaiting_info|approved|rejected|inactive), approved_at, rejected_at, rejection_reason"),
               ("reseller_verifications","novo","status, cnpj_valido, empresa_ativa, cnaes_compativeis, score, checked_at"),
-              ("reseller_status_events","novo","from_status, to_status, actor_id, note, created_at — alimenta a linha do tempo")],
+              ("reseller_status_events","novo","from_status, to_status, actor_id, note, created_at — alimenta a linha do tempo"),
+              ("reseller_documents","novo","type, original_name, disk, path, size_bytes, mime — reenvio quando a Velaro pede informacao adicional")],
      permissoes=["—"],
      regras=["Linha do tempo: cadastro recebido → validação automática → aprovação final → liberação de acesso.",
              "Estado de pré-cadastro dá acesso **somente** ao acompanhamento da própria solicitação.",
-             "Notificação a cada transição."])
+             "Notificação a cada transição.",
+             "Em `awaiting_info` a tela abre o reenvio de documentos: é a contraparte da ação "
+             "**Solicitar informações adicionais** do Painel Master (3.11), que até aqui não tinha resposta possível.",
+             "Documento reenviado registra evento em `reseller_status_events` e devolve a solicitação para `pending`."])
 
 tela(slug="site-aprovado", n="1.7", env="Site público", titulo="Cadastro aprovado e liberação",
      rota="GET /solicitacao/{protocolo}/aprovado", acesso="Link transacional",

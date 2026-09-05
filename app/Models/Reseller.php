@@ -46,6 +46,11 @@ class Reseller extends Model
 
     public const STATUS_PENDING = 'pending';
 
+    // A Velaro pediu informacao adicional (acao 'Solicitar informacoes adicionais' da tela
+    // 3.11). O lojista reenvia documento pela propria tela de acompanhamento (1.6), e o
+    // envio devolve a solicitacao para STATUS_PENDING.
+    public const STATUS_AWAITING_INFO = 'awaiting_info';
+
     public const STATUS_APPROVED = 'approved';
 
     public const STATUS_REJECTED = 'rejected';

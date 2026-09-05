@@ -9,12 +9,15 @@ Excecao de preco ao consumidor sobre o custo Velaro, resolvida por escopo e prio
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToReseller;
+use App\Models\Contracts\OwnedByReseller;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ResellerPriceRule extends Model
+class ResellerPriceRule extends Model implements OwnedByReseller
 {
+    use BelongsToReseller;
     use HasFactory;
 
     public const SCOPE_GLOBAL = 'global';

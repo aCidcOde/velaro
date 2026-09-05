@@ -9,14 +9,25 @@ Vitrine white-label do lojista: unica fonte da pintura, do dominio proprio e dos
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToReseller;
+use App\Models\Contracts\OwnedByReseller;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class ResellerStore extends Model
+/**
+ * `endereco` nasceu em portugues e virou `address` na migration de traducao do
+ * schema; o leitor de migrations do Larastan nao acompanha o rename, entao a
+ * coluna precisa ser declarada aqui para a analise estatica enxerga-la. E a
+ * mesma razao do bloco equivalente em {@see Reseller}.
+ *
+ * @property string|null $address
+ */
+class ResellerStore extends Model implements OwnedByReseller
 {
+    use BelongsToReseller;
     use HasFactory;
 
     /**

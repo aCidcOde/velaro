@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\Site\SiteContentService;
+use App\Support\ResellerScope;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -22,6 +23,12 @@ class AppServiceProvider extends ServiceProvider
         // do site, a tela 1.2 e os documentos legais leem os mesmos grupos de
         // `settings` no mesmo request.
         $this->app->scoped(SiteContentService::class);
+
+        // Escopo do Portal do Lojista. `scoped` porque o revendedor é o do
+        // usuário autenticado desta requisição: um controller do portal pede
+        // ResellerScope no construtor e já recebe as queries filtradas por
+        // `reseller_id`, sem nunca tocar em `auth()` nem montar o filtro à mão.
+        $this->app->scoped(ResellerScope::class, static fn (): ResellerScope => ResellerScope::current());
     }
 
     /**
@@ -32,6 +39,13 @@ class AppServiceProvider extends ServiceProvider
         if (app()->environment('production')) {
             URL::forceScheme('https');
         }
+
+        // Isolamento entre lojistas no route model binding: `{customer}`,
+        // `{batch}`, `{order:public_number}` e `{ticket:code}` só chegam ao
+        // controller do portal quando pertencem ao revendedor autenticado — o
+        // registro de outro lojista some com 404, nunca com 403 (a razão está
+        // documentada em ResellerScope).
+        ResellerScope::bindRouteParameters();
 
         RateLimiter::for('agent', function (Request $request) {
             $key = $request->user()?->id ?? $request->ip();

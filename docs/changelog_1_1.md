@@ -7,6 +7,31 @@
 - Documentação por tela com campos, permissões, regras de negócio e critérios de aceite.
 - Sistema de design registrado como referência única e já aplicado à aplicação em funcionamento.
 
+### 2026-09-05 · FEAT · Portal do Lojista e telas de acesso
+
+**Resumo:** O lojista aprovado passou a ter o proprio ambiente. Ele entra, ve o que comprou, o que
+deve, quem sao seus clientes, monta a propria vitrine e fala com a Velaro — tudo dentro de uma
+fronteira que garante que um lojista jamais alcance o dado de outro.
+
+**O que foi feito:** As dezenove telas do portal foram construidas sobre dados reais: painel com a
+situacao dos pedidos, catalogo com o custo de compra, carteira de clientes, acompanhamento de
+pedidos com a linha do tempo, financeiro com lotes, notas e pagamento, personalizacao da loja,
+tabela de margens e o atendimento.
+
+O isolamento entre lojistas virou estrutura, nao cuidado de quem escreve a consulta: existe uma
+peca unica por onde toda busca do portal passa ja restrita ao dono. Pedir o registro de outro
+lojista responde exatamente como pedir um registro inexistente — a diferenca entre as duas
+respostas permitiria descobrir o tamanho e os codigos da operacao do concorrente. A observacao
+interna da equipe Velaro e cortada na consulta, antes de chegar a tela.
+
+As telas de acesso — entrar, recuperar senha, redefinir, segunda etapa, verificacao, confirmacao e
+cadastro — ganharam a identidade Velaro, que ate aqui era a do sistema base.
+
+O login passou a levar cada perfil ao seu lugar, como o escopo promete: a equipe Velaro ao painel
+interno, o lojista aprovado ao portal, e quem esta em analise a propria solicitacao — antes todos
+caiam na mesma pagina generica. Quem esta aguardando informacao adicional tambem, e o estado ganhou
+nome e traducao nos tres idiomas.
+
 ### 2026-09-05 · FEAT · Site publico no ar
 
 **Resumo:** O primeiro dos quatro ambientes saiu do protótipo e virou sistema. Quem chega pelo
@@ -515,7 +540,7 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 | 2 | `composer qa:security` | 🟢 zero advisories |
 | 3 | `composer qa:style` | 🟢 passed |
 | 4 | `composer qa:static` | 🟢 no errors |
-| 5 | `composer qa:test` | 🟢 149 passed, 783 assertions |
+| 5 | `composer qa:test` | 🟢 365 passed, 1.742 assertions |
 | 6 | `composer qa:secrets` | 🟢 no leaks found (histórico) |
 | 7 | prefixo de commit | ⚪ N/A — sem commit nesta correção |
 | 8 | `composer qa:anti-debug` | 🟢 sem debug calls |
@@ -527,7 +552,7 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 
 **📊 Total de testes**
 
-🔵 149 testes · 783 assertions, incluindo 22 testes novos de regressão
+🔵 365 testes · 1.742 assertions, incluindo 22 testes novos de regressão
 
 **🛡️ Validação das demais gates**
 
@@ -549,13 +574,13 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 
 **📈 Métricas do sistema**
 
-- 🔵 Arquivos rastreados: 1.133
+- 🔵 Arquivos rastreados: 1.279
 - 🔵 Linhas rastreadas: 177.404 (medição antes da atualização deste fechamento; exclui arquivos novos não rastreados)
 - ⚪ Release anterior de referência: N/A (`1.1` é a baseline da série)
 - ⚪ Arquivos da release anterior: N/A
 - ⚪ Linhas da release anterior: N/A
 - ⚪ Aumento de arquivos vs release anterior: N/A
 - ⚪ Aumento de linhas vs release anterior: N/A
-- 🔵 Novos commits da release: 13 (incluindo esta entrega)
+- 🔵 Novos commits da release: 14 (incluindo esta entrega)
 
 **Status final: 🟢 Código e regressões validados · ⚪ Aplicação da nova migration ao banco local pendente**

@@ -4,20 +4,26 @@
 [Modulo: app/Http/Controllers/Portal]
 @Author: André Gomes ( @acidcode )
 @since 2026-09-05
-Esqueleto do Portal do Lojista: rota mapeada, tela pendente de implementacao.
+Dashboard do lojista: indicadores, ultimos pedidos, pendencias e configuracao da loja, tudo do proprio revendedor.
 */
 
 namespace App\Http\Controllers\Portal;
 
 use App\Http\Controllers\Controller;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Services\Portal\PainelLojistaService;
+use App\Support\ResellerScope;
+use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function __invoke(): never
+    /**
+     * Tela 2.1. O controller é fino de propósito: quem monta os números é o
+     * service, e ele os monta a partir do {@see ResellerScope} —
+     * não há aqui uma query que alguém possa esquecer de filtrar por
+     * `reseller_id`.
+     */
+    public function __invoke(PainelLojistaService $painel): View
     {
-        // Esqueleto: a rota existe e esta no mapa, a tela ainda nao foi construida.
-        // O ambiente Site publico foi implementado primeiro; este entra na sequencia.
-        throw new HttpException(501, 'Tela ainda nao implementada: portal.dashboard.__invoke');
+        return view('portal.dashboard', $painel->montar());
     }
 }

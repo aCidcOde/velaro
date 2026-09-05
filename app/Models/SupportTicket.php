@@ -9,14 +9,17 @@ Chamado entre Velaro e revendedor, com diagnostico de ambiente e os marcos de SL
 
 namespace App\Models;
 
+use App\Models\Concerns\BelongsToReseller;
+use App\Models\Contracts\OwnedByReseller;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class SupportTicket extends Model
+class SupportTicket extends Model implements OwnedByReseller
 {
+    use BelongsToReseller;
     use HasFactory;
 
     public const PRIORITY_HIGH = 'high';
@@ -36,6 +39,60 @@ class SupportTicket extends Model
     public const STATUS_ANSWERED = 'answered';
 
     public const STATUS_RESOLVED = 'resolved';
+
+    /**
+     * Categorias do chamado. Sao as quatro que a secao 5 da tela 2.8 lista como
+     * "categorias reais" e que a coluna `category` ja guarda por extenso — o
+     * valor gravado e o proprio rotulo, entao a constante e a unica forma
+     * aceita e a view nunca escreve a string na mao.
+     */
+    public const CATEGORY_ORDERS = 'Pedidos';
+
+    public const CATEGORY_FINANCE = 'Financeiro';
+
+    public const CATEGORY_STOREFRONT = 'Vitrine / Loja';
+
+    public const CATEGORY_STORE_BRANDING = 'Personalização da loja';
+
+    /** @var list<string> */
+    public const CATEGORIES = [
+        self::CATEGORY_ORDERS,
+        self::CATEGORY_FINANCE,
+        self::CATEGORY_STOREFRONT,
+        self::CATEGORY_STORE_BRANDING,
+    ];
+
+    /**
+     * Origem da abertura. O chamado nascido na tela 2.8 e sempre do portal; o
+     * campo existe porque a Velaro tambem abre chamado por WhatsApp e telefone.
+     */
+    public const CHANNEL_PORTAL = 'Portal do Lojista';
+
+    /**
+     * Prioridades da fila, na ordem em que a tela 2.8 as apresenta.
+     *
+     * @var list<string>
+     */
+    public const PRIORITIES = [
+        self::PRIORITY_HIGH,
+        self::PRIORITY_MEDIUM,
+        self::PRIORITY_LOW,
+    ];
+
+    /**
+     * Status do atendimento. `open` e o unico que o revendedor consegue criar:
+     * todos os demais sao a Velaro respondendo.
+     *
+     * @var list<string>
+     */
+    public const STATUSES = [
+        self::STATUS_OPEN,
+        self::STATUS_IN_PROGRESS,
+        self::STATUS_AWAITING_CUSTOMER,
+        self::STATUS_UNDER_REVIEW,
+        self::STATUS_ANSWERED,
+        self::STATUS_RESOLVED,
+    ];
 
     /**
      * @var list<string>

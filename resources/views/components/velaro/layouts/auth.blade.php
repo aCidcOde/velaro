@@ -14,6 +14,7 @@
         <div class="routerow"><span class="chip chip--brand">Perfil Master</span><x-velaro.icon name="arrow-up" style="transform:rotate(90deg)" /><code>/backend</code><small>Equipe Velaro</small></div>
         <div class="routerow"><span class="chip chip--ok">Parceiro Premium</span><x-velaro.icon name="arrow-up" style="transform:rotate(90deg)" /><code>/portal</code><small>Revendedor aprovado</small></div>
         <div class="routerow"><span class="chip chip--warn">Pré-cadastro</span><x-velaro.icon name="arrow-up" style="transform:rotate(90deg)" /><code>/solicitacao/…</code><small>Acompanha a própria solicitação</small></div>
+        <div class="routerow"><span class="chip chip--danger">Reprovado / inativo</span><x-velaro.icon name="arrow-up" style="transform:rotate(90deg)" /><code>—</code><small>Não autentica</small></div>
       </div>
     </div>
     <p class="muted" style="font-size:var(--text-xs);color:rgba(255,255,255,.5)">O cliente final não possui login. Ele existe apenas como cliente vinculado à carteira do Parceiro Premium.</p>

@@ -2,7 +2,7 @@
      as cores vêm de reseller_stores. $store é obrigatório. --}}
 @props(['store', 'title' => null, 'ativo' => null, 'itensNoCarrinho' => 0, 'single' => false])
 @php($r = $store->reseller)
-<x-velaro.layouts.base :title="$title ?? $store->name ?? $r?->nome_fantasia">
+<x-velaro.layouts.base :title="$title ?? $store->name ?? $r?->trade_name">
 <x-slot:head>
 <style>
   .shop{
@@ -18,7 +18,7 @@
 <div class="shop @if($single) shop--single @endif">
   <div class="shop__main" id="conteudo">
     <nav class="shop__nav">
-      <a class="shop__logo" href="{{ route('vitrine.index', $store) }}"><strong>{{ mb_strtoupper($store->name ?? $r?->nome_fantasia ?? 'LOJA') }}</strong><small>ALIANÇAS</small></a>
+      <a class="shop__logo" href="{{ route('vitrine.index', $store) }}"><strong>{{ mb_strtoupper($store->name ?? $r?->trade_name ?? 'LOJA') }}</strong><small>ALIANÇAS</small></a>
       <span class="shop__tabs">
         @foreach(['Todos os produtos' => null, 'Alianças' => 'aliancas', 'Solitários' => 'solitarios', 'Acessórios' => 'acessorios'] as $rotulo => $cat)
           <a href="{{ route('vitrine.index', [$store, 'categoria' => $cat]) }}" @class(['is-active' => ($ativo ?? null) === $cat])>{{ $rotulo }}</a>
