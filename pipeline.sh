@@ -116,15 +116,36 @@ php artisan view:cache
 php artisan event:cache
 
 # reload do PHP-FPM NÃO limpa a opcache (SHM); só restart zera de fato.
+# Reload do PHP-FPM NAO limpa a opcache (SHM); so restart zera de fato. Se este
+# passo for pulado, o servidor continua servindo o BYTECODE ANTIGO com o codigo
+# novo no disco — o pior tipo de deploy pela metade, porque nada aparenta erro.
+#
+# A versao anterior pre-testava a existencia do servico com `list-units | grep`
+# e, quando o grep nao casava, seguia em silencio. Aconteceu em producao: o
+# php8.3-fpm existia, o grep falhou, e o deploy terminou "com sucesso" sem ter
+# limpado a opcache. Agora a tentativa e o proprio teste, e o passo FALHA ALTO
+# quando nao consegue reiniciar nada.
 log "Reiniciando PHP-FPM para zerar a opcache"
 if command -v systemctl >/dev/null 2>&1; then
-    for fpm in php8.4-fpm php8.3-fpm php-fpm; do
-        if systemctl list-units --type=service --all 2>/dev/null | grep -q "${fpm}\.service"; then
-            systemctl restart "$fpm" && log "PHP-FPM (${fpm}) reiniciado" && break
+    FPM_REINICIADO=""
+    for fpm in php8.4-fpm php8.3-fpm php8.2-fpm php-fpm; do
+        if systemctl restart "$fpm" 2>/dev/null; then
+            FPM_REINICIADO="$fpm"
+            log "PHP-FPM (${fpm}) reiniciado"
+            break
         fi
     done
+
+    if [[ -z "$FPM_REINICIADO" ]]; then
+        echo "ERRO: nenhum servico PHP-FPM pode ser reiniciado. A opcache NAO foi" >&2
+        echo "      limpa e o servidor pode servir bytecode antigo. Reinicie a mao" >&2
+        echo "      e confira: systemctl list-units --type=service | grep fpm" >&2
+        exit 1
+    fi
 else
-    log "systemctl não encontrado — pulei restart do PHP-FPM (reinicie manualmente)"
+    echo "ERRO: systemctl nao encontrado — nao ha como zerar a opcache." >&2
+    echo "      Reinicie o PHP-FPM manualmente antes de considerar o deploy feito." >&2
+    exit 1
 fi
 
 log "Sinalizando queue:restart"
