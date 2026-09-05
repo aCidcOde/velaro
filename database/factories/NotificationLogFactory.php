@@ -26,8 +26,7 @@ class NotificationLogFactory extends Factory
     public function definition(): array
     {
         // As tres FKs sao nullable e nascem nulas: o vinculo vem pelos states.
-        // `status` fica no default da migration ('pending') — o model nao declara
-        // constante para os demais valores da fila de envio.
+        // `status` repete o default da migration para nao depender dele.
         return [
             'type' => NotificationLog::TYPE_ORDER_READY,
             'channel' => NotificationLog::CHANNEL_EMAIL,
@@ -36,7 +35,7 @@ class NotificationLogFactory extends Factory
             'order_id' => null,
             'reseller_id' => null,
             'customer_id' => null,
-            'status' => 'pending',
+            'status' => NotificationLog::STATUS_PENDING,
         ];
     }
 

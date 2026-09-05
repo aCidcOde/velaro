@@ -7,6 +7,68 @@
 - Documentação por tela com campos, permissões, regras de negócio e critérios de aceite.
 - Sistema de design registrado como referência única e já aplicado à aplicação em funcionamento.
 
+### 2026-09-05 · FEAT · Um login, um painel: a jornada do lojista comeca dentro do sistema
+
+**Resumo:** O lojista que se cadastrava escolhia uma senha e saia com um login que nao levava a
+lugar nenhum: ao entrar, era mandado para uma pagina de acompanhamento fora do painel. O
+pre-cadastro deixou de ser um estado de excecao do lado de fora e virou o primeiro passo da jornada
+dentro do produto. O painel e um so, do primeiro dia ate a operacao — o que muda e o conteudo.
+
+**O que foi feito:** Quem entra com o cadastro em analise cai no proprio painel e ve ali o
+andamento da solicitacao: as etapas da habilitacao, o resultado da verificacao automatica, a linha
+do tempo e os dados do cadastro. Quem teve o cadastro recusado ou inativado ve o motivo registrado
+por quem decidiu e o caminho para regularizar. Quem foi aprovado continua vendo o painel de sempre,
+sem nenhuma mudanca.
+
+Quando a equipe Velaro pede um documento adicional, o lojista passa a ter como responder: o painel
+abre o reenvio com a justificativa que a equipe escreveu, aceita os mesmos tres documentos do
+cadastro e devolve a solicitacao para a fila de analise, deixando o reenvio registrado no historico.
+Ate aqui a equipe pedia informacao e o lojista nao tinha por onde envia-la. O mesmo bloco aparece na
+pagina publica de acompanhamento, para quem chega pelo link do e-mail ou do WhatsApp.
+
+O menu lateral passou a contar a jornada inteira: os itens que a aprovacao libera continuam a
+vista, desabilitados e com a explicacao de quando abrem, em vez de sumirem. O lojista ve o que o
+espera.
+
+A abertura do painel foi deliberadamente estreita. So a tela inicial aceita lojista ainda nao
+aprovado; todo o resto do ambiente — catalogo com o custo de compra, pedidos, clientes, financeiro
+e margens — continua exigindo a aprovacao, exatamente como antes. E isso que a aprovacao concede, e
+afrouxar o ambiente inteiro entregaria a tabela de custo a quem ainda nao passou pela analise. Cada
+uma das dezoito telas de negocio tem teste automatizado provando que continua fechada, e a lista
+que o teste percorre e lida do proprio roteamento, para que uma tela nova nasca coberta.
+
+O link publico de acompanhamento continua existindo e funcionando sem sessao, porque e ele que o
+e-mail e o WhatsApp abrem. Deixou apenas de ser o destino de quem faz login.
+
+### 2026-09-05 · FEAT · Jornada do lojista unificada e permissoes do painel interno
+
+**Resumo:** O lojista deixou de ficar do lado de fora enquanto espera aprovacao. Ele se cadastra,
+recebe as boas-vindas por e-mail, entra com a senha que escolheu e acompanha o proprio processo
+dentro do painel — o mesmo painel que, depois de aprovado, vira a operacao completa dele.
+
+**O que foi feito:** O cadastro passou a criar o vinculo entre a pessoa e a empresa na hora, e nao
+so na aprovacao. Antes o lojista saia do cadastro com um acesso que nao levava a lugar nenhum, e o
+sistema o reconhecia comparando enderecos de e-mail — se qualquer um dos dois mudasse, ele perdia
+o proprio acompanhamento.
+
+Um e-mail de boas-vindas passou a sair no ato do cadastro, com o numero de protocolo, dizendo que
+a analise ainda vai acontecer, que ele ja pode entrar e que documentos adicionais podem ser
+pedidos.
+
+O painel virou um so, e muda conforme o estagio: quem espera analise ve as etapas, a triagem
+automatica e a linha do tempo; quem precisa complementar documentacao ve o reenvio; quem foi
+aprovado ve a operacao inteira; quem foi recusado ve o motivo e como regularizar. Os itens ainda
+indisponiveis aparecem no menu desabilitados, com a explicacao — a jornada fica visivel desde o
+primeiro dia. A abertura e so do painel: catalogo, pedidos, financeiro e precos continuam
+exigindo aprovacao.
+
+A tela de entrada deixou de explicar o roteamento interno do sistema e passou a falar com o
+lojista, que e quem usa o site.
+
+Tambem entrou o catalogo de permissoes do painel interno: trinta e seis permissoes em doze
+modulos, um por tela, com cinco perfis de equipe. As acoes sensiveis — aprovar, recusar, dar baixa
+financeira, ajustar estoque e acessar como revendedor — estao marcadas como exigindo registro.
+
 ### 2026-09-05 · FIX · Deploy apontava para o produto errado
 
 **Resumo:** O roteiro de publicacao ainda era o do sistema base do qual a Velaro nasceu. Rodado
@@ -559,7 +621,7 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 | 2 | `composer qa:security` | 🟢 zero advisories |
 | 3 | `composer qa:style` | 🟢 passed |
 | 4 | `composer qa:static` | 🟢 no errors |
-| 5 | `composer qa:test` | 🟢 365 passed, 1.742 assertions |
+| 5 | `composer qa:test` | 🟢 387 passed, 1.874 assertions |
 | 6 | `composer qa:secrets` | 🟢 no leaks found (histórico) |
 | 7 | prefixo de commit | ⚪ N/A — sem commit nesta correção |
 | 8 | `composer qa:anti-debug` | 🟢 sem debug calls |
@@ -571,7 +633,7 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 
 **📊 Total de testes**
 
-🔵 365 testes · 1.742 assertions, incluindo 22 testes novos de regressão
+🔵 387 testes · 1.874 assertions, incluindo 22 testes novos de regressão
 
 **🛡️ Validação das demais gates**
 
@@ -600,6 +662,6 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 - ⚪ Linhas da release anterior: N/A
 - ⚪ Aumento de arquivos vs release anterior: N/A
 - ⚪ Aumento de linhas vs release anterior: N/A
-- 🔵 Novos commits da release: 14 (incluindo esta entrega)
+- 🔵 Novos commits da release: 15 (incluindo esta entrega)
 
 **Status final: 🟢 Código e regressões validados · ⚪ Aplicação da nova migration ao banco local pendente**

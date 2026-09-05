@@ -4,7 +4,7 @@
 [Modulo: tests/Feature/Auth]
 @Author: André Gomes ( @acidcode )
 @since 2026-09-05
-Tela 0: prova o roteamento por perfil do login unico e fixa o ponto onde o pre-cadastro ainda para no destino errado.
+Tela 0: prova o roteamento por perfil do login unico — Master no backend e todo lojista vinculado no painel.
 */
 
 namespace Tests\Feature\Auth;
@@ -80,12 +80,16 @@ class LoginProfileRoutingTest extends TestCase
     }
 
     /**
-     * Regra 3 · Reprovado e inativo nao entram no portal.
+     * Regra 3 · Reprovado e inativo entram no painel, e so nele.
+     *
+     * O destino deixou de ser a pagina publica de acompanhamento: eles logam no
+     * proprio painel e leem ali o motivo e o caminho para regularizar. O que a
+     * aprovacao concede continua fechado — o negocio do portal responde 403.
      *
      * @param  Reseller::STATUS_*  $status
      */
     #[DataProvider('statusSemAcessoAoPortal')]
-    public function test_rejected_or_inactive_reseller_never_reaches_the_portal(string $status): void
+    public function test_rejected_or_inactive_reseller_lands_on_the_panel_but_not_on_the_business(string $status): void
     {
         $reseller = Reseller::factory()->create(['status' => $status]);
         $user = User::factory()->withoutTwoFactor()->forReseller($reseller)->create();
@@ -93,10 +97,13 @@ class LoginProfileRoutingTest extends TestCase
         $this->post(route('login.store'), [
             'email' => $user->email,
             'password' => 'password',
-        ])->assertRedirect(route('site.solicitacao.status', $reseller, absolute: false));
+        ])->assertRedirect(route('portal.dashboard', absolute: false));
 
-        // A porta do portal fica fechada mesmo com a sessao aberta.
-        $this->get(route('portal.dashboard'))->assertForbidden();
+        $this->get(route('portal.dashboard'))->assertOk();
+
+        // A porta do negocio fica fechada mesmo com a sessao aberta.
+        $this->get(route('portal.catalogo'))->assertForbidden();
+        $this->get(route('portal.pedidos.index'))->assertForbidden();
     }
 
     /**
@@ -126,14 +133,17 @@ class LoginProfileRoutingTest extends TestCase
     }
 
     /**
-     * Regra 2 · Pre-cadastro acompanha a propria solicitacao.
+     * Regra 2 · Pre-cadastro acompanha a propria solicitacao — dentro do painel.
      *
-     * A lacuna que este teste registrava foi fechada: o LoginResponse passou a
-     * encaminhar quem tem protocolo para `/solicitacao/{protocol}`, que e o
-     * destino que a regra 2 da tela 0 promete. A regra 2 da tela 1.6 completa o
-     * contrato — o pre-cadastro acessa SOMENTE o proprio acompanhamento.
+     * Um login, um painel: o destino do pre-cadastro passou a ser `/portal`, onde
+     * o acompanhamento e o conteudo do primeiro estagio da jornada. Antes ele era
+     * mandado para `/solicitacao/{protocol}`, uma pagina fora do painel — o
+     * lojista terminava o cadastro com um login que o expulsava do produto.
+     *
+     * A rota publica continua de pe: e ela que o link do e-mail e do WhatsApp
+     * abre. Ela so deixou de ser destino de quem logou.
      */
-    public function test_pending_reseller_is_routed_to_its_own_request(): void
+    public function test_pending_reseller_is_routed_to_the_panel(): void
     {
         $reseller = Reseller::factory()->pending()->create();
         $user = User::factory()->withoutTwoFactor()->forReseller($reseller)->create();
@@ -143,22 +153,23 @@ class LoginProfileRoutingTest extends TestCase
             'password' => 'password',
         ])
             ->assertSessionHasNoErrors()
-            ->assertRedirect(route('site.solicitacao.status', $reseller, absolute: false));
+            ->assertRedirect(route('portal.dashboard', absolute: false));
 
         $this->assertAuthenticatedAs($user);
 
-        // O acompanhamento abre; o portal continua fechado.
+        // O painel e o acompanhamento abrem; o negocio do portal continua fechado.
+        $this->get(route('portal.dashboard'))->assertOk();
         $this->get(route('site.solicitacao.status', $reseller))->assertOk();
-        $this->get(route('portal.dashboard'))->assertForbidden();
+        $this->get(route('portal.pedidos.index'))->assertForbidden();
     }
 
     /**
      * Regra 2 · `awaiting_info` e um pre-cadastro em curso: mesmo destino.
      *
      * O estado nasce da acao "Solicitar informacoes adicionais" do Master (3.11)
-     * e e onde a tela 1.6 abre o reenvio de documentos.
+     * e e onde o painel abre o reenvio de documentos.
      */
-    public function test_reseller_awaiting_information_is_routed_to_its_own_request(): void
+    public function test_reseller_awaiting_information_is_routed_to_the_panel(): void
     {
         $reseller = Reseller::factory()->create(['status' => Reseller::STATUS_AWAITING_INFO]);
         $user = User::factory()->withoutTwoFactor()->forReseller($reseller)->create();
@@ -166,8 +177,9 @@ class LoginProfileRoutingTest extends TestCase
         $this->post(route('login.store'), [
             'email' => $user->email,
             'password' => 'password',
-        ])->assertRedirect(route('site.solicitacao.status', $reseller, absolute: false));
+        ])->assertRedirect(route('portal.dashboard', absolute: false));
 
-        $this->get(route('portal.dashboard'))->assertForbidden();
+        $this->get(route('portal.dashboard'))->assertOk();
+        $this->get(route('portal.financeiro.index'))->assertForbidden();
     }
 }

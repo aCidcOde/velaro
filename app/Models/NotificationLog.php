@@ -19,6 +19,12 @@ class NotificationLog extends Model
 
     public const TYPE_ORDER_READY = 'order_ready';
 
+    /**
+     * Aviso de recebimento do cadastro de lojista, disparado na tela 1.4 e lido
+     * pela tela 1.5: o unico aviso que sai antes de existir pedido.
+     */
+    public const TYPE_REGISTRATION_RECEIVED = 'registration_received';
+
     public const CHANNEL_EMAIL = 'email';
 
     public const CHANNEL_WHATSAPP = 'whatsapp';
@@ -26,6 +32,17 @@ class NotificationLog extends Model
     public const RECIPIENT_TYPE_RESELLER = 'reseller';
 
     public const RECIPIENT_TYPE_CUSTOMER = 'customer';
+
+    /**
+     * Fila de envio. `pending` e o default da migration: a mensagem entrou na
+     * fila e ninguem confirmou a entrega ainda. `sent` e `failed` sao carimbados
+     * por quem fala com o provedor.
+     */
+    public const STATUS_PENDING = 'pending';
+
+    public const STATUS_SENT = 'sent';
+
+    public const STATUS_FAILED = 'failed';
 
     /**
      * @var list<string>

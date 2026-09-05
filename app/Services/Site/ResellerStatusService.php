@@ -188,6 +188,10 @@ class ResellerStatusService
     {
         return match ($event->to_status) {
             Reseller::STATUS_PENDING => $event->from_status === null ? 'Cadastro recebido' : 'Cadastro devolvido para análise',
+            // Sem este caso a linha do tempo anunciava "Status atualizado" no
+            // evento que mais precisa de nome: e ele que explica ao lojista por
+            // que a analise parou e o que a equipe esta esperando dele.
+            Reseller::STATUS_AWAITING_INFO => 'Informações adicionais solicitadas',
             Reseller::STATUS_APPROVED => 'Cadastro aprovado',
             Reseller::STATUS_REJECTED => 'Cadastro reprovado',
             Reseller::STATUS_INACTIVE => 'Cadastro inativado',

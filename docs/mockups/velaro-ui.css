@@ -269,6 +269,22 @@ table { border-collapse: collapse; width: 100%; }
 .nav a:hover { background: rgba(255,255,255,.06); color: #fff; }
 .nav a.is-active { background: var(--color-brand-800); color: #fff; font-weight: 600; }
 .nav a.is-active .ic { color: var(--color-gold-300); }
+/* Item de menu que este estagio ainda nao abre. Continua na lista, sem ser link:
+   o lojista em pre-cadastro precisa ver a jornada que o espera, e um <a> que nao
+   navega e pior que um rotulo. */
+.nav__locked {
+  display: flex; align-items: center; gap: 10px;
+  min-height: 44px; padding: 10px var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body); color: rgba(255,255,255,.34);
+  cursor: not-allowed;
+}
+.nav__locked .ic { color: rgba(255,255,255,.28); }
+.nav__lock { margin-left: auto; width: 14px; height: 14px; }
+.nav__note {
+  margin: var(--space-3) var(--space-3) 0;
+  font-size: var(--text-xs); line-height: 16px; color: rgba(255,255,255,.42);
+}
 .ic { width: 18px; height: 18px; flex: none; color: var(--color-gold-400); }
 
 .topbar {

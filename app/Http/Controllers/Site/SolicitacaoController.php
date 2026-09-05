@@ -11,17 +11,24 @@ namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\EnsureCanTrackReseller;
+use App\Http\Requests\Site\ResellerDocumentResubmissionRequest;
 use App\Models\Reseller;
+use App\Services\Portal\JornadaDoLojistaService;
+use App\Services\Site\ResellerDocumentResubmissionService;
 use App\Services\Site\ResellerStatusService;
 use App\Support\ResellerContactSources;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\View\View;
 
 class SolicitacaoController extends Controller implements HasMiddleware
 {
-    public function __construct(private readonly ResellerStatusService $status) {}
+    public function __construct(
+        private readonly ResellerStatusService $status,
+        private readonly JornadaDoLojistaService $jornada,
+    ) {}
 
     /**
      * 1.5 e 1.6 imprimem dado pessoal do solicitante e o protocolo e sequencial:
@@ -33,7 +40,7 @@ class SolicitacaoController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware(EnsureCanTrackReseller::class, only: ['enviada', 'status']),
+            new Middleware(EnsureCanTrackReseller::class, only: ['enviada', 'status', 'documentos']),
         ];
     }
 
@@ -61,7 +68,37 @@ class SolicitacaoController extends Controller implements HasMiddleware
             'timeline' => $this->status->timeline($reseller),
             'lastUpdated' => $this->status->lastUpdatedLabel($reseller),
             'contactSource' => ResellerContactSources::label($reseller->contact_source),
+            'documentos' => $this->jornada->documentosPedidos($reseller),
         ]);
+    }
+
+    /**
+     * Regra 4 da tela 1.6 — reenvio de documentos em `awaiting_info`.
+     *
+     * O mesmo endereco serve os dois lugares em que o lojista ve o pedido: o
+     * painel, onde ele entra logado, e a pagina publica do link transacional. Por
+     * isso a volta e para de onde ele veio.
+     */
+    public function documentos(
+        ResellerDocumentResubmissionRequest $request,
+        Reseller $reseller,
+        ResellerDocumentResubmissionService $service,
+    ): RedirectResponse {
+        $arquivos = [];
+
+        foreach (array_keys(JornadaDoLojistaService::TIPOS_DE_DOCUMENTO) as $tipo) {
+            $arquivo = $request->file($tipo);
+
+            if ($arquivo instanceof UploadedFile) {
+                $arquivos[$tipo] = $arquivo;
+            }
+        }
+
+        $service->resubmit($reseller, $arquivos);
+
+        return redirect()
+            ->back(fallback: route('site.solicitacao.status', ['reseller' => $reseller->protocol]))
+            ->with('status', 'Documentos reenviados. Sua solicitação voltou para análise.');
     }
 
     /**

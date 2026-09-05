@@ -50,61 +50,27 @@ Tela 1.6 — acompanhamento do cadastro: stepper, triagem automatica, linha do t
             @endforeach
         </div>
 
+        @if (session('status'))
+            <p class="notice notice--ok" style="margin-top:var(--space-4)">
+                <x-velaro.icon name="check" /><span>{{ session('status') }}</span></p>
+        @endif
+
         <div class="split split--wide" style="margin-top:var(--space-4)">
             <div class="stack">
                 <div class="card">
-                    <ol class="stepper">
-                        @foreach ($steps as $step)
-                            <li class="step step--{{ $step['state'] }}">
-                                <span class="step__dot">{{ $step['dot'] }}</span>
-                                <span class="step__lab">{{ $rotulos[$step['key']] }}</span>
-                                <span class="step__note">{{ $step['note'] }}</span>
-                            </li>
-                        @endforeach
-                    </ol>
+                    <x-velaro.solicitacao.stepper :steps="$steps" :rotulos="$rotulos" />
                 </div>
 
                 <div class="card">
-                    <div class="split" style="--gcols:180px minmax(0,1fr);gap:var(--space-6);align-items:center">
-                        <div style="display:grid;place-items:center;gap:10px;text-align:center">
-                            <x-velaro.icon name="brain" style="width:44px;height:44px;color:var(--color-gold-600)" />
-                            <strong style="font-size:var(--text-sm);color:var(--ink)">Validação<br>automática com IA</strong>
-                        </div>
-                        <div>
-                            <ul class="cklist">
-                                @foreach ($checks as $check)
-                                    <li @class(['ck--ok' => $check['state'] === 'ok', 'ck--wait' => $check['state'] === 'wait'])>
-                                        <x-velaro.icon :name="$check['icon']" />
-                                        <span>{{ $check['label'] }}</span>
-                                        <b>{{ $check['note'] }}</b>
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    </div>
+                    <x-velaro.solicitacao.verificacao :checks="$checks" />
                 </div>
+
+                <x-velaro.solicitacao.reenvio-documentos :reseller="$reseller" :documentos="$documentos" />
 
                 <div class="split" style="--gcols:1fr 1fr">
                     <div class="card">
                         <div class="card__head"><h2 class="title">Linha do tempo da solicitação</h2></div>
-                        <ul class="timeline">
-                            @forelse ($timeline as $evento)
-                                <li class="tl tl--{{ $evento['state'] }}">
-                                    <span class="tl__dot"></span>
-                                    <span class="tl__body">
-                                        <strong>{{ $evento['label'] }}</strong>
-                                        @if ($evento['note'])<span class="tl__desc">{{ $evento['note'] }}</span>@endif
-                                    </span>
-                                    <span class="tl__when">{{ $evento['when'] }}</span>
-                                </li>
-                            @empty
-                                <li class="tl tl--todo">
-                                    <span class="tl__dot"></span>
-                                    <span class="tl__body"><strong>Sem movimentações registradas.</strong></span>
-                                    <span class="tl__when">—</span>
-                                </li>
-                            @endforelse
-                        </ul>
+                        <x-velaro.solicitacao.linha-do-tempo :timeline="$timeline" />
                     </div>
 
                     <div class="card">

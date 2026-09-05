@@ -48,15 +48,7 @@ Tela 1.5 — confirmacao de recebimento do cadastro, com protocolo, resumo e ste
 
                 <div class="card">
                     <div class="card__head"><h2 class="title">Acompanhe o andamento do seu cadastro</h2></div>
-                    <ol class="stepper">
-                        @foreach ($steps as $step)
-                            <li class="step step--{{ $step['state'] }}">
-                                <span class="step__dot">{{ $step['dot'] }}</span>
-                                <span class="step__lab">{{ $rotulos[$step['key']] }}</span>
-                                <span class="step__note">{{ $step['note'] }}</span>
-                            </li>
-                        @endforeach
-                    </ol>
+                    <x-velaro.solicitacao.stepper :steps="$steps" :rotulos="$rotulos" />
                 </div>
             </div>
 

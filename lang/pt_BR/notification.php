@@ -10,6 +10,7 @@ Rotulos em portugues dos tipos, canais, destinatarios e status das notificacoes 
 return [
     'type' => [
         'order_ready' => 'Pedido pronto para retirada',
+        'registration_received' => 'Cadastro de lojista recebido',
     ],
 
     'channel' => [

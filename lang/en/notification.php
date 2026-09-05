@@ -10,6 +10,7 @@ Rotulos em ingles dos tipos, canais, destinatarios e status das notificacoes env
 return [
     'type' => [
         'order_ready' => 'Order ready for pickup',
+        'registration_received' => 'Reseller registration received',
     ],
 
     'channel' => [

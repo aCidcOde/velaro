@@ -23,9 +23,9 @@ use Symfony\Component\HttpFoundation\Response;
  * *somente* a propria solicitacao.
  *
  * Tres formas legitimas de chegar: a sessao que acabou de enviar o formulario,
- * o login do proprio solicitante (por vinculo ou pelo e-mail do cadastro) e o
- * Perfil Master. A tela 1.7 fica de fora porque nao exibe dado pessoal nenhum e
- * o doc a classifica como link transacional.
+ * o login vinculado a solicitacao e o Perfil Master. A tela 1.7 fica de fora
+ * porque nao exibe dado pessoal nenhum e o doc a classifica como link
+ * transacional.
  */
 class EnsureCanTrackReseller
 {
@@ -76,10 +76,17 @@ class EnsureCanTrackReseller
             return false;
         }
 
-        // O pre-cadastro nasce sem `users.reseller_id` (o vinculo so vem na
-        // aprovacao), entao o e-mail do cadastro e o que identifica o dono.
+        // O vinculo `users.reseller_id` nasce junto com o cadastro, entao ele
+        // sozinho ja identifica o dono da solicitacao.
+        //
+        // Aqui tambem havia uma comparacao por igualdade de e-mail, de quando o
+        // usuario nascia sem vinculo. Ela era fragil dos dois lados: bastava o
+        // lojista trocar o e-mail do login, ou a equipe corrigir o e-mail da
+        // solicitacao, para ele perder o acesso ao proprio cadastro — e, no
+        // sentido contrario, qualquer conta que viesse a usar aquele endereco
+        // herdava a solicitacao inteira (razao social, CNPJ, CPF do responsavel,
+        // WhatsApp). Chave de identidade e a FK, nao um campo editavel.
         return $user->reseller_id === $reseller->id
-            || strcasecmp((string) $user->email, (string) $reseller->email) === 0
             || Gate::forUser($user)->allows('access-backend');
     }
 }

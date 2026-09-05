@@ -10,6 +10,8 @@ Cobre o lote cadastro-solicitacao: formulario, gravacao com prova de LGPD e as t
 namespace Tests\Feature\Site;
 
 use App\Http\Middleware\EnsureCanTrackReseller;
+use App\Mail\ResellerRegistrationReceivedMail;
+use App\Models\NotificationLog;
 use App\Models\Reseller;
 use App\Models\ResellerConsent;
 use App\Models\ResellerDocument;
@@ -21,6 +23,7 @@ use App\Services\Site\ResellerStatusService;
 use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -118,9 +121,11 @@ class ResellerRegistrationTest extends TestCase
         $this->assertNull($event->from_status);
         $this->assertSame(Reseller::STATUS_PENDING, $event->to_status);
 
-        // O vínculo users.reseller_id só nasce na aprovação (regra 1 da tela 1.7).
+        // O vínculo users.reseller_id nasce com o cadastro, não na aprovação: o que
+        // a aprovação libera é o acesso de Parceiro Premium, não a existência do
+        // vínculo (a tela 1.6 já imprime "Login vinculado" em pré-cadastro).
         $user = User::where('email', 'contato@tomazelli.com.br')->firstOrFail();
-        $this->assertNull($user->reseller_id);
+        $this->assertSame($reseller->id, $user->reseller_id);
         $this->assertNotSame('SenhaForte123', $user->password);
         $this->assertNull($user->email_verified_at);
         Notification::assertSentTo($user, VerifyEmail::class);
@@ -234,7 +239,7 @@ class ResellerRegistrationTest extends TestCase
             'documentacao_enviada' => true,
         ]);
 
-        $dono = User::factory()->create(['email' => $reseller->email]);
+        $dono = User::factory()->create(['reseller_id' => $reseller->id]);
 
         $this->actingAs($dono)
             ->get(route('site.solicitacao.status', ['reseller' => $reseller->protocol]))
@@ -279,6 +284,117 @@ class ResellerRegistrationTest extends TestCase
 
         $this->get(route('site.solicitacao.status', ['reseller' => $reseller->protocol]))
             ->assertOk();
+    }
+
+    /**
+     * O cadastro terminava em silencio: a tela 1.5 mandava guardar e-mail e senha
+     * e nada chegava na caixa de entrada. O aviso sai enfileirado (regra 2 da tela
+     * 1.7: aviso transacional sempre via job) e deixa rastro em `notification_logs`.
+     */
+    public function test_cadastro_enfileira_o_email_de_boas_vindas_com_o_protocolo(): void
+    {
+        Storage::fake(ResellerRegistrationService::DOCUMENT_DISK);
+        Notification::fake();
+        Mail::fake();
+
+        $this->post(route('site.cadastro.store'), $this->payload())->assertRedirect();
+
+        $reseller = Reseller::firstOrFail();
+
+        Mail::assertQueued(
+            ResellerRegistrationReceivedMail::class,
+            function (ResellerRegistrationReceivedMail $mail) use ($reseller): bool {
+                return $mail->hasTo('contato@tomazelli.com.br')
+                    && $mail->reseller->is($reseller)
+                    && str_contains($mail->envelope()->subject, (string) $reseller->protocol);
+            }
+        );
+
+        $log = NotificationLog::where('reseller_id', $reseller->id)->firstOrFail();
+
+        $this->assertSame(NotificationLog::TYPE_REGISTRATION_RECEIVED, $log->type);
+        $this->assertSame(NotificationLog::CHANNEL_EMAIL, $log->channel);
+        $this->assertSame(NotificationLog::RECIPIENT_TYPE_RESELLER, $log->recipient_type);
+        $this->assertSame('contato@tomazelli.com.br', $log->recipient);
+        // Ninguem confirmou entrega ainda: a linha registra a entrada na fila.
+        $this->assertSame(NotificationLog::STATUS_PENDING, $log->status);
+        $this->assertNull($log->sent_at);
+    }
+
+    /**
+     * O corpo do aviso precisa sustentar o que a tela 1.5 promete: protocolo,
+     * analise ainda por vir, o acesso que ja existe e o pedido de documentos.
+     */
+    public function test_email_de_boas_vindas_diz_o_protocolo_o_acesso_e_a_analise_pendente(): void
+    {
+        $reseller = Reseller::factory()->pending()->create([
+            'protocol' => 'VEL-2026-0160',
+            'email' => 'contato@tomazelli.com.br',
+        ]);
+
+        $corpo = (new ResellerRegistrationReceivedMail($reseller))->render();
+
+        $this->assertStringContainsString('VEL-2026-0160', $corpo);
+        $this->assertStringContainsString('contato@tomazelli.com.br', $corpo);
+        $this->assertStringContainsString('senha que você acabou de escolher', $corpo);
+        $this->assertStringContainsString(route('login'), $corpo);
+        $this->assertStringContainsString('Assim que houver novidades', $corpo);
+    }
+
+    /**
+     * O buraco que este lote fecha: o lojista escolhe a senha no cadastro, entao o
+     * login tem de funcionar na hora — sem depender do token da sessao que enviou
+     * o formulario nem de os dois e-mails continuarem iguais.
+     */
+    public function test_lojista_recem_cadastrado_loga_e_alcanca_a_propria_solicitacao(): void
+    {
+        Storage::fake(ResellerRegistrationService::DOCUMENT_DISK);
+        Notification::fake();
+        Mail::fake();
+
+        $this->post(route('site.cadastro.store'), $this->payload())->assertRedirect();
+
+        $reseller = Reseller::firstOrFail();
+        $lojista = User::where('email', 'contato@tomazelli.com.br')->firstOrFail();
+
+        // Fora da sessao que enviou o formulario: quem abre a porta agora e o vinculo.
+        $this->flushSession();
+
+        $this->post(route('login'), [
+            'email' => 'contato@tomazelli.com.br',
+            'password' => 'SenhaForte123',
+        ])->assertSessionHasNoErrors();
+
+        $this->assertAuthenticatedAs($lojista);
+
+        $this->get(route('site.solicitacao.status', ['reseller' => $reseller->protocol]))
+            ->assertOk()
+            ->assertSee((string) $reseller->protocol);
+    }
+
+    /**
+     * A identidade agora e a FK, nao o campo de e-mail. Antes bastava ter o mesmo
+     * endereco da solicitacao para ler razao social, CNPJ, CPF do responsavel e
+     * WhatsApp de um cadastro alheio — e o lojista perdia o proprio acompanhamento
+     * assim que qualquer um dos dois e-mails mudasse.
+     */
+    public function test_mesmo_email_sem_vinculo_nao_abre_a_solicitacao(): void
+    {
+        $reseller = Reseller::factory()->pending()->create([
+            'protocol' => 'VEL-2026-0161',
+            'legal_name' => 'Tomazelli Alianças Ltda.',
+            'email' => 'contato@tomazelli.com.br',
+        ]);
+
+        $semVinculo = User::factory()->create([
+            'email' => 'contato@tomazelli.com.br',
+            'reseller_id' => null,
+        ]);
+
+        $this->actingAs($semVinculo)
+            ->get(route('site.solicitacao.status', ['reseller' => $reseller->protocol]))
+            ->assertForbidden()
+            ->assertDontSee('Tomazelli Alianças Ltda.');
     }
 
     /**

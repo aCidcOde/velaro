@@ -31,6 +31,12 @@ Route::name('site.')->group(function (): void {
     Route::post('seja-revendedor', [Site\CadastroController::class, 'store'])->name('cadastro.store');
     Route::get('solicitacao/{reseller:protocol}/enviada', [Site\SolicitacaoController::class, 'enviada'])->name('solicitacao.enviada');
     Route::get('solicitacao/{reseller:protocol}', [Site\SolicitacaoController::class, 'status'])->name('solicitacao.status');
+    // Reenvio de documentos (regra 4 da tela 1.6). Fica no ambiente `site` porque
+    // e o endereco que o doc da tela declara e porque os dois lugares onde o
+    // lojista ve o pedido — o painel e o link transacional — postam para ca.
+    Route::post('solicitacao/{reseller:protocol}/documentos', [Site\SolicitacaoController::class, 'documentos'])
+        ->middleware('throttle:5,1')
+        ->name('solicitacao.documentos');
     Route::get('solicitacao/{reseller:protocol}/aprovado', [Site\SolicitacaoController::class, 'aprovado'])->name('solicitacao.aprovado');
     Route::get('contato', [Site\ContatoController::class, 'create'])->name('contato');
     Route::post('contato', [Site\ContatoController::class, 'store'])->name('contato.store');
@@ -39,11 +45,28 @@ Route::name('site.')->group(function (): void {
 });
 
 // ─────────────────────────────── PORTAL DO LOJISTA ───────────────────────────────
+// O painel e a UNICA rota do portal que abre antes da aprovacao. Ele usa
+// `reseller.linked`, que pede so o vinculo (`users.reseller_id`); as 18 rotas
+// abaixo usam `reseller`, que exige `status = approved`.
+//
+// A excecao para aqui de proposito. Um lojista tem um login e um painel, e o
+// pre-cadastro e o primeiro passo da jornada — nao um estado fora do sistema.
+// Mas o resto do portal e informacao comercial: o catalogo traz o CUSTO B2B da
+// Velaro, e pedidos, clientes finais, financeiro, notas e regras de preco sao a
+// operacao ja habilitada. Trocar `reseller` por `reseller.linked` no grupo
+// inteiro entregaria tudo isso a quem ainda nao passou pela analise — ou a quem
+// foi reprovado. O que a aprovacao concede e exatamente esse acesso.
+Route::prefix('portal')
+    ->name('portal.')
+    ->middleware(['auth', 'not_blocked', 'verified', 'reseller.linked'])
+    ->group(function (): void {
+        Route::get('/', Portal\DashboardController::class)->name('dashboard');
+    });
+
 Route::prefix('portal')
     ->name('portal.')
     ->middleware(['auth', 'not_blocked', 'verified', 'reseller'])
     ->group(function (): void {
-        Route::get('/', Portal\DashboardController::class)->name('dashboard');
         Route::get('catalogo', [Portal\CatalogoController::class, 'index'])->name('catalogo');
         Route::get('clientes', [Portal\ClientesController::class, 'index'])->name('clientes.index');
         Route::get('clientes/{customer}', [Portal\ClientesController::class, 'show'])->name('clientes.show');

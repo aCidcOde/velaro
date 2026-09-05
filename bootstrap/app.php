@@ -3,6 +3,7 @@
 use App\Http\Middleware\AuthenticateAndEnsureUserIsNotBlocked;
 use App\Http\Middleware\AuthenticateMobileToken;
 use App\Http\Middleware\EnsureAgentAccess;
+use App\Http\Middleware\EnsureUserBelongsToReseller;
 use App\Http\Middleware\EnsureUserIsNotBlocked;
 use App\Http\Middleware\EnsureUserIsReseller;
 use App\Http\Middleware\SecurityHeaders;
@@ -40,7 +41,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth.blocked' => AuthenticateAndEnsureUserIsNotBlocked::class,
             'mobile.auth' => AuthenticateMobileToken::class,
             'not_blocked' => EnsureUserIsNotBlocked::class,
+            // Os dois portoes do portal, e a diferenca entre eles e deliberada:
+            // `reseller` exige revendedor APROVADO e guarda as 18 rotas de
+            // negocio; `reseller.linked` exige so o vinculo e guarda o painel,
+            // que e onde o lojista acompanha a propria jornada antes disso.
             'reseller' => EnsureUserIsReseller::class,
+            'reseller.linked' => EnsureUserBelongsToReseller::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -193,10 +193,11 @@ class ResellerScopeTest extends TestCase
         $resposta->assertNotFound();
     }
 
-    public function test_lojista_bloqueado_e_nao_aprovado_nao_entram_no_portal(): void
+    public function test_lojista_bloqueado_e_nao_aprovado_nao_entram_no_negocio_do_portal(): void
     {
         // Bloqueado perde a sessão e volta para o login (é o `not_blocked`, um
-        // degrau antes do escopo).
+        // degrau antes do escopo) — inclusive no painel, que é a única rota do
+        // portal aberta a lojista não aprovado.
         $bloqueado = User::factory()->blocked()->forReseller($this->tomazelli)->create();
 
         $this->actingAs($bloqueado)
@@ -205,11 +206,18 @@ class ResellerScopeTest extends TestCase
 
         // Cadastro ainda em análise: aqui o 403 é a resposta certa, porque a
         // negativa é sobre o ambiente inteiro e não sobre a existência de um
-        // registro. Quem está em pré-cadastro acompanha pela rota pública.
+        // registro.
         $pendente = Reseller::factory()->pending()->create();
         $semAprovacao = User::factory()->forReseller($pendente)->create();
 
-        $this->actingAs($semAprovacao)->get(route('portal.dashboard'))->assertForbidden();
+        $this->actingAs($semAprovacao)->get(route('portal.catalogo'))->assertForbidden();
+        $this->actingAs($semAprovacao)->get(route('portal.pedidos.index'))->assertForbidden();
+
+        // O painel é a exceção nominal: ele abre e mostra o estágio da jornada,
+        // sem número de negócio nenhum. É por isso que o escopo continua intacto
+        // — a exceção vale para uma rota, e ela não consulta pedido, cliente,
+        // financeiro nem preço.
+        $this->actingAs($semAprovacao)->get(route('portal.dashboard'))->assertOk();
     }
 
     public function test_binding_fora_do_portal_continua_o_do_laravel(): void

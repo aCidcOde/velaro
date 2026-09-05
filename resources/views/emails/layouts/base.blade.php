@@ -31,7 +31,7 @@
                         </tr>
                         <tr>
                             <td style="padding: 18px 28px 28px; font-family: Arial, sans-serif; color: #726f6c; font-size: 12px;">
-                                <p style="margin: 0 0 8px;">{{ config('app.name') }} • Template-base para novos projetos.</p>
+                                <p style="margin: 0 0 8px;">{{ config('app.name') }} • Mensagem automática.</p>
                                 <p style="margin: 0;">{{ config('app.name') }} &copy; {{ date('Y') }}. Todos os direitos reservados.</p>
                             </td>
                         </tr>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Responses\Auth;
 
-use App\Models\Reseller;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,9 +26,8 @@ class LoginResponse implements LoginResponseContract
             return redirect()->route('verification.notice');
         }
 
-        // Login único com roteamento por perfil (tela 0): o mesmo formulário
-        // manda cada um para o seu ambiente. Master -> /backend, revendedor
-        // aprovado -> /portal. Quem não é nenhum dos dois cai no destino padrão.
+        // Login único com roteamento por perfil (tela 0): o mesmo formulário manda
+        // cada um para o seu ambiente. Master -> /backend, lojista -> /portal.
         if ($request->session()->has('url.intended')) {
             return redirect()->intended(Fortify::redirects('login'));
         }
@@ -38,16 +36,17 @@ class LoginResponse implements LoginResponseContract
             return redirect()->route('backend.dashboard');
         }
 
-        $reseller = $user->reseller;
-
-        if ($reseller?->status === Reseller::STATUS_APPROVED) {
+        // Um login, um painel. TODO lojista com vínculo vai para `/portal`,
+        // aprovado ou não — o painel é que muda de conteúdo conforme o estágio da
+        // jornada, e o pré-cadastro é o primeiro passo dela, não um desvio.
+        //
+        // Antes, quem tinha protocolo era mandado para `/solicitacao/{protocol}`,
+        // uma página fora do painel: o lojista terminava o cadastro com um login
+        // que o expulsava do próprio produto. A rota pública continua existindo,
+        // porque é ela que o link do e-mail e do WhatsApp abre (telas 1.5 e 1.7) e
+        // ela funciona sem sessão — deixou apenas de ser destino de quem logou.
+        if ($user->reseller !== null) {
             return redirect()->route('portal.dashboard');
-        }
-
-        // Regra 2 da tela 1.6: pre-cadastro da acesso SOMENTE ao acompanhamento da propria
-        // solicitacao. Reprovado e inativo tambem param aqui — veem o motivo, nao o portal.
-        if ($reseller !== null && filled($reseller->protocol)) {
-            return redirect()->route('site.solicitacao.status', $reseller);
         }
 
         // Sem vinculo com revendedor nao ha ambiente Velaro para rotear: conta interna

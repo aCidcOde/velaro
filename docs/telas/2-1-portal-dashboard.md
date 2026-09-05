@@ -4,7 +4,7 @@
 |---|---|
 | **Ambiente** | Portal do Lojista |
 | **Rota** | `GET /portal` |
-| **Acesso** | Parceiro Premium aprovado — tudo escopado por `reseller_id` |
+| **Acesso** | Qualquer lojista vinculado a um revendedor — tudo escopado por `reseller_id` |
 | **Referência contratual** | Anexo I §4.1 |
 | **Mockup** | [`docs/mockups/02-portal-lojista.html`](../mockups/02-portal-lojista.html) |
 | **Mapa** | [mapa.html#portal-dashboard](../mockups/mapa.html#portal-dashboard) |
@@ -30,6 +30,13 @@
 
 1. Indicadores: em andamento, produção, prontos para retirada, pendência financeira, chamados, clientes.
 2. Nenhuma query sem filtro por `reseller_id` — vazamento entre revendedores é falha crítica.
+3. **Um login, um painel** (decisão do dono do produto, 2026-09-05). Esta é a única rota do portal
+   aberta a lojista ainda não aprovado, e o conteúdo muda conforme o estágio da jornada:
+   `pending`/`awaiting_info` veem o acompanhamento da solicitação (o conteúdo da tela 1.6, incluindo
+   o reenvio de documentos); `rejected`/`inactive` veem o motivo e o caminho para regularizar;
+   `approved` vê o dashboard descrito na seção 5. As demais telas do portal continuam exigindo
+   `status = approved` — abri-las exporia o custo B2B, pedidos e financeiro a quem não passou pela
+   análise. O menu mostra os itens bloqueados desabilitados, com explicação, em vez de escondê-los.
 
 ## 4. Critérios de aceite
 
