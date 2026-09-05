@@ -14,7 +14,9 @@ use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\OrderBatch;
 use App\Models\OrderItemEngraving;
+use App\Models\Product;
 use App\Models\Reseller;
+use App\Models\Setting;
 use App\Models\SupportTicket;
 use App\Models\User;
 use App\Support\ResellerScope;
@@ -90,19 +92,43 @@ class PortalSeedTest extends TestCase
         $this->actingAs($lojista)->get(route('portal.dashboard'))->assertOk();
     }
 
-    public function test_a_senha_do_seed_vem_do_ambiente(): void
+    /**
+     * A senha sai de `config('velaro.seed.reseller_password')`, e nao de `env()`
+     * direto: o deploy roda `config:cache`, e a partir dai `env()` fora de arquivo
+     * de config devolve null — a senha cairia no fallback publico do repositorio
+     * sem nenhum sinal. Este teste fixa o mecanismo, nao so o valor.
+     */
+    public function test_a_senha_do_seed_vem_da_configuracao(): void
     {
-        putenv('RESELLER_SEED_PASSWORD=segredo-do-ambiente');
+        config(['velaro.seed.reseller_password' => 'segredo-do-ambiente']);
 
-        try {
-            $this->seed(VelaroSeeder::class);
+        $this->seed(VelaroSeeder::class);
 
-            $lojista = User::query()->where('email', 'lojista@velaro.test')->firstOrFail();
+        $lojista = User::query()->where('email', 'lojista@velaro.test')->firstOrFail();
 
-            $this->assertTrue(password_verify('segredo-do-ambiente', (string) $lojista->password));
-        } finally {
-            putenv('RESELLER_SEED_PASSWORD');
-        }
+        $this->assertTrue(password_verify('segredo-do-ambiente', (string) $lojista->password));
+    }
+
+    /**
+     * Producao nao recebe demonstracao: o bloco do Portal e ignorado, e nenhuma
+     * conta com credencial versionada nasce no ambiente real.
+     */
+    public function test_producao_nao_semeia_a_demonstracao_do_portal(): void
+    {
+        app()->instance('env', 'production');
+
+        // Chamado direto, e nao por `$this->seed()`: em producao o comando
+        // `db:seed` pede confirmacao no console, o que travaria o teste.
+        $seeder = new VelaroSeeder;
+        $seeder->setContainer(app());
+        $seeder->run();
+
+        $this->assertDatabaseMissing('users', ['email' => 'lojista@velaro.test']);
+        $this->assertSame(0, Reseller::query()->count());
+
+        // O que vale em qualquer ambiente continua sendo semeado.
+        $this->assertGreaterThan(0, Setting::query()->count());
+        $this->assertGreaterThan(0, Product::query()->count());
     }
 
     public function test_o_lojista_demo_tem_o_ciclo_de_pedido_inteiro(): void

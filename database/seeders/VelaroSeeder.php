@@ -852,7 +852,10 @@ class VelaroSeeder extends Seeder
      */
     private function senhaDoLojista(): string
     {
-        $senha = env('RESELLER_SEED_PASSWORD');
+        // config(), nunca env() direto: com o config cacheado que o deploy gera,
+        // env() fora de arquivo de config devolve null e a senha cairia no
+        // fallback publico sem ninguem perceber.
+        $senha = config('velaro.seed.reseller_password');
 
         return is_string($senha) && $senha !== '' ? $senha : 'lojista-velaro';
     }
