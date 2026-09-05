@@ -156,18 +156,24 @@ class VelaroSeeder extends Seeder
             // ── Empresa ────────────────────────────────────────────────────────
             // Razão social, CNPJ e sede vêm da 17-site-privacidade.html §1, que é o
             // texto público da própria Velaro sobre a controladora dos dados.
+            // Dado fiscal e de contato entra como PLACEHOLDER EXPLICITO, nao como valor
+            // plausivel. Os protótipos traziam dois CNPJs diferentes e ambos ficticios
+            // (51h: 12.345.678/0001-90 · 17: 45.123.456/0001-09), e esses campos saem na
+            // Politica de Privacidade, nos Termos e no rodape do site. Um numero com cara
+            // de real e publicado sem ninguem notar; "[A DEFINIR]" nao passa despercebido.
+            // O nome da marca fica, porque esse e certo.
             ['company', 'company.nome', 'Velaro Alianças', 'string'],
-            ['company', 'company.razao_social', 'Velaro Alianças Ltda.', 'string'],
-            ['company', 'company.cnpj', '45.123.456/0001-09', 'string'],
-            ['company', 'company.endereco', 'Ribeirão Preto/SP', 'string'],
+            ['company', 'company.razao_social', '[A DEFINIR: razão social]', 'string'],
+            ['company', 'company.cnpj', '[A DEFINIR: CNPJ]', 'string'],
+            ['company', 'company.endereco', '[A DEFINIR: endereço completo com CEP]', 'string'],
 
             // ── Atendimento (rodapé de todas as telas do site) ─────────────────
-            ['contact', 'contact.telefone', '+55 (16) 99487-7800', 'string'],
+            ['contact', 'contact.telefone', '[A DEFINIR: telefone]', 'string'],
             // Célula própria na barra de canais da 1.8; hoje é o mesmo número do
             // comercial, mas a chave existe para poder divergir sem tocar na tela.
-            ['contact', 'contact.whatsapp', '+55 (16) 99487-7800', 'string'],
-            ['contact', 'contact.email', 'vendas@velaro.com.br', 'string'],
-            ['contact', 'contact.horario', 'Segunda a sexta, das 8h às 18h', 'string'],
+            ['contact', 'contact.whatsapp', '[A DEFINIR: WhatsApp]', 'string'],
+            ['contact', 'contact.email', '[A DEFINIR: e-mail comercial]', 'string'],
+            ['contact', 'contact.horario', '[A DEFINIR: horário de atendimento]', 'string'],
 
             // ── Institucional (tela 1.2 · Sobre nós) ──────────────────────────
             ['about', 'about.hero_eyebrow', 'Quem é a Velaro', 'string'],
