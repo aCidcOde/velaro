@@ -207,6 +207,28 @@ docs/
 - **Async**: APIs externas sempre via queue jobs (nunca síncronas em controller)
 - **Order status**: sempre via service, nunca `$order->update(['status' => ...])`
 
+### Cabeçalho de autoria (obrigatório em todo arquivo novo)
+
+Todo arquivo `.php` e `.blade.php` criado no projeto nasce com o cabeçalho abaixo, logo após a
+abertura do arquivo. A descrição é **uma linha em pt-BR sem acentos**, dizendo o que o arquivo faz.
+
+```php
+<?php
+
+/*
+[Modulo: app/Http/Controllers/Auth]
+@Author: André Gomes ( @acidcode )
+@since 2026-02-22
+Controla o login social com Google (redirect para OAuth e callback de autenticacao).
+*/
+
+namespace App\Http\Controllers\Auth;
+```
+
+Em Blade o mesmo bloco vai dentro de `{{-- --}}`; em arquivos de configuração (`.neon`, `.sh`)
+cada linha é prefixada com `#`. `[Modulo: ...]` recebe o **diretório** do arquivo, e `@since` a
+data de criação. Arquivos `.md` não levam cabeçalho.
+
 > Padrões completos: `.claude/context/design-patterns.md`
 
 ## Common Development Tasks

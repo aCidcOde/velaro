@@ -13,10 +13,13 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `customers + customer_velaro_details` | core + novo | sempre com `reseller_id` visível |
+| `customers` | core + colunas Velaro | reseller_id (sempre visível), name, person_type (filtro Pessoa Física/Jurídica), company_name, document, email, phone, cidade, uf, origem_contato, notes, created_at |
+| `resellers` | novo (módulo Velaro) | razao_social, nome_fantasia, code, telefone, whatsapp, email — bloco “Revendedor responsável” |
+| `reseller_stores` | novo (módulo Velaro) | name — nome da loja exibido junto ao revendedor |
+| `orders` | core + colunas Velaro | customer_id, public_number, total_amount, created_at — coluna “último pedido” e resumo de compras |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

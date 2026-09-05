@@ -17,8 +17,8 @@
 | `reseller_verifications` | novo (módulo Velaro) | cnpj_valido, empresa_ativa, cnaes_compativeis, documentacao_enviada, score, result (json), raw_payload |
 | `reseller_status_events` | novo (módulo Velaro) | histórico e justificativa de cada decisão |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

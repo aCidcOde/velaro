@@ -13,13 +13,16 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `products` | core (já existe no scaffold) | price — **custo B2B**, visível só aqui |
-| `product_attributes` | novo (módulo Velaro) | filtros: coleção, material, acabamento, largura, formato |
+| `products` | core + colunas Velaro | price — **custo B2B**, visível só aqui; name, sku, description, is_active, collection_id, material_id, finish_id, largura_mm, formato (filtros), prazo_entrega_dias (ficha do drawer) e is_made_to_order (chip “Sob encomenda”); created_at (selo “NOVO” e ordenação “Lançamento”) |
 | `product_variants` | novo (módulo Velaro) | sku, aro — disponibilidade por tamanho |
-| `stock_items` | novo (módulo Velaro) | disponivel — o portal apenas consulta |
+| `product_images` | novo (módulo Velaro) | path, position, is_primary — foto do card e galeria de miniaturas do drawer |
+| `stock_items` | novo (módulo Velaro) | disponivel, stock_location_id — o portal apenas consulta |
+| `collections` | novo (módulo Velaro) | name, slug, is_active — select “Coleção” e KPI “Coleções ativas” |
+| `materials` | novo (módulo Velaro) | name, slug — select “Material” |
+| `finishes` | novo (módulo Velaro) | name, slug — select “Acabamento” |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

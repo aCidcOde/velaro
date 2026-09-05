@@ -15,9 +15,10 @@
 |--------|--------|--------|
 | `collections` | novo (módulo Velaro) | name, slug, description, cover_path, position, is_active |
 | `settings` | novo (módulo Velaro) | company.*, contact.* — telefone, e-mail, horário de atendimento |
+| `contact_leads` | novo (módulo Velaro) | name, email, phone, company, subject, message, origin, status, handled_by, handled_at — o “Fale conosco” do menu e os CTAs “Solicitar atendimento” / “Falar com especialista” |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 
@@ -28,6 +29,7 @@
 1. Comunicação expressa de que a plataforma é exclusiva para lojistas.
 2. Nenhum preço B2B renderizado nesta rota, nem em JSON embutido.
 3. Sem venda direta ao consumidor final.
+4. O “Fale conosco” grava um lead — **não** cria revendedor nem acesso; `origin` guarda a página de partida e a fila de atendimento anda por `status`/`handled_by`.
 
 ## 4. Critérios de aceite
 

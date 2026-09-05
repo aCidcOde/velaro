@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Reseller;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -33,6 +34,9 @@ class UserFactory extends Factory
             'is_admin' => false,
             'is_agent' => false,
             'is_blocked' => false,
+            // Usuario do scaffold nao pertence a revendedor nenhum: `Reseller::users()` e hasMany,
+            // preencher isso no default criaria revendedor em todo teste do template.
+            'reseller_id' => null,
         ];
     }
 
@@ -70,6 +74,16 @@ class UserFactory extends Factory
     {
         return $this->state(fn () => [
             'is_blocked' => true,
+        ]);
+    }
+
+    /**
+     * Vincula o usuario a um revendedor (lojista do portal B2B).
+     */
+    public function paraRevendedor(?Reseller $reseller = null): static
+    {
+        return $this->state(fn (array $attributes): array => [
+            'reseller_id' => $reseller?->getKey() ?? Reseller::factory(),
         ]);
     }
 }

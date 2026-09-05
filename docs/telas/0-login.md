@@ -13,11 +13,11 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `users` | core (já existe no scaffold) | email, password, is_admin, two_factor_*, google_id |
-| `users` | extensão do core | reseller_id — vínculo com o Parceiro Premium |
+| `users` | core + colunas Velaro | email, password, is_admin, is_blocked, google_id, two_factor_secret, two_factor_confirmed_at, reseller_id — o vínculo com o Parceiro Premium |
+| `audit_logs` | core (já existe no scaffold) | actor_id, action, ip_address, user_agent — registro do login |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

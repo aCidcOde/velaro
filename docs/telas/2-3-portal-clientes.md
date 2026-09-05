@@ -13,12 +13,12 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `customers` | core (já existe no scaffold) | name, email, phone, document (CPF), notes |
-| `customer_velaro_details` | novo (módulo Velaro) | reseller_id, cidade, uf, endereco, data_nascimento, data_casamento, data_namoro, origem_contato |
-| `customer_consents` | novo (módulo Velaro) | type (marketing\|transacional), granted, granted_at, revoked_at, channel, evidence |
+| `customers` | core + colunas Velaro | reseller_id, name, person_type, company_name, document (CPF), phone, email, cep, endereco, cidade, uf, data_nascimento, data_casamento, data_namoro, origem_contato, notes, created_at |
+| `customer_consents` | novo (módulo Velaro) | customer_id, type (marketing\|transacional), granted, granted_at, revoked_at, channel, evidence |
+| `orders` | core + colunas Velaro | customer_id, public_number, operational_status, created_at — coluna “último pedido” e KPI de pedidos em aberto |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

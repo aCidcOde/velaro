@@ -14,12 +14,13 @@
 | Tabela | Origem | Campos |
 |--------|--------|--------|
 | `promotions` | novo (módulo Velaro) | code, name, type (desconto_progressivo\|preco_especial\|frete_gratis\|desconto_fixo\|lancamento), starts_at, ends_at, status (rascunho\|agendada\|ativa\|pausada\|encerrada), priority, show_badge, budget |
-| `promotion_rules` | novo (módulo Velaro) | tiers — acima de X → Y% de desconto |
-| `promotion_products` | novo (módulo Velaro) | pivot produto/coleção |
-| `promotion_audiences` | novo (módulo Velaro) | público-alvo e canais |
+| `promotion_rules` | novo (módulo Velaro) | min_amount, discount_percent, discount_amount, position — os tiers: acima de X → Y% de desconto |
+| `promotion_products` | novo (módulo Velaro) | promotion_id, product_id, collection_id — pivot produto/coleção |
+| `promotion_audiences` | novo (módulo Velaro) | publico_alvo, canais |
+| `order_promotions` | novo (módulo Velaro) | order_id, type, discount_amount, applied_at — alimenta “pedidos com a promoção” e “desconto concedido” |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

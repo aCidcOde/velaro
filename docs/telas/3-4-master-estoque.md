@@ -13,11 +13,13 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `stock_items` | novo (módulo Velaro) | product_variant_id, atual, reservado, disponivel, minimo, reposicao |
+| `stock_locations` | novo (módulo Velaro) | code, name, description, is_default, is_active — o “Local de armazenamento” do protótipo |
+| `stock_items` | novo (módulo Velaro) | product_variant_id, stock_location_id, atual, reservado, disponivel, minimo, reposicao |
 | `stock_movements` | novo (módulo Velaro) | type (entrada\|saida\|ajuste\|reserva\|producao), qty, before, after, reason, actor_id, order_id |
+| `production_requests` | novo (módulo Velaro) | product_variant_id, stock_location_id, qty_requested, qty_delivered, status, priority, due_date, requested_by, completed_at |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

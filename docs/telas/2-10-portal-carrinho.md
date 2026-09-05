@@ -13,13 +13,24 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `orders + order_velaro_details` | core + novo | nasce em `draft`, vinculado a reseller_id e customer_id |
-| `order_items` | core (já existe no scaffold) | unit_price = snapshot do preço B2C no momento da seleção |
+| `orders` | core + colunas Velaro | nasce em `draft`, vinculado a reseller_id e customer_id; subtotal_amount, engraving_amount, shipping_amount, discount_amount, total_amount — as quatro linhas de “Totais” mais o TOTAL |
+| `order_items` | core + colunas Velaro | product_id, product_variant_id, quantity, unit_price = snapshot do preço B2C no momento da seleção, total_price |
 | `order_item_engravings` | novo (módulo Velaro) | enabled, text, date, chars, price |
-| `settings` | novo (módulo Velaro) | gravacao.max_chars, gravacao.preco — parametrizáveis |
+| `order_promotions` | novo (módulo Velaro) | promotion_id, type, discount_amount — origem da linha “Descontos” |
+| `settings` | novo (módulo Velaro) | group, key, value — gravacao.max_chars e gravacao.preco, parametrizáveis |
+| `reseller_stores` | novo (módulo Velaro) | slug, name, slogan, logo_path, banner_path, show_prices, pickup_only, payment_in_store, endereco — cabeçalho, banner, retirada na loja e pagamento no caixa |
+| `reseller_store_categories` | novo (módulo Velaro) | category_id, position — abas Todos / Alianças / Solitários / Acessórios |
+| `categories` | novo (módulo Velaro) | name, slug, position — rótulo de cada aba |
+| `reseller_store_products` | novo (módulo Velaro) | product_id, position, is_featured — grade “Todos os produtos” |
+| `reseller_price_settings` | novo (módulo Velaro) | pricing_model, multiplier, margin_global, rounding — origem do preço B2C exibido |
+| `reseller_price_rules` | novo (módulo Velaro) | scope, collection_id, product_id, mode, value, rounding, priority — exceções que resolvem o preço B2C do card |
+| `favorites` | novo (módulo Velaro) | product_id, reseller_store_id, customer_id, visitor_token — o ♡ dos cards |
+| `products` | core + colunas Velaro | name, price, category_id, material_id, finish_id, permite_gravacao, gravacao_max_chars |
+| `product_variants` | novo (módulo Velaro) | aro |
+| `product_images` | novo (módulo Velaro) | path, is_primary — miniatura do card e da linha do carrinho |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 
