@@ -18,7 +18,7 @@ class OrderBatch extends Model
 {
     use HasFactory;
 
-    public const STATUS_ABERTO = 'aberto';
+    public const STATUS_OPEN = 'open';
 
     /**
      * @var list<string>
@@ -33,9 +33,9 @@ class OrderBatch extends Model
         'paid_at',
         'shipped_at',
         'arrived_at',
-        'retirado_em',
-        'retirado_por',
-        'retirado_por_documento',
+        'picked_up_at',
+        'picked_up_by_name',
+        'picked_up_by_document',
     ];
 
     /**
@@ -50,7 +50,7 @@ class OrderBatch extends Model
             'paid_at' => 'datetime',
             'shipped_at' => 'datetime',
             'arrived_at' => 'datetime',
-            'retirado_em' => 'datetime',
+            'picked_up_at' => 'datetime',
         ];
     }
 

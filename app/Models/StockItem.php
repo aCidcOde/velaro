@@ -24,11 +24,11 @@ class StockItem extends Model
     protected $fillable = [
         'product_variant_id',
         'stock_location_id',
-        'atual',
-        'reservado',
-        'disponivel',
-        'minimo',
-        'reposicao',
+        'on_hand',
+        'reserved',
+        'available',
+        'minimum',
+        'restock_point',
     ];
 
     /**
@@ -37,11 +37,11 @@ class StockItem extends Model
     protected function casts(): array
     {
         return [
-            'atual' => 'integer',
-            'reservado' => 'integer',
-            'disponivel' => 'integer',
-            'minimo' => 'integer',
-            'reposicao' => 'integer',
+            'on_hand' => 'integer',
+            'reserved' => 'integer',
+            'available' => 'integer',
+            'minimum' => 'integer',
+            'restock_point' => 'integer',
         ];
     }
 

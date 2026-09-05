@@ -31,7 +31,7 @@ class InvoiceFactory extends Factory
             'number' => fake()->unique()->numerify('######'),
             'amount' => fake()->randomFloat(2, 1200, 48000),
             // Nota ainda nao transmitida: por isso issued_at, pdf_path e xml_path ficam nulos.
-            'status' => Invoice::STATUS_PENDENTE,
+            'status' => Invoice::STATUS_PENDING,
         ];
     }
 }

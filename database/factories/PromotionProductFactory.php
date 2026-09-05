@@ -37,7 +37,7 @@ class PromotionProductFactory extends Factory
     /**
      * Alvo = produto avulso do catalogo.
      */
-    public function paraProduto(?Product $product = null): static
+    public function forProduct(?Product $product = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'product_id' => $product instanceof Product ? $product->getKey() : Product::factory(),
@@ -48,7 +48,7 @@ class PromotionProductFactory extends Factory
     /**
      * Alvo = colecao inteira ("Selecionar colecao inteira" da tela 3.8).
      */
-    public function paraColecao(?ProductCollection $collection = null): static
+    public function forCollection(?ProductCollection $collection = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'product_id' => null,

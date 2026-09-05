@@ -24,7 +24,8 @@ class ReportScheduleFactory extends Factory
     {
         // Agendamento padrao = "Relatorio semanal de vendas · Toda segunda-feira as 08:00"
         // da tela 3.9. `type` nao tem constante no model: usamos o rotulo literal do
-        // prototipo, que a coluna varchar(60) sustenta.
+        // prototipo, que a coluna varchar(60) sustenta. As chaves de `filters` seguem em
+        // pt-BR: nao estao no mapa de anglicizacao e sao lidas pela tela 3.9 como estao.
         return [
             'name' => 'Relatório semanal de vendas',
             'type' => 'Vendas por período',
@@ -43,7 +44,7 @@ class ReportScheduleFactory extends Factory
     /**
      * "Relatorio de estoque · Todo dia 1o as 09:00".
      */
-    public function estoqueMensal(): static
+    public function monthlyStock(): static
     {
         return $this->state(fn (array $attributes): array => [
             'name' => 'Relatório de estoque',
@@ -55,7 +56,7 @@ class ReportScheduleFactory extends Factory
     /**
      * "Relatorio financeiro mensal · Todo dia 5 as 10:00".
      */
-    public function financeiroMensal(): static
+    public function monthlyFinancial(): static
     {
         return $this->state(fn (array $attributes): array => [
             'name' => 'Relatório financeiro mensal',
@@ -67,7 +68,7 @@ class ReportScheduleFactory extends Factory
     /**
      * Agendamento desligado — nao entra na varredura do scheduler.
      */
-    public function inativo(): static
+    public function inactive(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_active' => false,
@@ -77,7 +78,7 @@ class ReportScheduleFactory extends Factory
     /**
      * Agendamento que ja rodou pelo menos uma vez.
      */
-    public function jaExecutado(): static
+    public function alreadyRun(): static
     {
         return $this->state(fn (array $attributes): array => [
             'last_run_at' => now()->subWeek(),

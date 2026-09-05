@@ -17,9 +17,9 @@ class ResellerConsent extends Model
 {
     use HasFactory;
 
-    public const TYPE_TERMOS = 'termos';
+    public const TYPE_TERMS = 'terms';
 
-    public const TYPE_LGPD = 'lgpd';
+    public const TYPE_PRIVACY_POLICY = 'privacy_policy';
 
     /**
      * @var list<string>

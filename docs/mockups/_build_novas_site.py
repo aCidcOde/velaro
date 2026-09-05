@@ -4,6 +4,7 @@
   16-site-produto.html              ficha pública do produto — GET /produto/{slug}, SEM preço
   17-site-privacidade.html          Política de Privacidade (LGPD)
   18-site-termos.html               Termos de Uso B2B
+  19-site-contato.html              tela 1.8 Fale conosco — GET /contato · POST /contato
   21-login-senha.html               recuperação de senha, nos dois estados
   07-vitrine-produto.html           ficha do produto na vitrine WHITE LABEL, COM preço B2C
   08-vitrine-pedido-confirmado.html pedido registrado no balcão — fecha o fluxo do PDV
@@ -131,7 +132,7 @@ body = f'''
         pelo preço que você define na sua vitrine.</p>
       <div class="row row--wrap" style="margin-top:var(--space-6)">
         {btn("Fazer cadastro como lojista", "gold", "user", "12-site-cadastro.html", sm=False)}
-        {btn("Falar com especialista", "ghost-gold", "support", "11-site-catalogo.html#contato", sm=False)}
+        {btn("Falar com especialista", "ghost-gold", "support", "19-site-contato.html", sm=False)}
       </div>
     </div>
     <div class="grid g2" style="gap:var(--space-5)">{condicoes}</div>
@@ -393,6 +394,127 @@ doc_legal("18-site-termos.html", "Velaro · Termos de Uso",
    "preços, pagamento, entrega e a vitrine white label."),
   "2.1", "01/08/2026", "01/08/2026", TERMOS,
   "17-site-privacidade.html", "Ler a Política de Privacidade", "classica", 906)
+
+# ═════════════════════════════════════════════════════════════════════════════
+# 1.8 · FALE CONOSCO  ·  GET /contato · POST /contato
+# A tela que faltava no escopo: "Fale conosco" era só uma âncora para o bloco de
+# CTA do catálogo, e `contact_leads` existia no banco sem formulário que a
+# alimentasse. Aqui o lead nasce de verdade.
+#
+# Regra que a tela precisa deixar explícita: lead NÃO é pré-cadastro. Quem quer
+# revender continua obrigado a passar pela 1.4 — este formulário não cria
+# revendedor, não cria acesso e não substitui a análise de CNPJ.
+#
+# Telefone, e-mail, WhatsApp e horário saem de `settings` grupo contact.* — são
+# os mesmos valores do rodapé montado pelo site_shell().
+# ═════════════════════════════════════════════════════════════════════════════
+CANAIS = [
+  ("phone", "Telefone comercial",  "+55 (16) 99487-7800"),
+  ("whats", "WhatsApp",            "+55 (16) 99487-7800"),
+  ("mail",  "E-mail comercial",    "vendas@velaro.com.br"),
+  ("clock", "Horário de atendimento", "Segunda a sexta, das 8h às 18h"),
+]
+canais = "".join(
+  f'<div class="identcell">{ic(i, style="color:var(--color-gold-600)")}'
+  f'<span><small>{e(k)}</small><strong>{e(v)}</strong></span></div>'
+  for i, k, v in CANAIS)
+
+ASSUNTOS = ["Condições comerciais e catálogo", "Acompanhar solicitação de cadastro",
+            "Suporte a lojista já aprovado", "Prazo de produção e entrega",
+            "Imprensa e parcerias", "Outro assunto"]
+
+dados_contato = form([
+  campo("Nome", "Como podemos chamar você?", True),
+  campo("E-mail", "seuemail@exemplo.com.br", True),
+  campo("Telefone / WhatsApp", "(00) 00000-0000", True,
+        hint="O retorno pode sair pelo mesmo número, por WhatsApp."),
+  campo("Empresa", "Nome fantasia da sua loja", False,
+        hint="Opcional — ajuda a direcionar o atendimento."),
+  campo("Assunto", "Selecione o assunto", True, "select", largura=2,
+        hint="Opções: " + " · ".join(ASSUNTOS)),
+  campo("Mensagem", "Conte o que você precisa. Quanto mais contexto, mais direta é a resposta.",
+        True, "textarea", largura=2, hint="Até 1.000 caracteres."),
+], 2, "Sua mensagem")
+
+# .checkline tambem e flex sem wrap: cada trecho solto (texto, link, asterisco)
+# virava um item e a frase descia em colunas no celular. Rotulo inteiro num <span>.
+consentimento = ('<h3 class="fsec">Consentimento</h3><div class="stacklist">'
+  '<span class="checkline" style="align-items:flex-start">'
+  '<span class="cbox is-on" style="flex:none;margin-top:2px">✓</span>'
+  '<span>Li e concordo com a <a href="#" class="link-gold">Política de Privacidade</a> e autorizo '
+  'a Velaro a usar os dados acima para responder a este contato.<i class="req">*</i></span></span>'
+  '</div>'
+  f'<p class="fhint" style="margin-top:var(--space-3)">{ic("shield")} '
+  'O aceite é obrigatório para enviar e fica registrado com data, hora, IP e a versão do texto '
+  'vigente — a mesma prova exigida no cadastro de lojista.</p>')
+
+passos = "".join(
+  f'<li><span class="num">{n}</span><div><strong>{e(t)}</strong><p>{e(d)}</p></div></li>'
+  for n, (t, d) in enumerate([
+    ("Mensagem recebida", "O contato entra na fila de atendimento com a página de origem registrada."),
+    ("Triagem pelo assunto", "A equipe assume o contato; a partir daí ele tem responsável e data de retorno."),
+    ("Resposta em até 1 dia útil", "Respondemos por e-mail ou WhatsApp, no canal que você preferir.")], 1))
+
+nao_substitui = "".join(f'<li>{ic("x")}{e(t)}</li>' for t in
+  ["Não cria cadastro de revendedor", "Não libera preço nem condição comercial",
+   "Não dá acesso ao Portal do Lojista", "Não dispensa o envio dos documentos"])
+
+hero = site_hero("FALE CONOSCO", eyebrow="Atendimento a lojistas",
+  sub="Uma conversa direta com quem fabrica a aliança.",
+  texto=("Dúvida sobre coleção, prazo de produção, condição comercial ou uma solicitação de cadastro em "
+         "andamento: escreva para o time comercial da Velaro e receba retorno em até 1 dia útil."),
+  # .hero__note e flex: o texto precisa vir num unico <span>, senao cada trecho
+  # separado pelo <strong> vira um item de flex e a frase quebra em colunas.
+  extra=f'<p class="hero__note">{ic("info")}<span>A Velaro é fábrica e vende <strong>somente para lojistas '
+        f'com CNPJ</strong>. Este canal é atendimento — quem quer revender precisa do pré-cadastro.</span></p>',
+  art=f'<div style="width:250px">{rings.svg("bicolor", 907)}</div>')
+
+body = f'''
+<section class="band-light"><div class="band__inner">
+  <div class="identbar">{canais}</div>
+  <div class="split" style="--gcols:minmax(0,1fr) 400px;margin-top:var(--space-4)">
+    <div class="card">
+      <div class="card__head"><h2 class="title">{ic("mail")} Envie sua mensagem</h2></div>
+      {dados_contato}
+      {consentimento}
+      <a class="btn btn--primary" style="width:100%;margin-top:var(--space-6)" href="#">
+        Enviar mensagem ›</a>
+      <p class="muted" style="text-align:center;margin:var(--space-3) 0 0;font-size:var(--text-xs)">
+        {ic("info")} Registramos de qual página do site você veio, para direcionar o atendimento.</p>
+    </div>
+    <div class="stack">
+      <div class="card panel-dark">
+        <h3 class="title" style="color:var(--color-gold-300)">Quer revender a Velaro?</h3>
+        <p style="margin:var(--space-3) 0 0;font-size:var(--text-sm);line-height:22px;color:rgba(255,255,255,.72)">
+          Este formulário <strong>não substitui o pré-cadastro</strong>. Para receber preço de fábrica e acesso
+          ao Portal do Lojista, envie o cadastro completo: CNPJ, CNAE compatível e os três documentos da empresa.</p>
+        <ul class="cklist cklist--dark" style="margin-top:var(--space-4)">{nao_substitui}</ul>
+        <div style="margin-top:var(--space-5)">
+          {btn("Quero ser revendedor", "gold", "user-plus", "12-site-cadastro.html", sm=False)}
+        </div>
+      </div>
+      <div class="card panel-dark">
+        <h3 class="title" style="color:var(--color-gold-300)">Como funciona o atendimento</h3>
+        <ol class="howto">{passos}</ol>
+      </div>
+      <div class="card">
+        <h3 class="title">Já é lojista Velaro?</h3>
+        <p class="lede" style="margin-top:var(--space-2);font-size:var(--text-sm)">
+          Pedido, financeiro e produção se resolvem mais rápido pelo chamado de suporte dentro do Portal,
+          que já chega com o histórico da sua loja.</p>
+        <div class="row row--wrap" style="margin-top:var(--space-4)">
+          {btn("Entrar no Portal", "primary", "user", "20-login.html")}
+          {btn("Acompanhar solicitação", "secondary", "search", "14-site-status.html")}
+        </div>
+      </div>
+    </div>
+  </div>
+  {notice("<strong>Contato não é chamado.</strong> Quem ainda não é revendedor não abre chamado de suporte: "
+          "a mensagem vira um lead na fila comercial, com responsável e data de atendimento registrados.")}
+</div></section>'''
+
+W("19-site-contato.html", page("Velaro · Fale conosco",
+  site_shell("Fale conosco", hero, body), body_class="site"))
 
 # ═════════════════════════════════════════════════════════════════════════════
 # 0b · RECUPERAR SENHA  ·  GET/POST /recuperar-senha
@@ -1015,4 +1137,4 @@ body = f'''
 </div>'''
 W("08-vitrine-pedido-confirmado.html", page("Vitrine · Pedido #2413 registrado", body, extra_css=SHOP_CSS))
 
-print("\n  6 telas novas geradas por _build_novas_site.py")
+print("\n  7 telas novas geradas por _build_novas_site.py")

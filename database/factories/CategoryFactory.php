@@ -45,7 +45,7 @@ class CategoryFactory extends Factory
      * Categoria nomeada do catálogo (Alianças Tradicionais, Solitários, Acessórios).
      * Slug determinístico: uma linha por nome — chamar duas vezes com o mesmo nome viola o UNIQUE(slug).
      */
-    public function comNome(string $name): static
+    public function named(string $name): static
     {
         return $this->state(fn (array $attributes): array => [
             'name' => $name,
@@ -53,14 +53,14 @@ class CategoryFactory extends Factory
         ]);
     }
 
-    public function filhaDe(Category $parent): static
+    public function childOf(Category $parent): static
     {
         return $this->state(fn (array $attributes): array => [
             'parent_id' => $parent->getKey(),
         ]);
     }
 
-    public function inativa(): static
+    public function inactive(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_active' => false,

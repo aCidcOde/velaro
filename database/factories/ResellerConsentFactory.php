@@ -30,8 +30,8 @@ class ResellerConsentFactory extends Factory
         return [
             'reseller_id' => Reseller::factory(),
             'type' => fake()->randomElement([
-                ResellerConsent::TYPE_TERMOS,
-                ResellerConsent::TYPE_LGPD,
+                ResellerConsent::TYPE_TERMS,
+                ResellerConsent::TYPE_PRIVACY_POLICY,
             ]),
             'granted' => true,
             'document_version' => fake()->randomElement(['v1.0', 'v1.1', 'v2.0', 'v2.1']),
@@ -42,17 +42,17 @@ class ResellerConsentFactory extends Factory
         ];
     }
 
-    public function termos(): static
+    public function terms(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'type' => ResellerConsent::TYPE_TERMOS,
+            'type' => ResellerConsent::TYPE_TERMS,
         ]);
     }
 
-    public function lgpd(): static
+    public function privacyPolicy(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'type' => ResellerConsent::TYPE_LGPD,
+            'type' => ResellerConsent::TYPE_PRIVACY_POLICY,
         ]);
     }
 
@@ -60,12 +60,12 @@ class ResellerConsentFactory extends Factory
      * Aceite revogado depois de concedido: `revoked_at` nasce ancorado em `granted_at`,
      * nunca antes dele.
      */
-    public function revogado(): static
+    public function revoked(): static
     {
         return $this->state(function (array $attributes): array {
-            $concedidoEm = $attributes['granted_at'] ?? null;
-            $base = $concedidoEm instanceof \DateTimeInterface
-                ? Carbon::instance($concedidoEm)
+            $grantedAt = $attributes['granted_at'] ?? null;
+            $base = $grantedAt instanceof \DateTimeInterface
+                ? Carbon::instance($grantedAt)
                 : now()->subDays(30);
 
             return [

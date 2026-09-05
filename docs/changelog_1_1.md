@@ -7,6 +7,29 @@
 - Documentação por tela com campos, permissões, regras de negócio e critérios de aceite.
 - Sistema de design registrado como referência única e já aplicado à aplicação em funcionamento.
 
+### 2026-09-05 · FEAT · Base do sistema em ingles, tres idiomas e a tela de contato
+
+**Resumo:** O sistema passou a ser escrito em ingles por dentro e a falar tres idiomas por fora.
+O lojista, o cliente final e a equipe continuam vendo portugues; o codigo deixou de misturar
+idiomas, o que abre a porta para atender fora do Brasil sem refazer nada.
+
+**O que foi feito:** Os nomes tecnicos e os estados de pedido, cadastro, estoque, promocao e
+atendimento foram padronizados em ingles, preservando apenas os documentos brasileiros que nao tem
+equivalente. Sobre isso entrou a camada de idiomas, com portugues, ingles e espanhol, usando os
+mesmos rotulos que os prototipos aprovados ja mostravam.
+
+A conversao do que ja estava gravado foi feita de forma reversivel e com trava de seguranca: se
+houver dado que a conversao nao consiga representar, ela para antes de tocar na estrutura, em vez
+de falhar no meio. A mesma protecao foi aplicada a dois pontos que podiam quebrar uma atualizacao
+em base ja existente — codigo de produto repetido entre contas e registro sem responsavel.
+
+O painel interno passou a tratar o pedido cuja conta responsavel foi excluida: o historico
+continua consultavel, a edicao e recusada com aviso claro, e o cadastro de produto passou a avisar
+quando o codigo ja pertence a outro item, em vez de deixar o erro estourar no banco.
+
+Foi desenhada tambem a tela de contato do site publico, que faltava: ate agora o convite para
+falar com a Velaro nao tinha para onde levar.
+
 ### 2026-09-05 · FEAT · Fundação de dados da plataforma B2B
 
 **Resumo:** A plataforma saiu do desenho e ganhou a estrutura que sustenta os quatro
@@ -33,6 +56,11 @@ teste, que permitem montar um cenário completo de ponta a ponta — do lojista 
 chamado de atendimento — para validar o comportamento antes de existir tela. A documentação
 das telas foi realinhada com o que existe de fato, e a cadeia de geração passou a avisar em
 destaque quais arquivos são produzidos automaticamente e não devem ser editados à mão.
+
+A atualização de instalações existentes passou a preservar cadastros, vínculos e históricos
+durante a padronização dos dados. Códigos de produto conflitantes são recusados de forma
+consistente, pedidos de contas excluídas continuam consultáveis e reversões incompatíveis
+são interrompidas antes de remover informações. Esses cenários ganharam testes de regressão.
 
 ### 2026-09-03 · CHORE · Higiene do repositório
 
@@ -462,43 +490,47 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 | 2 | `composer qa:security` | 🟢 zero advisories |
 | 3 | `composer qa:style` | 🟢 passed |
 | 4 | `composer qa:static` | 🟢 no errors |
-| 5 | `composer qa:test` | 🟢 72 passed, 332 assertions |
-| 6 | `composer qa:secrets` | 🟢 no leaks found (histórico e conteúdo staged) |
-| 7 | prefixo de commit | 🟢 `[FEAT]` com descrição em pt-BR |
+| 5 | `composer qa:test` | 🟢 94 passed, 461 assertions |
+| 6 | `composer qa:secrets` | 🟢 no leaks found (histórico) |
+| 7 | prefixo de commit | ⚪ N/A — sem commit nesta correção |
 | 8 | `composer qa:anti-debug` | 🟢 sem debug calls |
 | 9 | Trivy | ⚪ N/A (sem Dockerfile) |
 | 10 | changelog atualizado | 🟢 este bloco |
+| 11 | `composer qa:gates` | 🟢 todos os gates passaram na correção do review |
+| 12 | `npm run build` | 🟢 build concluído |
 | — | `php artisan route:list --except-vendor` | 🟢 85 rotas (inalteradas) |
 
 **📊 Total de testes**
 
-🔵 72 testes · 332 assertions
+🔵 94 testes · 461 assertions, incluindo 22 testes novos de regressão
 
 **🛡️ Validação das demais gates**
 
-- 🟢 Estrutura de dados aplicada e revertida integralmente em MySQL e SQLite: a reversão
-  restaura o núcleo ao formato original, campo a campo
-- 🟢 Cenário completo de ponta a ponta validado com os geradores de massa: 87 verificações,
-  todas conferindo contagem esperada, em transação revertida ao final
-- 🟢 Unicidade dos identificadores provada por contagem de valores distintos, não por
-  ausência de erro: 25 registros de cada entidade crítica, sem colisão
-- 🟢 Camada de acesso auditada contra a estrutura real por verificação independente:
-  toda entidade coberta, todos os vínculos conferindo
-- 🟢 Verificação de segredos executada também sobre o conteúdo preparado para envio,
-  além do histórico
-- 🟢 Base de dados confirmada sem resíduo após as validações
-- ⚪ Vocabulário de dois campos de acompanhamento pendente de confirmação do cliente;
-  registrado em comentário no próprio código
+- 🟢 Atualização incremental do schema antigo e reversão com dados validadas em SQLite
+  em memória, incluindo vínculos, índices, defaults e históricos de status
+- 🟢 Instalações já traduzidas aceitam a migration incremental sem repetir renomeações
+- 🟢 SKUs duplicados bloqueiam a atualização antes de alterar a tabela; códigos existentes
+  não são renomeados automaticamente e exigem resolução explícita do conflito
+- 🟢 Validação de SKU global coberta no web, mobile e painel administrativo
+- 🟢 Pedidos sem usuário podem ser consultados com seus itens; tentativas de edição são
+  recusadas sem modificar o pedido ou registrar uma atualização indevida
+- 🟢 Rollback de produtos, clientes e pedidos sem responsável bloqueado antes de remover
+  campos; a reversão continua funcionando quando os registros possuem responsável
+- 🟢 Mensagem de histórico conferida visualmente em 1280 px e 390 px, light/dark, sem
+  rolagem horizontal, usando uma prévia isolada com dados fictícios
+- ⚪ MySQL e PostgreSQL não executados nesta correção; a validação anterior em MySQL não
+  substitui o teste da nova migration nesses motores
+- ⚪ Nova migration não aplicada ao banco local; nenhum reset, seed ou commit executado
 
 **📈 Métricas do sistema**
 
 - 🔵 Arquivos rastreados: 983
-- 🔵 Linhas rastreadas: 177.044
+- 🔵 Linhas rastreadas: 177.404 (medição antes da atualização deste fechamento; exclui arquivos novos não rastreados)
 - ⚪ Release anterior de referência: N/A (`1.1` é a baseline da série)
 - ⚪ Arquivos da release anterior: N/A
 - ⚪ Linhas da release anterior: N/A
 - ⚪ Aumento de arquivos vs release anterior: N/A
 - ⚪ Aumento de linhas vs release anterior: N/A
-- 🔵 Novos commits da release: 8 (incluindo esta entrega)
+- 🔵 Novos commits da release: 10 (incluindo esta entrega)
 
-**Status final: 🟢 APROVADO**
+**Status final: 🟢 Código e regressões validados · ⚪ Aplicação da nova migration ao banco local pendente**

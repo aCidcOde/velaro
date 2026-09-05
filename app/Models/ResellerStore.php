@@ -33,7 +33,7 @@ class ResellerStore extends Model
         'phone',
         'whatsapp',
         'email',
-        'endereco',
+        'address',
         'color_primary',
         'color_secondary',
         'color_background',

@@ -91,7 +91,7 @@ class HelpArticleFactory extends Factory
      * Guia ou manual em PDF — o bloco "Guias e manuais". O conteudo mora no arquivo,
      * entao o corpo do artigo fica vazio.
      */
-    public function guia(): static
+    public function guide(): static
     {
         return $this->state(function (array $attributes): array {
             $title = (string) fake()->randomElement([
@@ -103,7 +103,7 @@ class HelpArticleFactory extends Factory
             $slug = $this->slugFor($title);
 
             return [
-                'type' => HelpArticle::TYPE_GUIA,
+                'type' => HelpArticle::TYPE_GUIDE,
                 'title' => $title,
                 'slug' => $slug,
                 'excerpt' => 'Material em PDF para download na Central de ajuda.',
@@ -142,7 +142,7 @@ class HelpArticleFactory extends Factory
     /**
      * Artigo escrito mas ainda invisivel na Central de ajuda.
      */
-    public function naoPublicado(): static
+    public function unpublished(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_published' => false,
@@ -152,7 +152,7 @@ class HelpArticleFactory extends Factory
     /**
      * Artigo solto, fora das seis categorias da Central.
      */
-    public function semCategoria(): static
+    public function withoutCategory(): static
     {
         return $this->state(fn (array $attributes): array => [
             'help_category_id' => null,

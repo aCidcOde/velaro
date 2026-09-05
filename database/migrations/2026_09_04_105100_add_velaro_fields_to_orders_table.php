@@ -9,6 +9,7 @@ Torna o pedido B2B: dono, lote, os dois status independentes, as linhas de valor
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -54,6 +55,17 @@ return new class extends Migration
 
     public function down(): void
     {
+        // O up() tornou `user_id` nulavel; restaurar NOT NULL quebraria na metade se algum
+        // registro ficou orfao. Falha antes de qualquer DDL, com o schema intacto.
+        $orfaos = DB::table('orders')->whereNull('user_id')->count();
+
+        if ($orfaos > 0) {
+            throw new RuntimeException(
+                'Rollback bloqueado: '.$orfaos.' registro(s) em orders sem dono. '
+                .'Reatribua o `user_id` antes de reverter esta migracao.'
+            );
+        }
+
         Schema::table('orders', function (Blueprint $table): void {
             $table->dropForeign(['retirado_por_customer_id']);
             $table->dropForeign(['batch_id']);

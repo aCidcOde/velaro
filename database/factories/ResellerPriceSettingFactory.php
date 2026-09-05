@@ -39,14 +39,14 @@ class ResellerPriceSettingFactory extends Factory
         ];
     }
 
-    public function porMargem(): static
+    public function byMargin(): static
     {
         return $this->state(fn (array $attributes): array => [
             'pricing_model' => ResellerPriceSetting::PRICING_MODEL_PERCENT,
         ]);
     }
 
-    public function recalculada(): static
+    public function recalculated(): static
     {
         return $this->state(fn (array $attributes): array => [
             'recalculated_at' => now(),

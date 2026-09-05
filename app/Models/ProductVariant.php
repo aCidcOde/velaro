@@ -24,7 +24,7 @@ class ProductVariant extends Model
     protected $fillable = [
         'product_id',
         'sku',
-        'aro',
+        'ring_size',
         'is_active',
     ];
 

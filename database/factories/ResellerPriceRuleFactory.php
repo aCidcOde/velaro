@@ -37,7 +37,7 @@ class ResellerPriceRuleFactory extends Factory
         ];
     }
 
-    public function paraColecao(?ProductCollection $collection = null): static
+    public function forCollection(?ProductCollection $collection = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'scope' => ResellerPriceRule::SCOPE_COLLECTION,
@@ -47,7 +47,7 @@ class ResellerPriceRuleFactory extends Factory
         ]);
     }
 
-    public function paraProduto(?Product $product = null): static
+    public function forProduct(?Product $product = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'scope' => ResellerPriceRule::SCOPE_PRODUCT,
@@ -57,7 +57,7 @@ class ResellerPriceRuleFactory extends Factory
         ]);
     }
 
-    public function porMargem(): static
+    public function byMargin(): static
     {
         return $this->state(fn (array $attributes): array => [
             'mode' => ResellerPriceRule::MODE_PERCENT,
@@ -65,7 +65,7 @@ class ResellerPriceRuleFactory extends Factory
         ]);
     }
 
-    public function inativa(): static
+    public function inactive(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_active' => false,

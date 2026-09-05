@@ -17,9 +17,21 @@ class ProductionRequest extends Model
 {
     use HasFactory;
 
-    public const STATUS_PENDENTE = 'pendente';
+    public const STATUS_PENDING = 'pending';
+
+    public const STATUS_IN_PRODUCTION = 'in_production';
+
+    public const STATUS_COMPLETED = 'completed';
+
+    public const STATUS_CANCELED = 'canceled';
+
+    public const PRIORITY_LOW = 'low';
 
     public const PRIORITY_NORMAL = 'normal';
+
+    public const PRIORITY_HIGH = 'high';
+
+    public const PRIORITY_URGENT = 'urgent';
 
     /**
      * @var list<string>

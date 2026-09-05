@@ -27,28 +27,28 @@ class PromotionAudienceFactory extends Factory
         // "Todos os revendedores ativos" e canais "Loja online, WhatsApp, E-mail".
         return [
             'promotion_id' => Promotion::factory(),
-            'publico_alvo' => 'Todos os revendedores ativos',
-            'canais' => ['Loja online', 'WhatsApp', 'E-mail'],
+            'target_audience' => 'Todos os revendedores ativos',
+            'channels' => ['Loja online', 'WhatsApp', 'E-mail'],
         ];
     }
 
     /**
      * Rascunho sem canal escolhido — o "Canais: Nenhum" do resumo da campanha.
      */
-    public function semCanais(): static
+    public function withoutChannels(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'canais' => null,
+            'channels' => null,
         ]);
     }
 
     /**
      * Campanha restrita ao canal proprio da vitrine.
      */
-    public function apenasLojaOnline(): static
+    public function onlineStoreOnly(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'canais' => ['Loja online'],
+            'channels' => ['Loja online'],
         ]);
     }
 }

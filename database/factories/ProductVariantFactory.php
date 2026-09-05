@@ -24,17 +24,17 @@ class ProductVariantFactory extends Factory
      */
     public function definition(): array
     {
-        $largura = (string) fake()->randomElement(['3', '4', '5', '6', '8']);
+        $width = (string) fake()->randomElement(['3', '4', '5', '6', '8']);
 
         return [
             'product_id' => Product::factory(),
-            'sku' => 'ALC-'.$largura.'MM-'.strtoupper(fake()->unique()->bothify('??##')),
-            'aro' => (string) fake()->numberBetween(8, 34),
+            'sku' => 'ALC-'.$width.'MM-'.strtoupper(fake()->unique()->bothify('??##')),
+            'ring_size' => (string) fake()->numberBetween(8, 34),
             'is_active' => true,
         ];
     }
 
-    public function paraProduto(Product $product): static
+    public function forProduct(Product $product): static
     {
         return $this->state(fn (array $attributes): array => [
             'product_id' => $product->getKey(),
@@ -42,33 +42,33 @@ class ProductVariantFactory extends Factory
     }
 
     /**
-     * Fixa o aro (tamanho do anel, 8 a 34) — respeita o UNIQUE(product_id, aro).
+     * Fixa o aro (tamanho do anel, 8 a 34) — respeita o UNIQUE(product_id, ring_size).
      */
-    public function comAro(int|string $aro): static
+    public function withRingSize(int|string $ringSize): static
     {
         return $this->state(fn (array $attributes): array => [
-            'aro' => (string) $aro,
+            'ring_size' => (string) $ringSize,
         ]);
     }
 
     /**
-     * Distribui aros consecutivos a partir de $inicial, dando a volta na faixa 8–34.
+     * Distribui aros consecutivos a partir de $start, dando a volta na faixa 8–34.
      * Percorre os 27 aros antes de repetir qualquer um — que é o teto do
-     * UNIQUE(product_id, aro), então count() acima de 27 no mesmo produto não existe.
+     * UNIQUE(product_id, ring_size), então count() acima de 27 no mesmo produto não existe.
      * Use ao criar várias variantes de uma vez:
-     * ProductVariant::factory()->count(6)->paraProduto($produto)->arosSequenciais().
+     * ProductVariant::factory()->count(6)->forProduct($product)->sequentialRingSizes().
      */
-    public function arosSequenciais(int $inicial = 10): static
+    public function sequentialRingSizes(int $start = 10): static
     {
-        $primeiro = max(8, min(34, $inicial));
-        $faixa = 34 - 8 + 1;
+        $first = max(8, min(34, $start));
+        $range = 34 - 8 + 1;
 
         return $this->sequence(fn (Sequence $sequence): array => [
-            'aro' => (string) (8 + (($primeiro - 8 + $sequence->index) % $faixa)),
+            'ring_size' => (string) (8 + (($first - 8 + $sequence->index) % $range)),
         ]);
     }
 
-    public function inativa(): static
+    public function inactive(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_active' => false,

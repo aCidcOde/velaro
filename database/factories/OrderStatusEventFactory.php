@@ -26,24 +26,24 @@ class OrderStatusEventFactory extends Factory
     {
         // Cadeia operacional canonica (decisao 1.2 de docs/banco-de-dados.md). O evento e
         // sempre um passo real dela: from_status e o degrau anterior de to_status.
-        $fluxo = [
-            Order::OPERATIONAL_STATUS_REGISTRADO,
-            Order::OPERATIONAL_STATUS_PAGAMENTO_CONFIRMADO,
-            Order::OPERATIONAL_STATUS_PRODUCAO_ANDAMENTO,
-            Order::OPERATIONAL_STATUS_PRODUCAO_FINALIZADA,
-            Order::OPERATIONAL_STATUS_EM_TRANSPORTE,
-            Order::OPERATIONAL_STATUS_PRONTO_RETIRADA,
-            Order::OPERATIONAL_STATUS_RETIRADO,
+        $flow = [
+            Order::OPERATIONAL_STATUS_REGISTERED,
+            Order::OPERATIONAL_STATUS_PAYMENT_CONFIRMED,
+            Order::OPERATIONAL_STATUS_IN_PRODUCTION,
+            Order::OPERATIONAL_STATUS_PRODUCTION_COMPLETED,
+            Order::OPERATIONAL_STATUS_IN_TRANSIT,
+            Order::OPERATIONAL_STATUS_READY_FOR_PICKUP,
+            Order::OPERATIONAL_STATUS_PICKED_UP,
         ];
 
-        $destino = fake()->numberBetween(1, count($fluxo) - 1);
+        $target = fake()->numberBetween(1, count($flow) - 1);
 
         return [
             'order_id' => Order::factory(),
             // Unico escopo com vocabulario acordado no model.
             'scope' => OrderStatusEvent::SCOPE_OPERATIONAL,
-            'from_status' => $fluxo[$destino - 1],
-            'to_status' => $fluxo[$destino],
+            'from_status' => $flow[$target - 1],
+            'to_status' => $flow[$target],
             // actor_id e nullable: transicao automatica do sistema por padrao.
             'actor_id' => null,
         ];
@@ -52,18 +52,18 @@ class OrderStatusEventFactory extends Factory
     /**
      * Primeiro evento da linha do tempo do pedido: nao existe status anterior.
      */
-    public function abertura(): static
+    public function opening(): static
     {
         return $this->state(fn (array $attributes): array => [
             'from_status' => null,
-            'to_status' => Order::OPERATIONAL_STATUS_REGISTRADO,
+            'to_status' => Order::OPERATIONAL_STATUS_REGISTERED,
         ]);
     }
 
     /**
      * Transicao registrada por um operador identificado, e nao pelo sistema.
      */
-    public function comAtor(): static
+    public function withActor(): static
     {
         return $this->state(fn (array $attributes): array => [
             'actor_id' => User::factory()->admin(),

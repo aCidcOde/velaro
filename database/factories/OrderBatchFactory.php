@@ -28,7 +28,7 @@ class OrderBatchFactory extends Factory
      * pool do `fake()->unique()`, que e compartilhado por formatter entre todas as
      * factories e estouraria numa faixa de 52 valores.
      */
-    private static int $semanasAtras = 0;
+    private static int $weeksBack = 0;
 
     /**
      * @return array<string, mixed>
@@ -36,7 +36,7 @@ class OrderBatchFactory extends Factory
     public function definition(): array
     {
         // Corte na segunda-feira da semana; vencimento 15 dias depois — sempre posterior.
-        $cutDate = now()->startOfWeek()->subWeeks(self::$semanasAtras++);
+        $cutDate = now()->startOfWeek()->subWeeks(self::$weeksBack++);
         $dueDate = $cutDate->copy()->addDays(15);
 
         return [
@@ -45,7 +45,7 @@ class OrderBatchFactory extends Factory
             'reseller_id' => Reseller::factory(),
             'cut_date' => $cutDate,
             'due_date' => $dueDate,
-            'status' => OrderBatch::STATUS_ABERTO,
+            'status' => OrderBatch::STATUS_OPEN,
             'total_amount' => fake()->randomFloat(2, 4800, 62000),
         ];
     }
@@ -53,23 +53,23 @@ class OrderBatchFactory extends Factory
     /**
      * Lote quitado no vencimento.
      *
-     * `order_batches.status` so declara 'aberto' no model (o default da migration). O unico
-     * slug 'pago' acordado no codigo e Order::PAYMENT_STATUS_PAGO — e a decisao 1.2 de
+     * `order_batches.status` so declara 'open' no model (o default da migration). O unico
+     * slug 'paid' acordado no codigo e Order::PAYMENT_STATUS_PAID — e a decisao 1.2 de
      * docs/banco-de-dados.md diz que `orders.payment_status` E o ciclo financeiro do lote,
-     * logo e o mesmo vocabulario. Troque por OrderBatch::STATUS_PAGO quando o model declarar.
+     * logo e o mesmo vocabulario. Troque por OrderBatch::STATUS_PAID quando o model declarar.
      */
-    public function pago(): static
+    public function paid(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => Order::PAYMENT_STATUS_PAGO,
+            'status' => Order::PAYMENT_STATUS_PAID,
             // Baixa no vencimento, nunca no futuro: lote pago e fato consumado, e um
             // `paid_at` a frente de hoje sumiria de todo relatorio de recebimento.
             // Closure para ler o `due_date` ja resolvido, inclusive quando o chamador
             // sobrescreve a data no proprio create().
-            'paid_at' => function (array $resolvidos): Carbon {
-                $vencimento = Carbon::parse($resolvidos['due_date'] ?? Carbon::now());
+            'paid_at' => function (array $resolved): Carbon {
+                $dueDateValue = Carbon::parse($resolved['due_date'] ?? Carbon::now());
 
-                return $vencimento->isFuture() ? Carbon::now() : $vencimento;
+                return $dueDateValue->isFuture() ? Carbon::now() : $dueDateValue;
             },
         ]);
     }
@@ -77,10 +77,10 @@ class OrderBatchFactory extends Factory
     /**
      * Lote ainda em cobranca: nada compensado.
      */
-    public function emAberto(): static
+    public function open(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => OrderBatch::STATUS_ABERTO,
+            'status' => OrderBatch::STATUS_OPEN,
             'paid_at' => null,
         ]);
     }

@@ -17,12 +17,11 @@ class OrderStatusEvent extends Model
 {
     use HasFactory;
 
-    // Unico valor de `scope` sustentado pelo schema: o default da migration de
-    // order_status_events. O escopo financeiro ainda nao tem vocabulario canonico — o
-    // diagrama ER declara `scope (operacional|financeiro)`, em pt-BR, e ja diverge do
-    // default gravado no banco. Declarar o segundo valor aqui seria escolher a string no
-    // escuro: qualquer consulta pelo termo errado volta vazia em silencio.
+    // Os dois escopos da timeline do pedido: `operational_status` e `payment_status` sao
+    // independentes entre si e cada transicao e registrada sob o escopo a que pertence.
     public const SCOPE_OPERATIONAL = 'operational';
+
+    public const SCOPE_PAYMENT = 'payment';
 
     /**
      * @var list<string>

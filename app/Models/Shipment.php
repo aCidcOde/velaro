@@ -18,7 +18,7 @@ class Shipment extends Model
 {
     use HasFactory;
 
-    public const STATUS_AGUARDANDO_LIBERACAO = 'aguardando_liberacao';
+    public const STATUS_AWAITING_RELEASE = 'awaiting_release';
 
     /**
      * @var list<string>

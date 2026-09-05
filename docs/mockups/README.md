@@ -6,24 +6,24 @@ tela a tela (campo de banco, permissão, ambiente).
 Servidor local: `php -S 127.0.0.1:8010 -t docs/mockups`.
 Índice: <http://localhost:8010/index.html>
 
-**31 telas contratadas + 33 telas internas, todas navegáveis** — 69 arquivos `.html` na pasta.
+**32 telas contratadas + 33 telas internas, todas navegáveis** — 70 arquivos `.html` na pasta.
 Índice completo em `index.html`; mapa consolidado em `mapa.html`; diagrama do banco em
 `er-banco.html`; documentação por tela em [`docs/telas/`](../telas/README.md).
 
 | Etapa | Ambiente | Telas | Arquivos |
 |-------|----------|-------|----------|
 | 0 | Transversal | 1 | `20-login` |
-| 1 | Site público | 7 | `01-site-publico` · `10-site-sobre` · `11-site-catalogo` · `12-site-cadastro` · `13-site-enviada` · `14-site-status` · `15-site-aprovado` |
+| 1 | Site público | 8 | `01-site-publico` · `10-site-sobre` · `11-site-catalogo` · `12-site-cadastro` · `13-site-enviada` · `14-site-status` · `15-site-aprovado` · `19-site-contato` |
 | 2 | Portal do Lojista | 9 | `02-portal-lojista` · `30-portal-catalogo` · `31-portal-clientes` · `32-portal-financeiro` · `33-portal-pedidos` · `34-portal-loja` · `35-portal-precos` · `36-portal-suporte` · `38-portal-retirada` |
 | 2 | Vitrine white label | 2 | `03-vitrine-pdv` (vitrine + carrinho PDV) · `37-portal-vitrine` (gestão) |
 | 3 | Painel Interno Velaro | 12 | `04-painel-master` · `50-master-clientes` · `51-master-config` · `52-master-estoque` · `53-master-financeiro` · `54-master-pedidos` · `55-master-produtos` · `56-master-promocoes` · `57-master-relatorios` · `58-master-revendedores` · `59-master-precadastro` · `60-master-suporte` |
 
 As 33 telas internas (detalhe, formulário de criação, subtela de configuração, relatório) são os
-destinos dos botões dessas 31 — numeradas `07`, `08`, `16`, `17`, `18`, `21`, `39`–`43`,
+destinos dos botões dessas 32 — numeradas `07`, `08`, `16`, `17`, `18`, `21`, `39`–`43`,
 `51a`–`51h`, `52a`, `52b`, `53a`, `53b` e `61`–`70`.
 
 Além das telas: `05-tipografia` (registro da decisão de fonte), `06-mapa-inputs` (prancha de
-inputs), `mapa` (spec das 31 telas) e `er-banco` (diagrama do banco).
+inputs), `mapa` (spec das 32 telas) e `er-banco` (diagrama do banco).
 
 Arquivos do sistema visual:
 
@@ -42,7 +42,7 @@ Arquivos do sistema visual:
 
 > ### ⚠️ `docs/telas/*.md` são ARQUIVOS GERADOS
 >
-> Os 31 documentos de tela e o `docs/telas/README.md` saem do `_build_docs.py`, que lê
+> Os 32 documentos de tela e o `docs/telas/README.md` saem do `_build_docs.py`, que lê
 > `_mapa.py` + `_notas.md`. **Editar um `.md` à mão é trabalho perdido:** a próxima execução
 > do gerador sobrescreve o arquivo inteiro, sem aviso e sem conflito.
 >
@@ -72,10 +72,10 @@ _mapa.py ──┤
            └──(_build_er.py)──> er-banco.html
                 ^ o schema (56 caixas, 90 relações, 18 lacunas registradas) está
                   declarado DENTRO do próprio _build_er.py, transcrito do
-                  information_schema; o _mapa.py entra só para dizer quais das 31
+                  information_schema; o _mapa.py entra só para dizer quais das 32
                   telas usam cada tabela. O script NÃO lê as migrations.
 
-_ui.py + _gen_rings.py ──(_build_*.py)──> as 62 páginas .html geradas
+_ui.py + _gen_rings.py ──(_build_*.py)──> as 63 páginas .html geradas
 ```
 
 `_mapa.py` tem dois papéis e é fácil esquecer o segundo: é **o banco de dados da documentação**
@@ -84,7 +84,7 @@ Mexer nele sem regenerar os três destinos deixa a documentação em três vers�
 
 `_mapa.py` e `_build_er.py` só escrevem sob `if __name__ == "__main__"`, então importá-los
 (como `_build_docs.py` faz) não sobrescreve nada. `_build_docs.py` **não** tem essa guarda:
-importá-lo regrava os 31 `.md` na hora.
+importá-lo regrava os 32 `.md` na hora.
 
 ### Receita
 
@@ -138,12 +138,12 @@ com **zero** `href="#"` e zero link quebrado.
 
 | Arquivo | Papel |
 |---------|-------|
-| `_notas.md` | Transcrição literal, campo a campo, do protótipo em PDF — 27 blocos numerados por tela. Vira a seção 5 de cada `docs/telas/*.md`. |
-| `_mapa.py` | Spec das 31 telas: rota, acesso, tabelas/campos, permissões, regras. Fonte de `mapa.html`, de `docs/telas/*.md` e do uso por tela no `er-banco.html`. |
+| `_notas.md` | Transcrição literal, campo a campo, do protótipo em PDF — 28 blocos numerados por tela (a 1.8 não tem página no PDF: transcreve o mockup). Vira a seção 5 de cada `docs/telas/*.md`. |
+| `_mapa.py` | Spec das 32 telas: rota, acesso, tabelas/campos, permissões, regras. Fonte de `mapa.html`, de `docs/telas/*.md` e do uso por tela no `er-banco.html`. |
 | `_ui.py` | Biblioteca de componentes: shells dos 4 ambientes, 20 blocos reutilizáveis, `religar()` e as tabelas `DESTINOS`. |
 | `_gen_rings.py` | Placeholders de aliança em SVG, por acabamento. Importado pelo `_ui.py`. |
-| `_build_site.py` · `_build_portal.py` · `_build_master.py` | Geram 27 das 31 telas contratadas — as outras 4 são escritas à mão. |
-| `_build_novas_site.py` · `_build_novas_portal.py` · `_build_novas_config.py` · `_build_novas_master.py` | Geram as 33 telas internas. |
+| `_build_site.py` · `_build_portal.py` · `_build_master.py` | Geram 27 das 32 telas contratadas — 4 são escritas à mão e a 1.8 sai do `_build_novas_site.py`. |
+| `_build_novas_site.py` · `_build_novas_portal.py` · `_build_novas_config.py` · `_build_novas_master.py` | Geram as 33 telas internas e a tela contratada 1.8 (`19-site-contato`). |
 | `_build_docs.py` | Gera `docs/telas/*.md` **e** `docs/telas/README.md`, a partir de `_mapa.py` + `_notas.md`. |
 | `_build_er.py` | Gera `er-banco.html` — schema transcrito do `information_schema` dentro do próprio script, mais as 18 lacunas de modelagem e o uso por tela vindo do `_mapa.py`. |
 
@@ -157,7 +157,7 @@ com **zero** `href="#"` e zero link quebrado.
 | `extensao` | Tabela do core que ganhou colunas Velaro | `products` · `orders` · `order_items` · `customers` · `users` |
 | `core` | Tabela do scaffold lida como está | `audit_logs` e as 4 `acl_*` |
 
-O valor `core/novo` foi eliminado — não use. As 31 telas citam **59 tabelas** ao todo.
+O valor `core/novo` foi eliminado — não use. As 32 telas citam **59 tabelas** ao todo.
 
 ### O banco, em números
 

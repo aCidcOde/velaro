@@ -26,7 +26,9 @@ class ReportExportFactory extends Factory
     {
         // Exportacao avulsa: nasce sem agendamento e sem autor, na fila.
         // `type` e `status` nao tem constante no model — `type` usa o rotulo literal
-        // do prototipo (tela 3.9) e `status` fica no default da migration.
+        // do prototipo (tela 3.9) e `status` fica no default da migration ('pending').
+        // As chaves de `filters` seguem em pt-BR de proposito: nao estao no mapa de
+        // anglicizacao, e traduzi-las na marra quebraria o filtro que a tela 3.9 monta.
         return [
             'report_schedule_id' => null,
             'type' => 'Vendas por período',
@@ -36,7 +38,7 @@ class ReportExportFactory extends Factory
                 'categoria' => 'Todas',
             ],
             'format' => 'pdf',
-            'status' => 'pendente',
+            'status' => 'pending',
             'generated_by' => null,
         ];
     }
@@ -44,7 +46,7 @@ class ReportExportFactory extends Factory
     /**
      * Exportacao disparada por um agendamento, e nao pelo botao "Exportar".
      */
-    public function paraAgendamento(?ReportSchedule $schedule = null): static
+    public function forSchedule(?ReportSchedule $schedule = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'report_schedule_id' => $schedule instanceof ReportSchedule
@@ -56,7 +58,7 @@ class ReportExportFactory extends Factory
     /**
      * Exportacao pedida por um usuario do painel.
      */
-    public function geradoPor(?User $user = null): static
+    public function generatedBy(?User $user = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'generated_by' => $user instanceof User ? $user->getKey() : User::factory(),

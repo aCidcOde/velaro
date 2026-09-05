@@ -39,7 +39,7 @@ class OrderItemFactory extends Factory
     /**
      * Item com aro escolhido. A variante e sempre do mesmo produto do item.
      */
-    public function comVariante(?ProductVariant $variant = null): static
+    public function withVariant(?ProductVariant $variant = null): static
     {
         if ($variant instanceof ProductVariant) {
             return $this->state(fn (array $attributes): array => [

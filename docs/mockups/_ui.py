@@ -17,6 +17,8 @@ CSS = ('<link rel="stylesheet" href="velaro-tokens.css">\n'
        '<link rel="stylesheet" href="velaro-ui.css">\n'
        '<link rel="stylesheet" href="velaro-screens.css">')
 
+# Copia do nav de _mapa.py, que deriva o contador de len(T). Aqui nao ha T:
+# ao acrescentar ou remover tela do mapa, acertar o numero abaixo a mao.
 MOCKNAV = """
 <nav class="mocknav" aria-label="Navegação entre os mockups">
   <span>Velaro</span>
@@ -25,7 +27,7 @@ MOCKNAV = """
   <a href="02-portal-lojista.html">Portal</a>
   <a href="03-vitrine-pdv.html">Vitrine</a>
   <a href="04-painel-master.html">Master</a>
-  <a class="map" href="mapa.html">Mapa · 31 telas</a>
+  <a class="map" href="mapa.html">Mapa · 32 telas</a>
 </nav>
 <script>
 (function(){
@@ -130,7 +132,7 @@ def page(title, body, extra_css="", body_class=""):
 # ═══════════════════════════════ SHELL · SITE PÚBLICO ═══════════════════════════════
 SITE_NAV = [("Início","01-site-publico.html"),("Sobre nós","10-site-sobre.html"),
             ("Catálogo","11-site-catalogo.html"),("Seja um revendedor","12-site-cadastro.html"),
-            ("Fale conosco","11-site-catalogo.html#contato")]
+            ("Fale conosco","19-site-contato.html")]
 
 def _sitenav_mobile(links):
     """Menu do site no celular. .site-nav__links some abaixo de 1100px e nada
@@ -181,7 +183,7 @@ def site_shell(active, hero, body, autenticado=None, foot_pillars=None):
     <div><h4>Links rápidos</h4>
       <a href="01-site-publico.html">Início</a><br><a href="10-site-sobre.html">Sobre nós</a><br>
       <a href="11-site-catalogo.html">Catálogo</a><br><a href="12-site-cadastro.html">Seja um revendedor</a><br>
-      <a href="20-login.html">Entrar</a></div>
+      <a href="19-site-contato.html">Fale conosco</a><br><a href="20-login.html">Entrar</a></div>
     <div><h4>Atendimento</h4>
       <p>+55 (16) 99487-7800<br>vendas@velaro.com.br<br>Segunda a sexta, das 8h às 18h.</p></div>
     <div><h4>Formas de pagamento B2B</h4><p>Pix · Boleto · Transferência</p>
@@ -504,6 +506,7 @@ DESTINOS_GLOBAIS = {
 DESTINOS = {
   "11-site-catalogo.html": {
     "Ver detalhes": "16-site-produto.html",
+    "Falar com especialista": "19-site-contato.html",
   },
   "03-vitrine-pdv.html": {
     "Ver detalhes": "07-vitrine-produto.html",
@@ -511,7 +514,7 @@ DESTINOS = {
     "Finalizar pedido": "08-vitrine-pedido-confirmado.html",
   },
   "14-site-status.html": {
-    "Falar com nossa equipe": "11-site-catalogo.html#contato",
+    "Falar com nossa equipe": "19-site-contato.html",
   },
   "32-portal-financeiro.html": {
     "Ver todas as notas fiscais emitidas": "40-portal-notas.html",

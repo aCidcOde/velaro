@@ -24,65 +24,65 @@ class StockItemFactory extends Factory
      */
     public function definition(): array
     {
-        $atual = (int) fake()->numberBetween(12, 180);
-        $reservado = (int) fake()->numberBetween(0, min(12, $atual));
-        $minimo = (int) fake()->numberBetween(4, 20);
+        $onHand = (int) fake()->numberBetween(12, 180);
+        $reservedQty = (int) fake()->numberBetween(0, min(12, $onHand));
+        $minimum = (int) fake()->numberBetween(4, 20);
 
         return [
             'product_variant_id' => ProductVariant::factory(),
             'stock_location_id' => StockLocation::factory(),
-            'atual' => $atual,
-            'reservado' => $reservado,
-            'disponivel' => $atual - $reservado,
-            'minimo' => $minimo,
-            'reposicao' => $minimo * 3,
+            'on_hand' => $onHand,
+            'reserved' => $reservedQty,
+            'available' => $onHand - $reservedQty,
+            'minimum' => $minimum,
+            'restock_point' => $minimum * 3,
         ];
     }
 
-    public function paraVariante(ProductVariant $variante): static
+    public function forVariant(ProductVariant $variant): static
     {
         return $this->state(fn (array $attributes): array => [
-            'product_variant_id' => $variante->getKey(),
+            'product_variant_id' => $variant->getKey(),
         ]);
     }
 
     /**
      * Fixa o cofre — o UNIQUE(product_variant_id, stock_location_id) é uma linha de saldo por cofre.
      */
-    public function noLocal(StockLocation $local): static
+    public function atLocation(StockLocation $location): static
     {
         return $this->state(fn (array $attributes): array => [
-            'stock_location_id' => $local->getKey(),
+            'stock_location_id' => $location->getKey(),
         ]);
     }
 
     /**
      * Saldo zerado — o aro sai da vitrine e entra na fila de produção.
      */
-    public function semEstoque(): static
+    public function outOfStock(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'atual' => 0,
-            'reservado' => 0,
-            'disponivel' => 0,
+            'on_hand' => 0,
+            'reserved' => 0,
+            'available' => 0,
         ]);
     }
 
     /**
      * Saldo abaixo do mínimo — alimenta o KPI "Baixo estoque" da tela de estoque.
      */
-    public function baixoEstoque(): static
+    public function lowStock(): static
     {
         return $this->state(function (array $attributes): array {
-            $minimo = (int) fake()->numberBetween(6, 20);
-            $atual = (int) fake()->numberBetween(1, $minimo - 1);
+            $minimum = (int) fake()->numberBetween(6, 20);
+            $onHand = (int) fake()->numberBetween(1, $minimum - 1);
 
             return [
-                'atual' => $atual,
-                'reservado' => 0,
-                'disponivel' => $atual,
-                'minimo' => $minimo,
-                'reposicao' => $minimo * 3,
+                'on_hand' => $onHand,
+                'reserved' => 0,
+                'available' => $onHand,
+                'minimum' => $minimum,
+                'restock_point' => $minimum * 3,
             ];
         });
     }

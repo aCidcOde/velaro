@@ -22,7 +22,7 @@ class CustomerFactory extends Factory
             // FK nullable: cliente do scaffold nao nasce preso a um revendedor.
             'reseller_id' => null,
             'name' => fake()->name(),
-            'person_type' => Customer::PERSON_TYPE_PF,
+            'person_type' => Customer::PERSON_TYPE_INDIVIDUAL,
             'company_name' => fake()->boolean(30) ? fake()->company() : null,
             'email' => fake()->safeEmail(),
             'phone' => fake()->phoneNumber(),
@@ -37,7 +37,7 @@ class CustomerFactory extends Factory
     /**
      * Cliente da carteira de um revendedor.
      */
-    public function paraRevendedor(?Reseller $reseller = null): static
+    public function forReseller(?Reseller $reseller = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'reseller_id' => $reseller?->getKey() ?? Reseller::factory(),
@@ -47,10 +47,10 @@ class CustomerFactory extends Factory
     /**
      * Cliente pessoa juridica: exige razao social.
      */
-    public function pessoaJuridica(): static
+    public function company(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'person_type' => Customer::PERSON_TYPE_PJ,
+            'person_type' => Customer::PERSON_TYPE_COMPANY,
             'company_name' => fake()->company(),
         ]);
     }

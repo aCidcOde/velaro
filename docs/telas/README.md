@@ -7,7 +7,7 @@ Fontes: Anexo I (escopo funcional e critérios de aceite), Plano de Negócio VEL
 e a apresentação "PLATAFORMA B2B VELARO ALIANÇAS".
 
 - Mockups navegáveis: [`docs/mockups/`](../mockups/index.html)
-- Mapa consolidado das 31 telas: [`docs/mockups/mapa.html`](../mockups/mapa.html)
+- Mapa consolidado das 32 telas: [`docs/mockups/mapa.html`](../mockups/mapa.html)
 
 **Como ler.** A seção 5 de cada documento é a régua de aceite: ela transcreve o que o
 protótipo mostra. Ausência de campo, regra, permissão, automação ou relatório ali descrito
@@ -30,6 +30,7 @@ caracteriza **pendência de escopo**, e não melhoria opcional (Anexo I §9).
 | 1.5 | [Solicitação enviada](1-5-site-enviada.md) | [mockup](../mockups/13-site-enviada.html) |
 | 1.6 | [Status da solicitação](1-6-site-status.md) | [mockup](../mockups/14-site-status.html) |
 | 1.7 | [Cadastro aprovado e liberação](1-7-site-aprovado.md) | [mockup](../mockups/15-site-aprovado.html) |
+| 1.8 | [Fale conosco](1-8-site-contato.md) | [mockup](../mockups/19-site-contato.html) |
 
 ### Portal do Lojista
 

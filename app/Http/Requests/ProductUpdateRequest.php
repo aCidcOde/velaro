@@ -27,8 +27,7 @@ class ProductUpdateRequest extends FormRequest
                 'string',
                 'max:100',
                 Rule::unique('products', 'sku')
-                    ->ignore($product)
-                    ->where(fn ($query) => $query->where('user_id', $this->user()?->id)),
+                    ->ignore($product),
             ],
             'description' => ['nullable', 'string', 'max:5000'],
             'price' => ['required', 'numeric', 'min:0'],

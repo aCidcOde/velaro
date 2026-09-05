@@ -25,7 +25,7 @@ class SupportStatusEventFactory extends Factory
 {
     /**
      * O padrão é o primeiro evento da trilha, coerente com o chamado que a factory cria junto
-     * (que nasce em `aberta`). Para os demais degraus use os states.
+     * (que nasce em `open`). Para os demais degraus use os states.
      *
      * @return array<string, mixed>
      */
@@ -34,7 +34,7 @@ class SupportStatusEventFactory extends Factory
         return [
             'ticket_id' => SupportTicket::factory(),
             'from_status' => null,
-            'to_status' => SupportTicket::STATUS_ABERTA,
+            'to_status' => SupportTicket::STATUS_OPEN,
             'actor_id' => null,
             'note' => 'Chamado aberto pelo revendedor.',
         ];
@@ -43,11 +43,11 @@ class SupportStatusEventFactory extends Factory
     /**
      * Primeiro evento da trilha: o chamado entrando na fila de atendimento.
      */
-    public function abertura(): static
+    public function opening(): static
     {
         return $this->state(fn (array $attributes): array => [
             'from_status' => null,
-            'to_status' => SupportTicket::STATUS_ABERTA,
+            'to_status' => SupportTicket::STATUS_OPEN,
             'note' => 'Chamado aberto pelo revendedor.',
         ]);
     }
@@ -55,11 +55,11 @@ class SupportStatusEventFactory extends Factory
     /**
      * Último degrau do vocabulário atual: o model não declara status de chamado fechado.
      */
-    public function resolucao(): static
+    public function resolution(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'from_status' => SupportTicket::STATUS_EM_ATENDIMENTO,
-            'to_status' => SupportTicket::STATUS_RESOLVIDO,
+            'from_status' => SupportTicket::STATUS_IN_PROGRESS,
+            'to_status' => SupportTicket::STATUS_RESOLVED,
             'note' => 'Chamado resolvido e encerrado com o revendedor.',
         ]);
     }
@@ -67,7 +67,7 @@ class SupportStatusEventFactory extends Factory
     /**
      * Evento com autor identificado — o padrão é a transição automática, sem ator.
      */
-    public function porAtor(?User $actor = null): static
+    public function byActor(?User $actor = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'actor_id' => $actor?->getKey() ?? User::factory(),

@@ -24,7 +24,7 @@ class ResellerStatusEventFactory extends Factory
 {
     /**
      * O padrão é o primeiro evento da trilha, coerente com o revendedor que a factory cria
-     * junto (que nasce em `pre_cadastro`). Para os demais eventos use os states.
+     * junto (que nasce em `pending`). Para os demais eventos use os states.
      *
      * @return array<string, mixed>
      */
@@ -33,7 +33,7 @@ class ResellerStatusEventFactory extends Factory
         return [
             'reseller_id' => Reseller::factory(),
             'from_status' => null,
-            'to_status' => Reseller::STATUS_PRE_CADASTRO,
+            'to_status' => Reseller::STATUS_PENDING,
             'actor_id' => null,
             'note' => 'Pré-cadastro recebido pelo formulário público.',
         ];
@@ -42,38 +42,38 @@ class ResellerStatusEventFactory extends Factory
     /**
      * Primeiro evento da trilha: o cadastro entrando na fila de análise.
      */
-    public function abertura(): static
+    public function opening(): static
     {
         return $this->state(fn (array $attributes): array => [
             'from_status' => null,
-            'to_status' => Reseller::STATUS_PRE_CADASTRO,
+            'to_status' => Reseller::STATUS_PENDING,
             'note' => 'Pré-cadastro recebido pelo formulário público.',
         ]);
     }
 
-    public function aprovacao(): static
+    public function approval(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'from_status' => Reseller::STATUS_PRE_CADASTRO,
-            'to_status' => Reseller::STATUS_APROVADO,
+            'from_status' => Reseller::STATUS_PENDING,
+            'to_status' => Reseller::STATUS_APPROVED,
             'note' => 'Cadastro aprovado após conferência dos documentos.',
         ]);
     }
 
-    public function reprovacao(): static
+    public function rejection(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'from_status' => Reseller::STATUS_PRE_CADASTRO,
-            'to_status' => Reseller::STATUS_REPROVADO,
+            'from_status' => Reseller::STATUS_PENDING,
+            'to_status' => Reseller::STATUS_REJECTED,
             'note' => 'Cadastro reprovado: CNAE incompatível com o comércio de joias.',
         ]);
     }
 
-    public function inativacao(): static
+    public function deactivation(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'from_status' => Reseller::STATUS_APROVADO,
-            'to_status' => Reseller::STATUS_INATIVO,
+            'from_status' => Reseller::STATUS_APPROVED,
+            'to_status' => Reseller::STATUS_INACTIVE,
             'note' => 'Revendedor inativado por ausência de pedidos no período.',
         ]);
     }
@@ -81,7 +81,7 @@ class ResellerStatusEventFactory extends Factory
     /**
      * Evento com autor identificado — o padrão é a transição automática, sem ator.
      */
-    public function porAdmin(): static
+    public function byAdmin(): static
     {
         return $this->state(fn (array $attributes): array => [
             'actor_id' => User::factory()->admin(),

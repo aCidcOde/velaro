@@ -25,6 +25,8 @@ class SettingFactory extends Factory
         // `settings.key` e UNIQUE e o formato e pontuado pelo grupo: company.nome,
         // contact.telefone, gravacao.max_chars. O sufixo aleatorio existe so para dar
         // folga ao UNIQUE; as chaves reais do prototipo vivem nos states abaixo.
+        // O vocabulario das chaves segue em pt-BR: e dado de configuracao do prototipo,
+        // fora do mapa de anglicizacao — por isso o state ingles aponta para a chave pt-BR.
         $group = fake()->randomElement(['company', 'contact', 'gravacao']);
 
         return [
@@ -40,7 +42,7 @@ class SettingFactory extends Factory
     /**
      * Nome fantasia exibido no site publico e no rodape.
      */
-    public function companyNome(): static
+    public function companyName(): static
     {
         return $this->state(fn (array $attributes): array => [
             'group' => 'company',
@@ -54,7 +56,7 @@ class SettingFactory extends Factory
     /**
      * Telefone de atendimento do rodape do site publico.
      */
-    public function contactTelefone(): static
+    public function contactPhone(): static
     {
         return $this->state(fn (array $attributes): array => [
             'group' => 'contact',
@@ -68,7 +70,7 @@ class SettingFactory extends Factory
     /**
      * Limite de caracteres da gravacao — o "11/20 caracteres" do prototipo.
      */
-    public function gravacaoMaxChars(): static
+    public function engravingMaxChars(): static
     {
         return $this->state(fn (array $attributes): array => [
             'group' => 'gravacao',
@@ -82,7 +84,7 @@ class SettingFactory extends Factory
     /**
      * Adicional de gravacao discriminado no carrinho: R$ 30,00.
      */
-    public function gravacaoPreco(): static
+    public function engravingPrice(): static
     {
         return $this->state(fn (array $attributes): array => [
             'group' => 'gravacao',
@@ -96,7 +98,7 @@ class SettingFactory extends Factory
     /**
      * Configuracao legivel pelo site publico.
      */
-    public function publica(): static
+    public function publicSetting(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_public' => true,

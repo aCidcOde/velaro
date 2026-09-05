@@ -21,15 +21,15 @@ class Reseller extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public const STATUS_PRE_CADASTRO = 'pre_cadastro';
+    public const STATUS_PENDING = 'pending';
 
-    public const STATUS_APROVADO = 'aprovado';
+    public const STATUS_APPROVED = 'approved';
 
-    public const STATUS_REPROVADO = 'reprovado';
+    public const STATUS_REJECTED = 'rejected';
 
-    public const STATUS_INATIVO = 'inativo';
+    public const STATUS_INACTIVE = 'inactive';
 
-    public const REGISTRATION_TYPE_AUTOMATICO = 'automatico';
+    public const REGISTRATION_TYPE_AUTOMATIC = 'automatic';
 
     public const REGISTRATION_TYPE_MANUAL = 'manual';
 
@@ -37,28 +37,28 @@ class Reseller extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'protocolo',
+        'protocol',
         'code',
-        'razao_social',
-        'nome_fantasia',
+        'legal_name',
+        'trade_name',
         'cnpj',
-        'inscricao_estadual',
-        'responsavel_nome',
-        'responsavel_cpf',
+        'state_registration',
+        'contact_name',
+        'contact_cpf',
         'email',
-        'telefone',
+        'phone',
         'whatsapp',
-        'cep',
-        'logradouro',
-        'numero',
-        'complemento',
-        'bairro',
-        'cidade',
-        'uf',
-        'origem_contato',
+        'postal_code',
+        'street',
+        'street_number',
+        'address_complement',
+        'district',
+        'city',
+        'state',
+        'contact_source',
         'registration_type',
-        'observacoes',
-        'observacoes_internas',
+        'notes',
+        'internal_notes',
         'status',
         'approved_at',
         'approved_by',

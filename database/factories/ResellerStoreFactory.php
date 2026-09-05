@@ -51,7 +51,7 @@ class ResellerStoreFactory extends Factory
             'phone' => fake()->numerify('(##) 3###-####'),
             'whatsapp' => fake()->numerify('(##) 9####-####'),
             'email' => 'contato@'.$slug.'.com.br',
-            'endereco' => 'Rua '.fake()->lastName().', '.fake()->numberBetween(10, 1999).' - '.fake()->randomElement(['Centro', 'Jardim América', 'Vila Nova', 'Boa Vista']),
+            'address' => 'Rua '.fake()->lastName().', '.fake()->numberBetween(10, 1999).' - '.fake()->randomElement(['Centro', 'Jardim América', 'Vila Nova', 'Boa Vista']),
             'color_primary' => '#800020',
             'color_secondary' => '#B8860B',
             'color_background' => '#FFFFFF',
@@ -69,7 +69,7 @@ class ResellerStoreFactory extends Factory
      * Vitrine no ar. `is_active` nasce `false` (default da migration) e `published_at` só existe
      * a partir da publicação.
      */
-    public function publicada(): static
+    public function published(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_active' => true,
@@ -77,7 +77,7 @@ class ResellerStoreFactory extends Factory
         ]);
     }
 
-    public function marcaPropria(): static
+    public function ownBrand(): static
     {
         return $this->state(fn (array $attributes): array => [
             'own_brand_only' => true,
@@ -88,7 +88,7 @@ class ResellerStoreFactory extends Factory
     /**
      * Loja servida em domínio próprio, e não pela rota /loja/{slug}.
      */
-    public function comDominioProprio(?string $domain = null): static
+    public function withCustomDomain(?string $domain = null): static
     {
         return $this->state(function (array $attributes) use ($domain): array {
             $slug = $attributes['slug'] ?? null;

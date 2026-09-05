@@ -19,7 +19,7 @@ class CustomerConsent extends Model
 
     public const TYPE_MARKETING = 'marketing';
 
-    public const TYPE_TRANSACIONAL = 'transacional';
+    public const TYPE_TRANSACTIONAL = 'transactional';
 
     /**
      * @var list<string>

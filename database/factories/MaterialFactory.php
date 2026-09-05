@@ -43,7 +43,7 @@ class MaterialFactory extends Factory
      * Material nomeado da ficha técnica (Prata 950, Ouro Amarelo 18k, Aço).
      * Slug determinístico: uma linha por nome — chamar duas vezes com o mesmo nome viola o UNIQUE(slug).
      */
-    public function comNome(string $name): static
+    public function named(string $name): static
     {
         return $this->state(fn (array $attributes): array => [
             'name' => $name,
@@ -51,7 +51,7 @@ class MaterialFactory extends Factory
         ]);
     }
 
-    public function inativo(): static
+    public function inactive(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_active' => false,

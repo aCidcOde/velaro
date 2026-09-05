@@ -30,7 +30,7 @@ class StockMovementFactory extends Factory
 
         return [
             'stock_item_id' => StockItem::factory(),
-            'type' => StockMovement::TYPE_ENTRADA,
+            'type' => StockMovement::TYPE_INBOUND,
             'qty' => $qty,
             'before' => $before,
             'after' => $before + $qty,
@@ -43,14 +43,14 @@ class StockMovementFactory extends Factory
     /**
      * Reabastecimento do cofre: soma ao saldo.
      */
-    public function entrada(): static
+    public function inbound(): static
     {
         return $this->state(function (array $attributes): array {
             $before = (int) fake()->numberBetween(0, 120);
             $qty = (int) fake()->numberBetween(1, 30);
 
             return [
-                'type' => StockMovement::TYPE_ENTRADA,
+                'type' => StockMovement::TYPE_INBOUND,
                 'qty' => $qty,
                 'before' => $before,
                 'after' => $before + $qty,
@@ -62,14 +62,14 @@ class StockMovementFactory extends Factory
     /**
      * Baixa por expedição: subtrai do saldo, nunca abaixo de zero.
      */
-    public function saida(): static
+    public function outbound(): static
     {
         return $this->state(function (array $attributes): array {
             $before = (int) fake()->numberBetween(5, 120);
             $qty = (int) fake()->numberBetween(1, $before);
 
             return [
-                'type' => StockMovement::TYPE_SAIDA,
+                'type' => StockMovement::TYPE_OUTBOUND,
                 'qty' => $qty,
                 'before' => $before,
                 'after' => $before - $qty,
@@ -81,14 +81,14 @@ class StockMovementFactory extends Factory
     /**
      * Ajuste manual do master — qty é o delta assinado e exige registro em audit_logs.
      */
-    public function ajuste(): static
+    public function adjustment(): static
     {
         return $this->state(function (array $attributes): array {
             $before = (int) fake()->numberBetween(5, 120);
             $qty = (int) fake()->randomElement([-4, -3, -2, -1, 1, 2, 3, 4]);
 
             return [
-                'type' => StockMovement::TYPE_AJUSTE,
+                'type' => StockMovement::TYPE_ADJUSTMENT,
                 'qty' => $qty,
                 'before' => $before,
                 'after' => $before + $qty,
@@ -100,14 +100,14 @@ class StockMovementFactory extends Factory
     /**
      * Reserva de peças para um pedido em aberto: derruba o disponível.
      */
-    public function reserva(): static
+    public function reservation(): static
     {
         return $this->state(function (array $attributes): array {
             $before = (int) fake()->numberBetween(4, 120);
             $qty = (int) fake()->numberBetween(1, min(12, $before));
 
             return [
-                'type' => StockMovement::TYPE_RESERVA,
+                'type' => StockMovement::TYPE_RESERVATION,
                 'qty' => $qty,
                 'before' => $before,
                 'after' => $before - $qty,
@@ -119,14 +119,14 @@ class StockMovementFactory extends Factory
     /**
      * Devolução da produção ao cofre depois da solicitação atendida.
      */
-    public function producao(): static
+    public function production(): static
     {
         return $this->state(function (array $attributes): array {
             $before = (int) fake()->numberBetween(0, 60);
             $qty = (int) fake()->numberBetween(2, 40);
 
             return [
-                'type' => StockMovement::TYPE_PRODUCAO,
+                'type' => StockMovement::TYPE_PRODUCTION,
                 'qty' => $qty,
                 'before' => $before,
                 'after' => $before + $qty,
@@ -135,14 +135,14 @@ class StockMovementFactory extends Factory
         });
     }
 
-    public function porAtor(?User $actor = null): static
+    public function byActor(?User $actor = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'actor_id' => $actor?->getKey() ?? User::factory(),
         ]);
     }
 
-    public function doPedido(Order $order): static
+    public function forOrder(Order $order): static
     {
         return $this->state(fn (array $attributes): array => [
             'order_id' => $order->getKey(),

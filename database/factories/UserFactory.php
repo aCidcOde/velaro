@@ -80,7 +80,7 @@ class UserFactory extends Factory
     /**
      * Vincula o usuario a um revendedor (lojista do portal B2B).
      */
-    public function paraRevendedor(?Reseller $reseller = null): static
+    public function forReseller(?Reseller $reseller = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'reseller_id' => $reseller?->getKey() ?? Reseller::factory(),

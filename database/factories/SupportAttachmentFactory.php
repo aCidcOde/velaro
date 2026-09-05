@@ -56,7 +56,7 @@ class SupportAttachmentFactory extends Factory
      * dentro de um state. Atributo passado no `create()` entra como último state e sobrescreveria
      * o `ticket_id` decidido aqui, deixando o anexo num chamado e a mensagem em outro.
      */
-    public function daMensagem(?SupportMessage $message = null): static
+    public function forMessage(?SupportMessage $message = null): static
     {
         return $this->afterMaking(function (SupportAttachment $attachment) use ($message): void {
             if ($message instanceof SupportMessage) {

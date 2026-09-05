@@ -24,9 +24,9 @@ class ResellerDocumentFactory extends Factory
     public function definition(): array
     {
         $type = (string) fake()->randomElement([
-            ResellerDocument::TYPE_CONTRATO_SOCIAL,
-            ResellerDocument::TYPE_DOCUMENTO_SOCIO,
-            ResellerDocument::TYPE_CARTAO_CNPJ,
+            ResellerDocument::TYPE_ARTICLES_OF_INCORPORATION,
+            ResellerDocument::TYPE_PARTNER_ID_DOCUMENT,
+            ResellerDocument::TYPE_CNPJ_CARD,
         ]);
 
         return [
@@ -40,26 +40,26 @@ class ResellerDocumentFactory extends Factory
         ];
     }
 
-    public function contratoSocial(): static
+    public function articlesOfIncorporation(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'type' => ResellerDocument::TYPE_CONTRATO_SOCIAL,
+            'type' => ResellerDocument::TYPE_ARTICLES_OF_INCORPORATION,
             'original_name' => 'contrato-social.pdf',
         ]);
     }
 
-    public function documentoSocio(): static
+    public function partnerIdDocument(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'type' => ResellerDocument::TYPE_DOCUMENTO_SOCIO,
+            'type' => ResellerDocument::TYPE_PARTNER_ID_DOCUMENT,
             'original_name' => 'documento-socio.pdf',
         ]);
     }
 
-    public function cartaoCnpj(): static
+    public function cnpjCard(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'type' => ResellerDocument::TYPE_CARTAO_CNPJ,
+            'type' => ResellerDocument::TYPE_CNPJ_CARD,
             'original_name' => 'cartao-cnpj.pdf',
         ]);
     }
@@ -67,7 +67,7 @@ class ResellerDocumentFactory extends Factory
     /**
      * Foto/scan enviado pelo celular, em vez do PDF.
      */
-    public function imagem(): static
+    public function image(): static
     {
         return $this->state(fn (array $attributes): array => [
             'original_name' => 'documento-'.fake()->numerify('####').'.jpg',

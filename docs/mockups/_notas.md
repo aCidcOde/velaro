@@ -124,6 +124,50 @@ Nav: Início · Sobre Nós · Catálogo · Seja um Revendedor · Fale Conosco ·
 - **Coluna direita**: COMO FUNCIONA (4 passos) · "O QUE VOCÊ PODE FAZER AGORA?" (Explorar o catálogo completo ·
   Consultar preços exclusivos · Realizar pedidos com agilidade · Acompanhar seus pedidos e novidades) · 4 selos
 
+## 1.8 FALE CONOSCO (sem página no PDF — tela desenhada para fechar a pendência)
+> O protótipo aprovado não tem esta tela: "Fale Conosco" era só uma âncora para o bloco de CTA
+> do catálogo, e `contact_leads` existia no banco sem formulário que a alimentasse. A transcrição
+> abaixo é do mockup `19-site-contato.html`, e vale como régua de aceite igual às demais.
+- **Hero** eyebrow "ATENDIMENTO A LOJISTAS" · H1 "FALE CONOSCO" ·
+  "Uma conversa direta com quem fabrica a aliança." + parágrafo (dúvida sobre coleção, prazo de produção,
+  condição comercial ou solicitação de cadastro em andamento; retorno em até 1 dia útil) ·
+  **aviso no hero**: "A Velaro é fábrica e vende somente para lojistas com CNPJ. Este canal é atendimento —
+  quem quer revender precisa do pré-cadastro."
+- **Barra de canais diretos (4 células)**, com os mesmos valores do rodapé do site (`settings` grupo `contact.*`):
+  Telefone comercial +55 (16) 99487-7800 · WhatsApp +55 (16) 99487-7800 ·
+  E-mail comercial vendas@velaro.com.br · Horário de atendimento "Segunda a sexta, das 8h às 18h"
+- **Formulário "ENVIE SUA MENSAGEM"** — 2 colunas:
+  | campo | obrig. | placeholder / tipo |
+  | Nome | * | "Como podemos chamar você?" |
+  | E-mail | * | "seuemail@exemplo.com.br" |
+  | Telefone / WhatsApp | * | máscara (00) 00000-0000 · hint "O retorno pode sair pelo mesmo número, por WhatsApp." |
+  | Empresa | opcional | "Nome fantasia da sua loja" · hint "ajuda a direcionar o atendimento" |
+  | Assunto | * | select "Selecione o assunto", largura total |
+  | Mensagem | * | textarea largura total · hint "Até 1.000 caracteres." |
+  - **Opções do select Assunto**: Condições comerciais e catálogo · Acompanhar solicitação de cadastro ·
+    Suporte a lojista já aprovado · Prazo de produção e entrega · Imprensa e parcerias · Outro assunto
+  - **Consentimento (1 checkbox obrigatório)**: "Li e concordo com a Política de Privacidade e autorizo a
+    Velaro a usar os dados acima para responder a este contato." (link para a 17) +
+    nota "O aceite é obrigatório para enviar e fica registrado com data, hora, IP e a versão do texto vigente —
+    a mesma prova exigida no cadastro de lojista."
+  - Botão **ENVIAR MENSAGEM ›** (largura total) · nota "Registramos de qual página do site você veio,
+    para direcionar o atendimento."
+- **Coluna lateral (3 cards)**:
+  1. "QUER REVENDER A VELARO?" (escuro) — "Este formulário **não substitui o pré-cadastro**" + 4 negativas
+     (Não cria cadastro de revendedor · Não libera preço nem condição comercial · Não dá acesso ao Portal do
+     Lojista · Não dispensa o envio dos documentos) + botão **QUERO SER REVENDEDOR** → tela 1.4
+  2. "COMO FUNCIONA O ATENDIMENTO" (escuro) — 3 passos: 1 Mensagem recebida (entra na fila com a página de
+     origem registrada) · 2 Triagem pelo assunto (o contato ganha responsável e data de retorno) ·
+     3 Resposta em até 1 dia útil (e-mail ou WhatsApp)
+  3. "JÁ É LOJISTA VELARO?" — pedido, financeiro e produção se resolvem pelo chamado dentro do Portal +
+     botões ENTRAR NO PORTAL (tela 0) e ACOMPANHAR SOLICITAÇÃO (tela 1.6)
+- **Faixa de aviso** "Contato não é chamado." + "Quem ainda não é revendedor não abre chamado de suporte:
+  a mensagem vira um lead na fila comercial, com responsável e data de atendimento registrados."
+- **Faixa** 4 pilares + rodapé iguais aos das demais telas do site
+> ⚠ FALTA no banco: o aceite LGPD desta tela não tem onde ser gravado. `reseller_consents` exige
+> `reseller_id` NOT NULL e o lead não é revendedor; `contact_leads` precisa das colunas de aceite
+> (data, IP, user agent e versão do texto).
+
 # ─────────────────── ETAPA 2 · PORTAL DO LOJISTA ───────────────────
 > Shell do portal: sidebar (Dashboard · Catálogo Revendedor · Clientes · Financeiro · Pedidos ·
 > Personalização da loja · Preços e margens · Suporte · Vitrine para clientes) +

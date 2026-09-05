@@ -17,11 +17,11 @@ class ResellerDocument extends Model
 {
     use HasFactory;
 
-    public const TYPE_CONTRATO_SOCIAL = 'contrato_social';
+    public const TYPE_ARTICLES_OF_INCORPORATION = 'articles_of_incorporation';
 
-    public const TYPE_DOCUMENTO_SOCIO = 'documento_socio';
+    public const TYPE_PARTNER_ID_DOCUMENT = 'partner_id_document';
 
-    public const TYPE_CARTAO_CNPJ = 'cartao_cnpj';
+    public const TYPE_CNPJ_CARD = 'cnpj_card';
 
     /**
      * @var list<string>

@@ -34,14 +34,14 @@ class FavoriteFactory extends Factory
         ];
     }
 
-    public function naLoja(?ResellerStore $store = null): static
+    public function inStore(?ResellerStore $store = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'reseller_store_id' => $store?->getKey() ?? ResellerStore::factory(),
         ]);
     }
 
-    public function doCliente(?Customer $customer = null): static
+    public function forCustomer(?Customer $customer = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'customer_id' => $customer?->getKey() ?? Customer::factory(),

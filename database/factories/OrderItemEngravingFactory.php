@@ -21,7 +21,7 @@ class OrderItemEngravingFactory extends Factory
     /**
      * Preco da gravacao interna no prototipo Velaro: R$ 35,00 por alianca.
      */
-    private const PRECO_GRAVACAO = 35.00;
+    private const ENGRAVING_PRICE = 35.00;
 
     /**
      * @return array<string, mixed>
@@ -29,22 +29,22 @@ class OrderItemEngravingFactory extends Factory
     public function definition(): array
     {
         // A data gravada e a mesma que aparece no texto — sao o mesmo fato.
-        $data = fake()->dateTimeBetween('-2 years', '+1 year');
+        $engravedOn = fake()->dateTimeBetween('-2 years', '+1 year');
 
         // Iniciais do casal, sem repetir a mesma letra nos dois lados.
-        $iniciais = fake()->randomElements(range('A', 'Z'), 2);
+        $initials = fake()->randomElements(range('A', 'Z'), 2);
 
-        $texto = sprintf('%s & %s %s', $iniciais[0], $iniciais[1], $data->format('d.m.Y'));
+        $text = sprintf('%s & %s %s', $initials[0], $initials[1], $engravedOn->format('d.m.Y'));
 
         return [
             // order_item_id e UNIQUE: a gravacao e 1:1 com o item do pedido.
             'order_item_id' => OrderItem::factory(),
             'enabled' => true,
-            'text' => $texto,
-            'date' => $data,
+            'text' => $text,
+            'date' => $engravedOn,
             // chars e o contador cobrado — precisa bater com o texto, nunca ser sorteado.
-            'chars' => mb_strlen($texto),
-            'price' => self::PRECO_GRAVACAO,
+            'chars' => mb_strlen($text),
+            'price' => self::ENGRAVING_PRICE,
         ];
     }
 
@@ -52,7 +52,7 @@ class OrderItemEngravingFactory extends Factory
      * Item sem gravacao: o registro existe, mas nao conta caracteres nem cobra nada
      * (exatamente os defaults da migration).
      */
-    public function desabilitada(): static
+    public function disabled(): static
     {
         return $this->state(fn (array $attributes): array => [
             'enabled' => false,

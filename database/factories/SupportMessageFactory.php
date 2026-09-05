@@ -27,7 +27,7 @@ class SupportMessageFactory extends Factory
         return [
             'ticket_id' => SupportTicket::factory(),
             'author_id' => User::factory(),
-            'author_role' => SupportMessage::AUTHOR_ROLE_REVENDEDOR,
+            'author_role' => SupportMessage::AUTHOR_ROLE_RESELLER,
             'body' => fake()->randomElement([
                 'Boa tarde! A cliente pediu a troca do aro 16 para o aro 18. Como devo proceder?',
                 'O pedido chegou sem a gravação interna que foi combinada na compra.',
@@ -38,7 +38,7 @@ class SupportMessageFactory extends Factory
         ];
     }
 
-    public function daVelaro(): static
+    public function fromVelaro(): static
     {
         return $this->state(fn (array $attributes): array => [
             'author_role' => SupportMessage::AUTHOR_ROLE_VELARO,
@@ -50,7 +50,7 @@ class SupportMessageFactory extends Factory
         ]);
     }
 
-    public function notaInterna(): static
+    public function internalNote(): static
     {
         return $this->state(fn (array $attributes): array => [
             'author_role' => SupportMessage::AUTHOR_ROLE_VELARO,

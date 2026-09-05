@@ -29,13 +29,13 @@ class OrderPromotionFactory extends Factory
             'order_id' => Order::factory(),
             'promotion_id' => Promotion::factory(),
             // Snapshot do tipo da promocao no instante da aplicacao: a promocao pode ser
-            // editada depois, o pedido nao muda. Use daPromocao() para casar os dois.
+            // editada depois, o pedido nao muda. Use fromPromotion() para casar os dois.
             'type' => fake()->randomElement([
-                OrderPromotion::TYPE_DESCONTO_PROGRESSIVO,
-                OrderPromotion::TYPE_PRECO_ESPECIAL,
-                OrderPromotion::TYPE_FRETE_GRATIS,
-                OrderPromotion::TYPE_DESCONTO_FIXO,
-                OrderPromotion::TYPE_LANCAMENTO,
+                OrderPromotion::TYPE_TIERED_DISCOUNT,
+                OrderPromotion::TYPE_SPECIAL_PRICE,
+                OrderPromotion::TYPE_FREE_SHIPPING,
+                OrderPromotion::TYPE_FIXED_DISCOUNT,
+                OrderPromotion::TYPE_LAUNCH,
             ]),
             'discount_amount' => fake()->randomFloat(2, 45, 780),
             'applied_at' => now(),
@@ -45,11 +45,11 @@ class OrderPromotionFactory extends Factory
     /**
      * Aplica uma promocao existente e copia o tipo dela — o snapshot fiel.
      */
-    public function daPromocao(Promotion $promocao): static
+    public function fromPromotion(Promotion $promotion): static
     {
         return $this->state(fn (array $attributes): array => [
-            'promotion_id' => $promocao->getKey(),
-            'type' => $promocao->type,
+            'promotion_id' => $promotion->getKey(),
+            'type' => $promotion->type,
         ]);
     }
 }

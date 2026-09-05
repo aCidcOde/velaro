@@ -17,15 +17,15 @@ class OrderPromotion extends Model
 {
     use HasFactory;
 
-    public const TYPE_DESCONTO_PROGRESSIVO = 'desconto_progressivo';
+    public const TYPE_TIERED_DISCOUNT = 'tiered_discount';
 
-    public const TYPE_PRECO_ESPECIAL = 'preco_especial';
+    public const TYPE_SPECIAL_PRICE = 'special_price';
 
-    public const TYPE_FRETE_GRATIS = 'frete_gratis';
+    public const TYPE_FREE_SHIPPING = 'free_shipping';
 
-    public const TYPE_DESCONTO_FIXO = 'desconto_fixo';
+    public const TYPE_FIXED_DISCOUNT = 'fixed_discount';
 
-    public const TYPE_LANCAMENTO = 'lancamento';
+    public const TYPE_LAUNCH = 'launch';
 
     /**
      * @var list<string>

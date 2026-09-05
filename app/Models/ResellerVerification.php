@@ -17,7 +17,7 @@ class ResellerVerification extends Model
 {
     use HasFactory;
 
-    public const STATUS_PENDENTE = 'pendente';
+    public const STATUS_PENDING = 'pending';
 
     /**
      * @var list<string>

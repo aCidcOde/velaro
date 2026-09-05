@@ -44,7 +44,7 @@ class FinishFactory extends Factory
      * Acabamento nomeado da ficha técnica (Polida, Fosca, Diamantada).
      * Slug determinístico: uma linha por nome — chamar duas vezes com o mesmo nome viola o UNIQUE(slug).
      */
-    public function comNome(string $name): static
+    public function named(string $name): static
     {
         return $this->state(fn (array $attributes): array => [
             'name' => $name,
@@ -52,7 +52,7 @@ class FinishFactory extends Factory
         ]);
     }
 
-    public function inativo(): static
+    public function inactive(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_active' => false,

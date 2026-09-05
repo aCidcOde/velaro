@@ -9,6 +9,7 @@ Poe o consumidor final na carteira de um lojista, com endereco e datas que alime
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -45,6 +46,17 @@ return new class extends Migration
 
     public function down(): void
     {
+        // O up() tornou `user_id` nulavel; restaurar NOT NULL quebraria na metade se algum
+        // registro ficou orfao. Falha antes de qualquer DDL, com o schema intacto.
+        $orfaos = DB::table('customers')->whereNull('user_id')->count();
+
+        if ($orfaos > 0) {
+            throw new RuntimeException(
+                'Rollback bloqueado: '.$orfaos.' registro(s) em customers sem dono. '
+                .'Reatribua o `user_id` antes de reverter esta migracao.'
+            );
+        }
+
         Schema::table('customers', function (Blueprint $table): void {
             $table->dropForeign(['reseller_id']);
             $table->dropForeign(['user_id']);

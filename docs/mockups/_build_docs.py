@@ -97,7 +97,7 @@ Fontes: Anexo I (escopo funcional e critérios de aceite), Plano de Negócio VEL
 e a apresentação "PLATAFORMA B2B VELARO ALIANÇAS".
 
 - Mockups navegáveis: [`docs/mockups/`](../mockups/index.html)
-- Mapa consolidado das 31 telas: [`docs/mockups/mapa.html`](../mockups/mapa.html)
+- Mapa consolidado das {len(m.T)} telas: [`docs/mockups/mapa.html`](../mockups/mapa.html)
 
 **Como ler.** A seção 5 de cada documento é a régua de aceite: ela transcreve o que o
 protótipo mostra. Ausência de campo, regra, permissão, automação ou relatório ali descrito

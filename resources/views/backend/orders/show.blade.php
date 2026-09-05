@@ -42,14 +42,29 @@
             </section>
 
             <section class="rounded-4 border border-slate-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
-                <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Atualizar pedido</h2>
-                <form method="POST" action="{{ route('backend.orders.update', $order) }}" class="mt-6 grid gap-6">
-                    @include('orders._form', ['order' => $order, 'customers' => $order->user->customers()->orderBy('name')->get(), 'products' => $order->user->products()->orderBy('name')->get(), 'method' => 'PUT'])
-
-                    <div class="flex justify-end">
-                        <button type="submit" class="rounded-full bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400">Salvar alterações</button>
+                @if ($order->user === null)
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Histórico preservado</h2>
+                    <p class="mt-4 text-sm text-slate-600 dark:text-slate-300">A conta responsável foi excluída. O histórico e os itens permanecem disponíveis para consulta. A edição está indisponível.</p>
+                    <div class="mt-6 grid gap-4 text-sm">
+                        @forelse ($order->items as $item)
+                            <dl class="grid min-w-0 gap-1 wrap-anywhere">
+                                <dt class="font-medium text-slate-900 dark:text-slate-100">{{ $item->product?->name ?? 'Produto indisponível' }}</dt>
+                                <dd class="text-slate-600 dark:text-slate-300">{{ $item->quantity }} × R$ {{ number_format((float) $item->unit_price, 2, ',', '.') }} · Total: R$ {{ number_format((float) $item->total_price, 2, ',', '.') }}</dd>
+                            </dl>
+                        @empty
+                            <div class="text-slate-600 dark:text-slate-300">Nenhum item registrado.</div>
+                        @endforelse
                     </div>
-                </form>
+                @else
+                    <h2 class="text-lg font-semibold text-slate-900 dark:text-slate-100">Atualizar pedido</h2>
+                    <form method="POST" action="{{ route('backend.orders.update', $order) }}" class="mt-6 grid gap-6">
+                        @include('orders._form', ['order' => $order, 'customers' => $order->user->customers()->orderBy('name')->get(), 'products' => $order->user->products()->orderBy('name')->get(), 'method' => 'PUT'])
+
+                        <div class="flex justify-end">
+                            <button type="submit" class="rounded-full bg-sky-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-sky-400">Salvar alterações</button>
+                        </div>
+                    </form>
+                @endif
             </section>
         </div>
     </div>

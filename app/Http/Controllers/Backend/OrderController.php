@@ -55,6 +55,8 @@ class OrderController extends Controller
 
     public function update(OrderUpdateRequest $request, Order $order): RedirectResponse
     {
+        abort_if($order->user === null, 409, 'Este pedido não pode ser editado porque a conta responsável foi excluída. O histórico permanece disponível para consulta.');
+
         $before = $order->toArray();
         $data = $request->validated();
         $customer = $order->user->customers()->find($data['customer_id']);

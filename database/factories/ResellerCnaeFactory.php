@@ -41,7 +41,7 @@ class ResellerCnaeFactory extends Factory
     /**
      * CNAE principal do ramo: 4783-1/01, comércio varejista de artigos de joalheria.
      */
-    public function principal(): static
+    public function primary(): static
     {
         return $this->state(fn (array $attributes): array => [
             'code' => '4783-1/01',
@@ -51,7 +51,7 @@ class ResellerCnaeFactory extends Factory
         ]);
     }
 
-    public function secundario(): static
+    public function secondary(): static
     {
         return $this->state(fn (array $attributes): array => [
             'code' => '4783-1/02',
@@ -64,7 +64,7 @@ class ResellerCnaeFactory extends Factory
     /**
      * CNAE fora do ramo — derruba a compatibilidade na verificação do cadastro.
      */
-    public function incompativel(): static
+    public function incompatible(): static
     {
         return $this->state(fn (array $attributes): array => [
             'code' => '5611-2/01',

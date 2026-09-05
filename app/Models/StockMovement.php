@@ -17,15 +17,15 @@ class StockMovement extends Model
 {
     use HasFactory;
 
-    public const TYPE_ENTRADA = 'entrada';
+    public const TYPE_INBOUND = 'inbound';
 
-    public const TYPE_SAIDA = 'saida';
+    public const TYPE_OUTBOUND = 'outbound';
 
-    public const TYPE_AJUSTE = 'ajuste';
+    public const TYPE_ADJUSTMENT = 'adjustment';
 
-    public const TYPE_RESERVA = 'reserva';
+    public const TYPE_RESERVATION = 'reservation';
 
-    public const TYPE_PRODUCAO = 'producao';
+    public const TYPE_PRODUCTION = 'production';
 
     /**
      * @var list<string>

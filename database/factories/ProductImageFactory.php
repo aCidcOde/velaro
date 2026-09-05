@@ -24,15 +24,15 @@ class ProductImageFactory extends Factory
      */
     public function definition(): array
     {
-        $peca = (string) fake()->randomElement([
+        $piece = (string) fake()->randomElement([
             'Aliança Clássica',
             'Aliança Anatômica',
             'Aliança Diamantada',
             'Solitário Clássico',
             'Anel Aparador',
         ]);
-        $largura = (int) fake()->randomElement([3, 4, 5, 6, 8]);
-        $angulo = (string) fake()->randomElement([
+        $width = (int) fake()->randomElement([3, 4, 5, 6, 8]);
+        $angle = (string) fake()->randomElement([
             'vista frontal',
             'vista lateral',
             'par sobreposto',
@@ -41,14 +41,14 @@ class ProductImageFactory extends Factory
 
         return [
             'product_id' => Product::factory(),
-            'path' => 'produtos/'.Str::slug($peca.' '.$largura.'mm').'/'.fake()->unique()->numerify('foto-####').'.webp',
-            'alt' => $peca.' '.$largura.'mm — '.$angulo,
+            'path' => 'produtos/'.Str::slug($piece.' '.$width.'mm').'/'.fake()->unique()->numerify('foto-####').'.webp',
+            'alt' => $piece.' '.$width.'mm — '.$angle,
             'position' => fake()->numberBetween(1, 6),
             'is_primary' => false,
         ];
     }
 
-    public function paraProduto(Product $product): static
+    public function forProduct(Product $product): static
     {
         return $this->state(fn (array $attributes): array => [
             'product_id' => $product->getKey(),
@@ -58,7 +58,7 @@ class ProductImageFactory extends Factory
     /**
      * Foto de capa do produto — primeira posição da galeria.
      */
-    public function principal(): static
+    public function primary(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_primary' => true,

@@ -13,9 +13,9 @@ class Customer extends Model
     /** @use HasFactory<CustomerFactory> */
     use HasFactory;
 
-    public const PERSON_TYPE_PF = 'pf';
+    public const PERSON_TYPE_INDIVIDUAL = 'individual';
 
-    public const PERSON_TYPE_PJ = 'pj';
+    public const PERSON_TYPE_COMPANY = 'company';
 
     /**
      * @var list<string>
@@ -29,14 +29,14 @@ class Customer extends Model
         'email',
         'phone',
         'document',
-        'cep',
-        'endereco',
-        'cidade',
-        'uf',
-        'data_nascimento',
-        'data_casamento',
-        'data_namoro',
-        'origem_contato',
+        'postal_code',
+        'address',
+        'city',
+        'state',
+        'birth_date',
+        'wedding_date',
+        'relationship_date',
+        'contact_source',
         'notes',
         'meta',
     ];
@@ -47,9 +47,9 @@ class Customer extends Model
     protected function casts(): array
     {
         return [
-            'data_nascimento' => 'date',
-            'data_casamento' => 'date',
-            'data_namoro' => 'date',
+            'birth_date' => 'date',
+            'wedding_date' => 'date',
+            'relationship_date' => 'date',
             'meta' => 'array',
         ];
     }
@@ -73,9 +73,9 @@ class Customer extends Model
     }
 
     /** @return HasMany<Order, $this> */
-    public function ordersRetirados(): HasMany
+    public function pickedUpOrders(): HasMany
     {
-        return $this->hasMany(Order::class, 'retirado_por_customer_id');
+        return $this->hasMany(Order::class, 'picked_up_by_customer_id');
     }
 
     /** @return HasMany<CustomerConsent, $this> */

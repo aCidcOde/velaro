@@ -19,7 +19,7 @@ class HelpArticle extends Model
 
     public const TYPE_FAQ = 'faq';
 
-    public const TYPE_GUIA = 'guia';
+    public const TYPE_GUIDE = 'guide';
 
     public const TYPE_VIDEO = 'video';
 

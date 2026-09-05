@@ -48,7 +48,7 @@ class ProductCollectionFactory extends Factory
      * Coleção nomeada do catálogo (Classic, Diamond, Premium) com slug derivado do nome.
      * Slug determinístico: uma linha por nome — chamar duas vezes com o mesmo nome viola o UNIQUE(slug).
      */
-    public function comNome(string $name): static
+    public function named(string $name): static
     {
         return $this->state(fn (array $attributes): array => [
             'name' => $name,
@@ -58,7 +58,7 @@ class ProductCollectionFactory extends Factory
         ]);
     }
 
-    public function inativa(): static
+    public function inactive(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_active' => false,

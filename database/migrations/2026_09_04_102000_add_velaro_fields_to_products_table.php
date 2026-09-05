@@ -9,12 +9,30 @@ Da ao produto a ficha tecnica de joalheria, a taxonomia e o slug da rota publica
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
     public function up(): void
     {
+        // O SKU deixa de ser unico por dono e passa a ser unico global. Duas contas com o
+        // mesmo SKU quebrariam o indice no meio da migracao, depois do indice antigo ja
+        // ter sido dropado. Falha antes de qualquer DDL.
+        $duplicados = DB::table('products')
+            ->select('sku')
+            ->whereNotNull('sku')
+            ->groupBy('sku')
+            ->havingRaw('COUNT(*) > 1')
+            ->pluck('sku');
+
+        if ($duplicados->isNotEmpty()) {
+            throw new RuntimeException(
+                'Migracao bloqueada: SKUs duplicados entre contas impedem o indice unico global. '
+                .'Resolva antes de migrar: '.$duplicados->implode(', ')
+            );
+        }
+
         Schema::table('products', function (Blueprint $table): void {
             $table->dropUnique(['user_id', 'sku']);
             $table->dropForeign(['user_id']);
@@ -53,6 +71,17 @@ return new class extends Migration
 
     public function down(): void
     {
+        // O up() tornou `user_id` nulavel; restaurar NOT NULL quebraria na metade se algum
+        // registro ficou orfao. Falha antes de qualquer DDL, com o schema intacto.
+        $orfaos = DB::table('products')->whereNull('user_id')->count();
+
+        if ($orfaos > 0) {
+            throw new RuntimeException(
+                'Rollback bloqueado: '.$orfaos.' registro(s) em products sem dono. '
+                .'Reatribua o `user_id` antes de reverter esta migracao.'
+            );
+        }
+
         Schema::table('products', function (Blueprint $table): void {
             $table->dropForeign(['finish_id']);
             $table->dropForeign(['material_id']);

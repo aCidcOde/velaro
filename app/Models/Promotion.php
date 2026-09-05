@@ -18,25 +18,25 @@ class Promotion extends Model
 {
     use HasFactory;
 
-    public const TYPE_DESCONTO_PROGRESSIVO = 'desconto_progressivo';
+    public const TYPE_TIERED_DISCOUNT = 'tiered_discount';
 
-    public const TYPE_PRECO_ESPECIAL = 'preco_especial';
+    public const TYPE_SPECIAL_PRICE = 'special_price';
 
-    public const TYPE_FRETE_GRATIS = 'frete_gratis';
+    public const TYPE_FREE_SHIPPING = 'free_shipping';
 
-    public const TYPE_DESCONTO_FIXO = 'desconto_fixo';
+    public const TYPE_FIXED_DISCOUNT = 'fixed_discount';
 
-    public const TYPE_LANCAMENTO = 'lancamento';
+    public const TYPE_LAUNCH = 'launch';
 
-    public const STATUS_RASCUNHO = 'rascunho';
+    public const STATUS_DRAFT = 'draft';
 
-    public const STATUS_AGENDADA = 'agendada';
+    public const STATUS_SCHEDULED = 'scheduled';
 
-    public const STATUS_ATIVA = 'ativa';
+    public const STATUS_ACTIVE = 'active';
 
-    public const STATUS_PAUSADA = 'pausada';
+    public const STATUS_PAUSED = 'paused';
 
-    public const STATUS_ENCERRADA = 'encerrada';
+    public const STATUS_ENDED = 'ended';
 
     /**
      * @var list<string>

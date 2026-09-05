@@ -17,15 +17,15 @@ class NotificationLog extends Model
 {
     use HasFactory;
 
-    public const TYPE_PEDIDO_PRONTO = 'pedido_pronto';
+    public const TYPE_ORDER_READY = 'order_ready';
 
     public const CHANNEL_EMAIL = 'email';
 
     public const CHANNEL_WHATSAPP = 'whatsapp';
 
-    public const RECIPIENT_TYPE_REVENDEDOR = 'revendedor';
+    public const RECIPIENT_TYPE_RESELLER = 'reseller';
 
-    public const RECIPIENT_TYPE_CLIENTE = 'cliente';
+    public const RECIPIENT_TYPE_CUSTOMER = 'customer';
 
     /**
      * @var list<string>

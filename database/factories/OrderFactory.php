@@ -39,8 +39,8 @@ class OrderFactory extends Factory
             'reference' => strtoupper(fake()->bothify('REF-####')),
             'status' => fake()->randomElement(['draft', 'awaiting_payment', 'paid', 'in_progress', 'completed', 'canceled', 'error']),
             // Status canonicos do modulo Velaro — independentes entre si e do espelho `status`.
-            'operational_status' => Order::OPERATIONAL_STATUS_REGISTRADO,
-            'payment_status' => Order::PAYMENT_STATUS_PENDENTE,
+            'operational_status' => Order::OPERATIONAL_STATUS_REGISTERED,
+            'payment_status' => Order::PAYMENT_STATUS_PENDING,
             'total_amount' => $totalAmount,
             'subtotal_amount' => $subtotalAmount,
             'engraving_amount' => $engravingAmount,
@@ -57,7 +57,7 @@ class OrderFactory extends Factory
     /**
      * Pedido feito por um revendedor no portal B2B.
      */
-    public function paraRevendedor(?Reseller $reseller = null): static
+    public function forReseller(?Reseller $reseller = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'reseller_id' => $reseller?->getKey() ?? Reseller::factory(),
@@ -67,10 +67,10 @@ class OrderFactory extends Factory
     /**
      * Pedido que chegou na loja e aguarda o cliente final.
      */
-    public function prontoParaRetirada(): static
+    public function readyForPickup(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'operational_status' => Order::OPERATIONAL_STATUS_PRONTO_RETIRADA,
+            'operational_status' => Order::OPERATIONAL_STATUS_READY_FOR_PICKUP,
             'arrived_at' => now()->subDay(),
         ]);
     }
@@ -78,14 +78,14 @@ class OrderFactory extends Factory
     /**
      * Pedido ja entregue ao cliente final no balcao da loja.
      */
-    public function retirado(): static
+    public function pickedUp(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'operational_status' => Order::OPERATIONAL_STATUS_RETIRADO,
+            'operational_status' => Order::OPERATIONAL_STATUS_PICKED_UP,
             'arrived_at' => now()->subDays(3),
-            'retirado_em' => now(),
-            'retirado_por' => fake()->name(),
-            'retirado_por_documento' => fake()->numerify('###.###.###-##'),
+            'picked_up_at' => now(),
+            'picked_up_by_name' => fake()->name(),
+            'picked_up_by_document' => fake()->numerify('###.###.###-##'),
         ]);
     }
 }

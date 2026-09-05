@@ -21,9 +21,9 @@ class Payment extends Model
 
     public const METHOD_BOLETO = 'boleto';
 
-    public const METHOD_TRANSFERENCIA = 'transferencia';
+    public const METHOD_BANK_TRANSFER = 'bank_transfer';
 
-    public const STATUS_PENDENTE = 'pendente';
+    public const STATUS_PENDING = 'pending';
 
     /**
      * @var list<string>

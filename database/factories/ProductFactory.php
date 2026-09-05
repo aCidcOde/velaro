@@ -43,17 +43,17 @@ class ProductFactory extends Factory
     /**
      * Produto do catalogo Velaro: taxonomia completa e ficha tecnica da alianca.
      */
-    public function daVelaro(): static
+    public function velaroCatalog(): static
     {
         return $this->state(fn (array $attributes): array => [
             'collection_id' => ProductCollection::factory(),
             'category_id' => Category::factory(),
             'material_id' => Material::factory(),
             'finish_id' => Finish::factory(),
-            'largura_mm' => fake()->randomElement([4, 5, 6, 8]),
-            'formato' => fake()->randomElement(['Reta', 'Anatômica']),
-            'permite_gravacao' => true,
-            'gravacao_max_chars' => fake()->randomElement([20, 25, 30]),
+            'width_mm' => fake()->randomElement([4, 5, 6, 8]),
+            'shape' => fake()->randomElement(['Reta', 'Anatômica']),
+            'allows_engraving' => true,
+            'engraving_max_chars' => fake()->randomElement([20, 25, 30]),
         ]);
     }
 }

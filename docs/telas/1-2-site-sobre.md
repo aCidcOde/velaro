@@ -14,7 +14,7 @@
 | Tabela | Origem | Campos |
 |--------|--------|--------|
 | `settings` | novo (módulo Velaro) | about.* — história, fábrica própria, diferenciais, mídia |
-| `contact_leads` | novo (módulo Velaro) | origin = sobre, subject, message — o CTA final “Vamos crescer juntos? · SOLICITAR ATENDIMENTO (Fale com um especialista)”; mesmo formulário da 1.1 |
+| `contact_leads` | novo (módulo Velaro) | origin = sobre — o CTA final “Vamos crescer juntos? · SOLICITAR ATENDIMENTO (Fale com um especialista)” encaminha para a **1.8**, que grava o lead; esta página não tem formulário próprio |
 
 > O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
 > core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
@@ -26,7 +26,7 @@
 ## 3. Regras críticas
 
 1. Página institucional: fábrica própria, qualidade, atendimento consultivo, logística, posicionamento B2B.
-2. O CTA de atendimento desta página cai no mesmo `contact_leads` da home, marcado por `origin`.
+2. O CTA de atendimento leva para `GET /contato` (tela **1.8**); o lead nasce lá, com `origin = sobre`.
 
 ## 4. Critérios de aceite
 

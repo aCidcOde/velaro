@@ -32,7 +32,7 @@ class ResellerStoreProductFactory extends Factory
         ];
     }
 
-    public function semDestaque(): static
+    public function notFeatured(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_featured' => false,

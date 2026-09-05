@@ -16,10 +16,14 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * Consulta automática do CNPJ/CNAE do cadastro.
  *
- * ⚠ `status` fica sempre em `ResellerVerification::STATUS_PENDENTE`, a única constante que o
- * model declara e o default da migration. Os states `aprovada()` e `reprovada()` descrevem o
+ * ⚠ `status` fica sempre em `ResellerVerification::STATUS_PENDING`, a única constante que o
+ * model declara e o default da migration. Os states `approved()` e `rejected()` descrevem o
  * desfecho pelos quatro booleanos, pelo `score` e pelo `result` — não por `status`, porque o
  * vocabulário de desfecho ainda não está acordado no model.
+ *
+ * As quatro colunas booleanas (`cnpj_valido`, `empresa_ativa`, `cnaes_compativeis`,
+ * `documentacao_enviada`) e o `raw_payload` da Receita Federal seguem em pt-BR: não constam
+ * do mapa de anglicização e o payload espelha os campos do provedor.
  *
  * @extends Factory<ResellerVerification>
  */
@@ -37,7 +41,7 @@ class ResellerVerificationFactory extends Factory
 
         return [
             'reseller_id' => Reseller::factory(),
-            'status' => ResellerVerification::STATUS_PENDENTE,
+            'status' => ResellerVerification::STATUS_PENDING,
             'cnpj_valido' => $cnpjValido,
             'empresa_ativa' => $empresaAtiva,
             'cnaes_compativeis' => $cnaesCompativeis,
@@ -52,10 +56,10 @@ class ResellerVerificationFactory extends Factory
     /**
      * Consulta ainda não executada — enfileirada, sem resultado.
      */
-    public function pendente(): static
+    public function pending(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => ResellerVerification::STATUS_PENDENTE,
+            'status' => ResellerVerification::STATUS_PENDING,
             'cnpj_valido' => null,
             'empresa_ativa' => null,
             'cnaes_compativeis' => null,
@@ -68,9 +72,9 @@ class ResellerVerificationFactory extends Factory
     }
 
     /**
-     * Os quatro checks verdes e score cheio. `status` permanece em `STATUS_PENDENTE`.
+     * Os quatro checks verdes e score cheio. `status` permanece em `STATUS_PENDING`.
      */
-    public function aprovada(): static
+    public function approved(): static
     {
         return $this->state(fn (array $attributes): array => [
             'cnpj_valido' => true,
@@ -85,9 +89,9 @@ class ResellerVerificationFactory extends Factory
     }
 
     /**
-     * O inverso: os quatro checks reprovados e score zero. `status` permanece em `STATUS_PENDENTE`.
+     * O inverso: os quatro checks reprovados e score zero. `status` permanece em `STATUS_PENDING`.
      */
-    public function reprovada(): static
+    public function rejected(): static
     {
         return $this->state(fn (array $attributes): array => [
             'cnpj_valido' => false,

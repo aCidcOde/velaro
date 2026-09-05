@@ -27,11 +27,11 @@ class Product extends Model
         'finish_id',
         'sku',
         'description',
-        'largura_mm',
-        'formato',
-        'permite_gravacao',
-        'gravacao_max_chars',
-        'prazo_entrega_dias',
+        'width_mm',
+        'shape',
+        'allows_engraving',
+        'engraving_max_chars',
+        'delivery_days',
         'is_made_to_order',
         'price', // custo B2B (custo Velaro) cobrado do lojista — nao e preco de vitrine
         'is_active',
@@ -44,10 +44,10 @@ class Product extends Model
     protected function casts(): array
     {
         return [
-            'largura_mm' => 'decimal:2',
-            'permite_gravacao' => 'boolean',
-            'gravacao_max_chars' => 'integer',
-            'prazo_entrega_dias' => 'integer',
+            'width_mm' => 'decimal:2',
+            'allows_engraving' => 'boolean',
+            'engraving_max_chars' => 'integer',
+            'delivery_days' => 'integer',
             'is_made_to_order' => 'boolean',
             'price' => 'decimal:2',
             'is_active' => 'boolean',

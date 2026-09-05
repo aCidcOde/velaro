@@ -19,23 +19,23 @@ class SupportTicket extends Model
 {
     use HasFactory;
 
-    public const PRIORITY_ALTA = 'alta';
+    public const PRIORITY_HIGH = 'high';
 
-    public const PRIORITY_MEDIA = 'media';
+    public const PRIORITY_MEDIUM = 'medium';
 
-    public const PRIORITY_BAIXA = 'baixa';
+    public const PRIORITY_LOW = 'low';
 
-    public const STATUS_ABERTA = 'aberta';
+    public const STATUS_OPEN = 'open';
 
-    public const STATUS_EM_ATENDIMENTO = 'em_atendimento';
+    public const STATUS_IN_PROGRESS = 'in_progress';
 
-    public const STATUS_AGUARDANDO_RETORNO = 'aguardando_retorno';
+    public const STATUS_AWAITING_CUSTOMER = 'awaiting_customer';
 
-    public const STATUS_EM_ANALISE = 'em_analise';
+    public const STATUS_UNDER_REVIEW = 'under_review';
 
-    public const STATUS_RESPONDIDO = 'respondido';
+    public const STATUS_ANSWERED = 'answered';
 
-    public const STATUS_RESOLVIDO = 'resolvido';
+    public const STATUS_RESOLVED = 'resolved';
 
     /**
      * @var list<string>

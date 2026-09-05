@@ -19,7 +19,7 @@ class SupportMessage extends Model
 {
     use HasFactory;
 
-    public const AUTHOR_ROLE_REVENDEDOR = 'revendedor';
+    public const AUTHOR_ROLE_RESELLER = 'reseller';
 
     public const AUTHOR_ROLE_VELARO = 'velaro';
 

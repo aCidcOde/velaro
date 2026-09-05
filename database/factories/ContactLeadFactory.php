@@ -25,7 +25,7 @@ class ContactLeadFactory extends Factory
     {
         // O "Fale conosco" do site publico: grava lead, nao cria revendedor nem acesso.
         // `origin` guarda a pagina de partida e `status` fica no default da migration
-        // ('novo'), porque o model nao declara constante para a fila de atendimento.
+        // ('new'), porque o model nao declara constante para a fila de atendimento.
         return [
             'name' => fake()->randomElement(['Maria', 'João', 'Ana', 'Carlos', 'Juliana', 'Rafael', 'Patrícia', 'Bruno'])
                 .' '.fake()->randomElement(['Silva', 'Souza', 'Oliveira', 'Pereira', 'Costa', 'Almeida', 'Ribeiro']),
@@ -41,7 +41,7 @@ class ContactLeadFactory extends Factory
             ]),
             'message' => 'Tenho loja física e gostaria de conhecer as condições comerciais para revenda de alianças.',
             'origin' => 'home',
-            'status' => 'novo',
+            'status' => 'new',
             'handled_by' => null,
         ];
     }
@@ -49,7 +49,7 @@ class ContactLeadFactory extends Factory
     /**
      * Lead vindo do CTA "Vamos crescer juntos?" da pagina Sobre.
      */
-    public function daPaginaSobre(): static
+    public function fromAboutPage(): static
     {
         return $this->state(fn (array $attributes): array => [
             'origin' => 'sobre',
@@ -59,7 +59,7 @@ class ContactLeadFactory extends Factory
     /**
      * Lead ja puxado por alguem do painel — a fila anda por `handled_by`.
      */
-    public function atendidoPor(?User $user = null): static
+    public function handledBy(?User $user = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'handled_by' => $user instanceof User ? $user->getKey() : User::factory(),
@@ -70,7 +70,7 @@ class ContactLeadFactory extends Factory
     /**
      * Lead so com telefone: o formulario nao exige e-mail.
      */
-    public function semEmail(): static
+    public function withoutEmail(): static
     {
         return $this->state(fn (array $attributes): array => [
             'email' => null,

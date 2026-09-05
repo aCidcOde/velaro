@@ -60,26 +60,26 @@ class SupportTicketFactory extends Factory
             'customer_id' => null,
             'subject' => $subject,
             'category' => $category,
-            'priority' => SupportTicket::PRIORITY_MEDIA,
-            'status' => SupportTicket::STATUS_ABERTA,
+            'priority' => SupportTicket::PRIORITY_MEDIUM,
+            'status' => SupportTicket::STATUS_OPEN,
             'assignee_id' => null,
         ];
     }
 
-    public function aberta(): static
+    public function open(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => SupportTicket::STATUS_ABERTA,
+            'status' => SupportTicket::STATUS_OPEN,
             'first_response_at' => null,
             'resolved_at' => null,
             'closed_at' => null,
         ]);
     }
 
-    public function emAtendimento(): static
+    public function inProgress(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => SupportTicket::STATUS_EM_ATENDIMENTO,
+            'status' => SupportTicket::STATUS_IN_PROGRESS,
             'assignee_id' => $attributes['assignee_id'] ?? User::factory(),
             'first_response_at' => now()->subHours(3),
             'resolved_at' => null,
@@ -87,38 +87,38 @@ class SupportTicketFactory extends Factory
         ]);
     }
 
-    public function resolvida(): static
+    public function resolved(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => SupportTicket::STATUS_RESOLVIDO,
+            'status' => SupportTicket::STATUS_RESOLVED,
             'assignee_id' => $attributes['assignee_id'] ?? User::factory(),
             'first_response_at' => now()->subDay(),
             'resolved_at' => now(),
         ]);
     }
 
-    public function prioridadeAlta(): static
+    public function highPriority(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'priority' => SupportTicket::PRIORITY_ALTA,
+            'priority' => SupportTicket::PRIORITY_HIGH,
         ]);
     }
 
-    public function atribuida(?User $assignee = null): static
+    public function assignedTo(?User $assignee = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'assignee_id' => $assignee?->getKey() ?? User::factory(),
         ]);
     }
 
-    public function doPedido(?Order $order = null): static
+    public function forOrder(?Order $order = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'order_id' => $order?->getKey() ?? Order::factory(),
         ]);
     }
 
-    public function doCliente(?Customer $customer = null): static
+    public function forCustomer(?Customer $customer = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'customer_id' => $customer?->getKey() ?? Customer::factory(),

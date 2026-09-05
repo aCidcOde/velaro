@@ -21,27 +21,31 @@ class Order extends Model
     // `status` (campo do scaffold) permanece apenas como espelho derivado, por compatibilidade
     // com OrderWorkflowStatusService — nada no modulo Velaro deve le-lo como autoridade.
 
-    public const OPERATIONAL_STATUS_REGISTRADO = 'registrado';
+    public const OPERATIONAL_STATUS_REGISTERED = 'registered';
 
-    public const OPERATIONAL_STATUS_PAGAMENTO_CONFIRMADO = 'pagamento_confirmado';
+    public const OPERATIONAL_STATUS_PAYMENT_CONFIRMED = 'payment_confirmed';
 
-    public const OPERATIONAL_STATUS_PRODUCAO_ANDAMENTO = 'producao_andamento';
+    public const OPERATIONAL_STATUS_IN_PRODUCTION = 'in_production';
 
-    public const OPERATIONAL_STATUS_PRODUCAO_FINALIZADA = 'producao_finalizada';
+    public const OPERATIONAL_STATUS_PRODUCTION_COMPLETED = 'production_completed';
 
-    public const OPERATIONAL_STATUS_EM_TRANSPORTE = 'em_transporte';
+    public const OPERATIONAL_STATUS_IN_TRANSIT = 'in_transit';
 
-    public const OPERATIONAL_STATUS_PRONTO_RETIRADA = 'pronto_retirada';
+    public const OPERATIONAL_STATUS_READY_FOR_PICKUP = 'ready_for_pickup';
 
-    public const OPERATIONAL_STATUS_RETIRADO = 'retirado';
+    public const OPERATIONAL_STATUS_PICKED_UP = 'picked_up';
 
-    public const PAYMENT_STATUS_PENDENTE = 'pendente';
+    public const PAYMENT_STATUS_PENDING = 'pending';
 
-    public const PAYMENT_STATUS_AGUARDANDO_COMPENSACAO = 'aguardando_compensacao';
+    public const PAYMENT_STATUS_AWAITING_CLEARANCE = 'awaiting_clearance';
 
-    public const PAYMENT_STATUS_PAGO = 'pago';
+    public const PAYMENT_STATUS_PAID = 'paid';
 
-    public const PAYMENT_STATUS_VENCIDO = 'vencido';
+    public const PAYMENT_STATUS_OVERDUE = 'overdue';
+
+    public const PAYMENT_STATUS_REFUNDED = 'refunded';
+
+    public const PAYMENT_STATUS_CANCELED = 'canceled';
 
     /**
      * @var list<string>
@@ -63,12 +67,12 @@ class Order extends Model
         'shipping_amount',
         'discount_amount',
         'currency',
-        'previsao',
+        'expected_at',
         'arrived_at',
-        'retirado_em',
-        'retirado_por',
-        'retirado_por_documento',
-        'retirado_por_customer_id',
+        'picked_up_at',
+        'picked_up_by_name',
+        'picked_up_by_document',
+        'picked_up_by_customer_id',
         'notes',
         'meta',
     ];
@@ -84,9 +88,9 @@ class Order extends Model
             'engraving_amount' => 'decimal:2',
             'shipping_amount' => 'decimal:2',
             'discount_amount' => 'decimal:2',
-            'previsao' => 'date',
+            'expected_at' => 'date',
             'arrived_at' => 'datetime',
-            'retirado_em' => 'datetime',
+            'picked_up_at' => 'datetime',
             'meta' => 'array',
         ];
     }
@@ -122,9 +126,9 @@ class Order extends Model
     }
 
     /** @return BelongsTo<Customer, $this> */
-    public function retiradoPorCustomer(): BelongsTo
+    public function pickedUpByCustomer(): BelongsTo
     {
-        return $this->belongsTo(Customer::class, 'retirado_por_customer_id');
+        return $this->belongsTo(Customer::class, 'picked_up_by_customer_id');
     }
 
     /** @return HasMany<OrderItem, $this> */

@@ -46,7 +46,7 @@ class HelpCategoryFactory extends Factory
     /**
      * Categoria fora do ar na Central de ajuda.
      */
-    public function inativa(): static
+    public function inactive(): static
     {
         return $this->state(fn (array $attributes): array => [
             'is_active' => false,

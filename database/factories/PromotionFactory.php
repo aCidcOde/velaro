@@ -38,8 +38,8 @@ class PromotionFactory extends Factory
             ]),
             'description' => 'Descontos aplicados conforme o valor total do pedido.',
             // O tipo padrao casa com os tiers do PromotionRuleFactory.
-            'type' => Promotion::TYPE_DESCONTO_PROGRESSIVO,
-            'status' => Promotion::STATUS_RASCUNHO,
+            'type' => Promotion::TYPE_TIERED_DISCOUNT,
+            'status' => Promotion::STATUS_DRAFT,
             'starts_at' => $startsAt,
             'ends_at' => $startsAt->copy()->addDays(30)->endOfDay(),
             'priority' => fake()->numberBetween(0, 10),
@@ -51,10 +51,10 @@ class PromotionFactory extends Factory
     /**
      * Campanha no ar: a janela envolve o agora.
      */
-    public function ativa(): static
+    public function active(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => Promotion::STATUS_ATIVA,
+            'status' => Promotion::STATUS_ACTIVE,
             'starts_at' => now()->subDays(5)->startOfDay(),
             'ends_at' => now()->addDays(25)->endOfDay(),
         ]);
@@ -63,10 +63,10 @@ class PromotionFactory extends Factory
     /**
      * Campanha publicada com inicio no futuro.
      */
-    public function agendada(): static
+    public function scheduled(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => Promotion::STATUS_AGENDADA,
+            'status' => Promotion::STATUS_SCHEDULED,
             'starts_at' => now()->addDays(7)->startOfDay(),
             'ends_at' => now()->addDays(37)->endOfDay(),
         ]);
@@ -75,10 +75,10 @@ class PromotionFactory extends Factory
     /**
      * Campanha cuja janela ja se fechou.
      */
-    public function encerrada(): static
+    public function ended(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => Promotion::STATUS_ENCERRADA,
+            'status' => Promotion::STATUS_ENDED,
             'starts_at' => now()->subDays(60)->startOfDay(),
             'ends_at' => now()->subDays(30)->endOfDay(),
         ]);
@@ -87,10 +87,10 @@ class PromotionFactory extends Factory
     /**
      * Campanha suspensa sem perder a janela original.
      */
-    public function pausada(): static
+    public function paused(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'status' => Promotion::STATUS_PAUSADA,
+            'status' => Promotion::STATUS_PAUSED,
             'starts_at' => now()->subDays(5)->startOfDay(),
             'ends_at' => now()->addDays(25)->endOfDay(),
         ]);
@@ -99,10 +99,10 @@ class PromotionFactory extends Factory
     /**
      * Frete gratis acima de um piso de pedido — nao usa tier percentual.
      */
-    public function freteGratis(): static
+    public function freeShipping(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'type' => Promotion::TYPE_FRETE_GRATIS,
+            'type' => Promotion::TYPE_FREE_SHIPPING,
             'name' => 'Frete Grátis acima de R$ 1.000,00',
             'description' => 'Frete por conta da Velaro nos pedidos acima do piso.',
         ]);
@@ -111,10 +111,10 @@ class PromotionFactory extends Factory
     /**
      * Campanha de lancamento de colecao.
      */
-    public function lancamento(): static
+    public function launch(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'type' => Promotion::TYPE_LANCAMENTO,
+            'type' => Promotion::TYPE_LAUNCH,
             'name' => 'Coleção Eternidade',
             'description' => 'Destaque de lançamento na vitrine dos revendedores.',
         ]);

@@ -24,28 +24,28 @@ class ProductRevisionFactory extends Factory
      */
     public function definition(): array
     {
-        $precoAnterior = (float) fake()->randomFloat(2, 180, 4200);
-        $precoNovo = round($precoAnterior * (float) fake()->randomFloat(2, 1.02, 1.18), 2);
-        $prazoAnterior = (int) fake()->numberBetween(12, 30);
+        $previousPrice = (float) fake()->randomFloat(2, 180, 4200);
+        $newPrice = round($previousPrice * (float) fake()->randomFloat(2, 1.02, 1.18), 2);
+        $previousDeliveryDays = (int) fake()->numberBetween(12, 30);
 
         return [
             'product_id' => Product::factory(),
             'actor_id' => null,
             'action' => ProductRevision::ACTION_UPDATED,
             'before' => [
-                'price' => $precoAnterior,
-                'prazo_entrega_dias' => $prazoAnterior,
+                'price' => $previousPrice,
+                'delivery_days' => $previousDeliveryDays,
                 'is_active' => true,
             ],
             'after' => [
-                'price' => $precoNovo,
-                'prazo_entrega_dias' => max(5, $prazoAnterior - 3),
+                'price' => $newPrice,
+                'delivery_days' => max(5, $previousDeliveryDays - 3),
                 'is_active' => true,
             ],
         ];
     }
 
-    public function paraProduto(Product $product): static
+    public function forProduct(Product $product): static
     {
         return $this->state(fn (array $attributes): array => [
             'product_id' => $product->getKey(),
@@ -55,7 +55,7 @@ class ProductRevisionFactory extends Factory
     /**
      * Revisão feita por um usuário do painel — sem ator, a alteração é do sistema.
      */
-    public function porAtor(?User $actor = null): static
+    public function byActor(?User $actor = null): static
     {
         return $this->state(fn (array $attributes): array => [
             'actor_id' => $actor?->getKey() ?? User::factory(),

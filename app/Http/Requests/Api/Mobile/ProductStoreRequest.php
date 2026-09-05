@@ -24,7 +24,7 @@ class ProductStoreRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:100',
-                Rule::unique('products', 'sku')->where(fn ($query) => $query->where('user_id', $this->user()?->id)),
+                Rule::unique('products', 'sku'),
             ],
             'description' => ['nullable', 'string', 'max:5000'],
             'price' => ['required', 'numeric', 'min:0'],

@@ -22,8 +22,8 @@ class PromotionAudience extends Model
      */
     protected $fillable = [
         'promotion_id',
-        'publico_alvo',
-        'canais',
+        'target_audience',
+        'channels',
     ];
 
     /**
@@ -32,7 +32,7 @@ class PromotionAudience extends Model
     protected function casts(): array
     {
         return [
-            'canais' => 'array',
+            'channels' => 'array',
         ];
     }
 

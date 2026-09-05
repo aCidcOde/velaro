@@ -33,7 +33,7 @@ class CustomerConsentFactory extends Factory
             'customer_id' => Customer::factory(),
             'type' => fake()->randomElement([
                 CustomerConsent::TYPE_MARKETING,
-                CustomerConsent::TYPE_TRANSACIONAL,
+                CustomerConsent::TYPE_TRANSACTIONAL,
             ]),
             'granted' => true,
             'granted_at' => now()->subDays(fake()->numberBetween(0, 365)),
@@ -50,10 +50,10 @@ class CustomerConsentFactory extends Factory
         ]);
     }
 
-    public function transacional(): static
+    public function transactional(): static
     {
         return $this->state(fn (array $attributes): array => [
-            'type' => CustomerConsent::TYPE_TRANSACIONAL,
+            'type' => CustomerConsent::TYPE_TRANSACTIONAL,
             'evidence' => 'Cliente autorizou avisos sobre o andamento do pedido.',
         ]);
     }
@@ -62,12 +62,12 @@ class CustomerConsentFactory extends Factory
      * Aceite revogado depois de concedido: `revoked_at` nasce ancorado em `granted_at`,
      * nunca antes dele.
      */
-    public function revogado(): static
+    public function revoked(): static
     {
         return $this->state(function (array $attributes): array {
-            $concedidoEm = $attributes['granted_at'] ?? null;
-            $base = $concedidoEm instanceof \DateTimeInterface
-                ? Carbon::instance($concedidoEm)
+            $grantedAt = $attributes['granted_at'] ?? null;
+            $base = $grantedAt instanceof \DateTimeInterface
+                ? Carbon::instance($grantedAt)
                 : now()->subDays(30);
 
             return [

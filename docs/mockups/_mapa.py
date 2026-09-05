@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Mapa das 31 telas do Velaro: rota, acesso, tabelas, permissões e regras.
+"""Mapa das telas do Velaro: rota, acesso, tabelas, permissões e regras.
 Fonte: Anexo I (escopo funcional), Plano de Negócio e os protótipos aprovados.
 Gera mapa.html — as telas dos mockups linkam para as âncoras daqui."""
 
@@ -18,20 +18,20 @@ tela(slug="site-home", n="1.1", env="Site público", titulo="Página inicial B2B
      anexo="§3.1",
      tabelas=[("collections","novo","name, slug, description, cover_path, position, is_active"),
               ("settings","novo","company.*, contact.* — telefone, e-mail, horário de atendimento"),
-              ("contact_leads","novo","name, email, phone, company, subject, message, origin, status, handled_by, handled_at — o “Fale conosco” do menu e os CTAs “Solicitar atendimento” / “Falar com especialista”")],
+              ("contact_leads","novo","origin = home — o “Fale conosco” do menu e os CTAs “Solicitar atendimento” / “Falar com especialista” não gravam nada aqui: levam para a **1.8**, que é a dona do formulário")],
      permissoes=["—"],
      regras=["Comunicação expressa de que a plataforma é exclusiva para lojistas.",
              "Nenhum preço B2B renderizado nesta rota, nem em JSON embutido.",
              "Sem venda direta ao consumidor final.",
-             "O “Fale conosco” grava um lead — **não** cria revendedor nem acesso; `origin` guarda a página de partida e a fila de atendimento anda por `status`/`handled_by`."])
+             "O “Fale conosco” do menu aponta para `GET /contato` (tela **1.8**); esta página só origina o lead, marcando `origin`."])
 
 tela(slug="site-sobre", n="1.2", env="Site público", titulo="Sobre nós",
      rota="GET /sobre", acesso="Público", status="pronta", arquivo="10-site-sobre.html", anexo="§3.2",
      tabelas=[("settings","novo","about.* — história, fábrica própria, diferenciais, mídia"),
-              ("contact_leads","novo","origin = sobre, subject, message — o CTA final “Vamos crescer juntos? · SOLICITAR ATENDIMENTO (Fale com um especialista)”; mesmo formulário da 1.1")],
+              ("contact_leads","novo","origin = sobre — o CTA final “Vamos crescer juntos? · SOLICITAR ATENDIMENTO (Fale com um especialista)” encaminha para a **1.8**, que grava o lead; esta página não tem formulário próprio")],
      permissoes=["—"],
      regras=["Página institucional: fábrica própria, qualidade, atendimento consultivo, logística, posicionamento B2B.",
-             "O CTA de atendimento desta página cai no mesmo `contact_leads` da home, marcado por `origin`."])
+             "O CTA de atendimento leva para `GET /contato` (tela **1.8**); o lead nasce lá, com `origin = sobre`."])
 
 tela(slug="site-catalogo", n="1.3", env="Site público", titulo="Catálogo público",
      rota="GET /catalogo · GET /catalogo/{colecao} · GET /produto/{slug}",
@@ -89,6 +89,20 @@ tela(slug="site-aprovado", n="1.7", env="Site público", titulo="Cadastro aprova
      permissoes=["—"],
      regras=["Aprovação libera o acesso de Parceiro Premium e cria o vínculo `users.reseller_id`.",
              "Aviso transacional por e-mail e/ou WhatsApp — sempre via job."])
+
+tela(slug="site-contato", n="1.8", env="Site público", titulo="Fale conosco",
+     rota="GET /contato · POST /contato", acesso="Público", status="pronta",
+     arquivo="19-site-contato.html", anexo="§3.1 · §3.2",
+     tabelas=[("contact_leads","novo","name, email, phone, company, subject, message, origin, status, handled_by, handled_at — **a única tela que grava esta tabela**; as chamadas “Fale conosco”, “Solicitar atendimento” e “Falar com especialista” das telas 1.1, 1.2 e 1.3 desembocam aqui, cada uma marcando o seu `origin`"),
+              ("settings","novo","contact.* — telefone, WhatsApp, e-mail e horário de atendimento do bloco de canais diretos; os mesmos valores do rodapé do site, lidos com `is_public = true`")],
+     permissoes=["—",
+                 "A fila de leads é lida no Painel Interno; `handled_by` referencia `users.id` da equipe Velaro"],
+     regras=["Rota pública com Form Request e throttle — é formulário aberto na internet.",
+             "**Lead não é pré-cadastro:** o envio não cria `resellers`, não cria `users` e não libera preço. Quem quer revender é encaminhado para a **1.4**.",
+             "**Lead não é chamado:** quem ainda não é revendedor não tem `support_tickets`; a mensagem nasce em `contact_leads` com `status = new`.",
+             "`origin` guarda a página de partida (home, sobre, catálogo, contato) e a fila anda por `status`/`handled_by`/`handled_at`.",
+             "Consentimento LGPD obrigatório para enviar, gravado com data, IP, user agent e versão do texto. `reseller_consents` **não serve** — exige `reseller_id`, e o lead ainda não é revendedor: as colunas de aceite precisam nascer em `contact_leads`.",
+             "Nenhum preço B2B renderizado nesta rota."])
 
 # ══════════════════════════ TRANSVERSAL ══════════════════════════
 tela(slug="login", n="0", env="Transversal", titulo="Login único com roteamento por perfil",
@@ -450,7 +464,7 @@ MOCKNAV = """
   <a href="02-portal-lojista.html">Portal</a>
   <a href="03-vitrine-pdv.html">Vitrine</a>
   <a href="04-painel-master.html">Master</a>
-  <a class="map" href="mapa.html">Mapa · 31 telas</a>
+  <a class="map" href="mapa.html">Mapa · __TOTAL_TELAS__ telas</a>
 </nav>
 <script>
 (function(){
@@ -460,6 +474,10 @@ MOCKNAV = """
 })();
 </script>
 """
+# O contador do nav sai do proprio T. MOCKNAV nao pode ser f-string (o bloco leva
+# CSS e JS com chaves), entao o numero entra por substituicao. A copia do mesmo nav
+# em _ui.py, que nao enxerga T, precisa ser mantida em dia a mao.
+MOCKNAV = MOCKNAV.replace("__TOTAL_TELAS__", str(len(T)))
 
 ENV_ORDER = ["Transversal", "Site público", "Portal do Lojista",
              "Vitrine white label", "Painel Interno Velaro"]
@@ -561,7 +579,7 @@ def render():
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Velaro · Mapa das 31 telas</title>
+<title>Velaro · Mapa das {len(T)} telas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Inter+Tight:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -671,14 +689,14 @@ def render():
     <p class="crumbs"><a href="index.html">← Mockups</a> <span style="opacity:.4">·</span>
       <a href="01-site-publico.html">Site</a> <a href="02-portal-lojista.html">Portal</a>
       <a href="03-vitrine-pdv.html">Vitrine</a> <a href="04-painel-master.html">Master</a></p>
-    <h1>Mapa das <b>31 telas</b></h1>
+    <h1>Mapa das <b>{len(T)} telas</b></h1>
     <p>Rota, perfil de acesso, tabelas e campos, permissões e regras críticas — tela a tela.
        Derivado do Anexo I, do Plano de Negócio e dos protótipos aprovados. Este mapa não depende do
        layout: ele diz o que cada tela precisa existir no banco e na ACL, independente de como for desenhada.
        Cada tela tem mockup navegável e documentação própria em <code>docs/telas/</code>.</p>
     <div class="stats">
-      <div class="stat"><b>31</b><span>telas no escopo</span></div>
-      <div class="stat"><b>31</b><span>mockups prontos</span></div>
+      <div class="stat"><b>{len(T)}</b><span>telas no escopo</span></div>
+      <div class="stat"><b>{sum(1 for t in T if t["status"] == "pronta")}</b><span>mockups prontos</span></div>
       <div class="stat"><b>{novas}</b><span>tabelas novas</span></div>
       <div class="stat"><b>4</b><span>ambientes + login</span></div>
     </div>

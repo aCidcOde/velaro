@@ -25,7 +25,7 @@ class PromotionRuleFactory extends Factory
     {
         // Primeiro tier do prototipo (tela 3.8): acima de R$ 1.000,00 -> 5%.
         // `discount_amount` fica de fora: e a alternativa excludente ao percentual
-        // e ganha valor pelo state `valorFixo()`.
+        // e ganha valor pelo state `fixedAmount()`.
         return [
             'promotion_id' => Promotion::factory(),
             'min_amount' => 1000.00,
@@ -37,7 +37,7 @@ class PromotionRuleFactory extends Factory
     /**
      * Tier 1 do prototipo: acima de R$ 1.000,00 -> 5%.
      */
-    public function acimaDeMil(): static
+    public function aboveOneThousand(): static
     {
         return $this->state(fn (array $attributes): array => [
             'min_amount' => 1000.00,
@@ -50,7 +50,7 @@ class PromotionRuleFactory extends Factory
     /**
      * Tier 2 do prototipo: acima de R$ 2.000,00 -> 10%.
      */
-    public function acimaDeDoisMil(): static
+    public function aboveTwoThousand(): static
     {
         return $this->state(fn (array $attributes): array => [
             'min_amount' => 2000.00,
@@ -63,7 +63,7 @@ class PromotionRuleFactory extends Factory
     /**
      * Tier 3 do prototipo: acima de R$ 3.000,00 -> 15%.
      */
-    public function acimaDeTresMil(): static
+    public function aboveThreeThousand(): static
     {
         return $this->state(fn (array $attributes): array => [
             'min_amount' => 3000.00,
@@ -76,7 +76,7 @@ class PromotionRuleFactory extends Factory
     /**
      * Faixa de abatimento fixo em reais — exclui o percentual.
      */
-    public function valorFixo(float $amount = 150.00): static
+    public function fixedAmount(float $amount = 150.00): static
     {
         return $this->state(fn (array $attributes): array => [
             'discount_percent' => null,
