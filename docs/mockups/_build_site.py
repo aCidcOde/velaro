@@ -167,8 +167,12 @@ docs = ('<h3 class="fsec">Documentos</h3><div class="fgrid fgrid--3">' + "".join
   f'<strong>{e(t)}<i class="req">*</i></strong><small>PDF, PNG ou JPG · máx. 5MB</small></div>'
   for t in ["Contrato social","Documento do sócio / responsável","Cartão ou comprovante do CNPJ"]) + '</div>')
 
+# .checkline e flex sem wrap: cada trecho solto (texto, link, ponto final) virava um
+# item e a frase descia em cinco colunas no celular. Rotulo inteiro num <span>.
 aceites = '<h3 class="fsec">Aceites</h3><div class="stacklist">' + "".join(
-  f'<span class="checkline"><span class="cbox is-on">✓</span>{t}</span>' for t in [
+  '<span class="checkline" style="align-items:flex-start">'
+  '<span class="cbox is-on" style="flex:none;margin-top:2px">✓</span>'
+  f'<span>{t}</span></span>' for t in [
     "Declaro que sou lojista / empresa formalizada.",
     "Autorizo a validação automática do meu CNPJ e CNAE.",
     'Li e concordo com a <a href="#" class="link-gold">Política de Privacidade</a> e os <a href="#" class="link-gold">Termos de Uso</a>.',
