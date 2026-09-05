@@ -122,6 +122,20 @@ class VelaroSeeder extends Seeder
 
         // Ambiente 2 (Portal do Lojista). Depende do catálogo acima: os itens dos
         // pedidos demo apontam para produtos e aros que existem de verdade.
+        //
+        // BLOQUEADO EM PRODUÇÃO: este bloco cria dois revendedores fictícios com login
+        // de teste (`lojista@velaro.test`, senha conhecida e em texto no repositório),
+        // carteira, pedidos e lotes. Em produção isso seria conta real com credencial
+        // publicada. As configurações e o catálogo acima podem rodar em qualquer
+        // ambiente; a demonstração do portal, não.
+        if (app()->environment('production')) {
+            $this->command?->warn('  Demo do Portal ignorada: ambiente de produção.');
+
+            $this->imprimirContagens();
+
+            return;
+        }
+
         $this->semearPortalDemo($colecoes);
 
         $this->imprimirContagens();
