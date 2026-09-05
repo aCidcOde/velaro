@@ -14,10 +14,15 @@
 | Tabela | Origem | Campos |
 |--------|--------|--------|
 | `settings` | novo (módulo Velaro) | grupos: empresa, notificações, integrações, segurança, financeiro/fiscal, personalização, backup, parâmetros de pedido, meios de pagamento B2B |
-| `users / acl_*` | core (já existe no scaffold) | usuários e permissões |
+| `users` | core + colunas Velaro | name, email, is_admin, is_agent, is_blocked, reseller_id — usuários do painel |
+| `acl_permissions` | core (já existe no scaffold) | key, module, label — permissões granulares |
+| `acl_responsibilities` | core (já existe no scaffold) | key, name — papéis |
+| `acl_user_responsibility` | core (já existe no scaffold) | user_id, responsibility_id, assigned_by |
+| `acl_user_permission_overrides` | core (já existe no scaffold) | user_id, permission_id, is_allowed — exceção por usuário |
+| `audit_logs` | core (já existe no scaffold) | actor_id, action, before, after — toda escrita de configuração |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

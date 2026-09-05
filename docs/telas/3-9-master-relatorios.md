@@ -16,8 +16,8 @@
 | `report_schedules` | novo (módulo Velaro) | name, type, cron, recipients, format, is_active, last_run_at |
 | `report_exports` | novo (módulo Velaro) | type, filters (json), file_path, generated_by, generated_at |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

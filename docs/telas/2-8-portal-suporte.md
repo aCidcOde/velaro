@@ -16,9 +16,11 @@
 | `support_tickets` | novo (módulo Velaro) | code, reseller_id, order_id, customer_id, subject, category, priority, status, assignee_id, channel |
 | `support_messages` | novo (módulo Velaro) | author_id, author_role (revendedor\|velaro), body, is_internal_note |
 | `support_attachments` | novo (módulo Velaro) | original_name, path, size_bytes, mime |
+| `help_categories` | novo (módulo Velaro) | name, slug, position — as categorias da central de ajuda |
+| `help_articles` | novo (módulo Velaro) | type (faq\|guia\|video), title, slug, excerpt, body, video_url, file_path, is_published |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

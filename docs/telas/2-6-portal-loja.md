@@ -13,10 +13,10 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `reseller_stores` | novo (módulo Velaro) | name, slogan, logo_path, banner_path, slug, domain, phone, whatsapp, email, endereco, color_primary, color_secondary, color_background, color_text, is_active, published_at |
+| `reseller_stores` | novo (módulo Velaro) | name, slogan, logo_path, banner_path, slug, domain, phone, whatsapp, email, endereco, color_primary, color_secondary, color_background, color_text, own_brand_only, hide_supplier_brand, show_prices, pickup_only, payment_in_store, is_active, published_at |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

@@ -13,17 +13,17 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `products` | core (já existe no scaffold) | name, slug, description, is_active |
-| `product_attributes` | novo (módulo Velaro) | collection_id, category_id, material_id, finish_id, largura_mm, formato, permite_gravacao |
-| `product_variants` | novo (módulo Velaro) | sku, aro (tamanho) |
-| `product_images` | novo (módulo Velaro) | path, position, is_primary |
-| `collections` | novo (módulo Velaro) | name, slug, position, is_active |
+| `products` | core + colunas Velaro | name, slug, sku, description, is_active, collection_id, category_id, material_id, finish_id, largura_mm, formato, permite_gravacao |
+| `product_variants` | novo (módulo Velaro) | sku, aro (tamanho), is_active |
+| `product_images` | novo (módulo Velaro) | path, alt, position, is_primary |
+| `collections` | novo (módulo Velaro) | name, slug, position, is_active — filtro “Coleção” |
 | `categories` | novo (módulo Velaro) | name, slug, parent_id, position |
-| `materials` | novo (módulo Velaro) | name, slug — ex.: Ouro 18K, Ouro branco, Prata 950 |
-| `finishes` | novo (módulo Velaro) | name, slug — ex.: polido, fosco, diamantado, trabalhado |
+| `materials` | novo (módulo Velaro) | name, slug — ex.: Prata 950, Ouro Rosé 18k, Ouro Amarelo 18k, Aço |
+| `finishes` | novo (módulo Velaro) | name, slug — ex.: Diamantada, Fosca, Polida, PVD Preto e Dourado, Texturizada, Cravejada |
+| `favorites` | novo (módulo Velaro) | product_id, visitor_token — ícone de coração no card; o consumidor final não tem login |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

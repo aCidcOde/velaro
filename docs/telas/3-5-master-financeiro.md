@@ -13,12 +13,14 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `order_batches` | novo (módulo Velaro) | code, reseller_id, cut_date, due_date, status, total_amount, paid_at, shipped_at |
-| `payments` | novo (módulo Velaro) | method, amount, paid_at, status, external_id, receipt_path |
-| `invoices` | novo (módulo Velaro) | number, series, amount, issued_at, pdf_path, xml_path, provider |
+| `order_batches` | novo (módulo Velaro) | code, reseller_id, cut_date, due_date, status, total_amount, paid_at, shipped_at, arrived_at |
+| `payments` | novo (módulo Velaro) | method, amount, paid_at, status, external_id, receipt_path, reconciled_by |
+| `invoices` | novo (módulo Velaro) | batch_id, number, series, amount, issued_at, pdf_path, xml_path, provider, issued_by — a nota é **do lote** |
+| `invoice_items` | novo (módulo Velaro) | order_id, amount — rateio da nota pelos pedidos do lote |
+| `shipments` | novo (módulo Velaro) | code, order_batch_id, status, carrier, tracking_code, released_by, released_at, shipped_at — a liberação logística |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

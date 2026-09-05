@@ -16,8 +16,8 @@ for mt in re.finditer(r'^## (\d+\.\d+) (.+?)$', notas, re.M):
     nxt = re.search(r'^(## |# )', notas[ini:], re.M)
     BLOCOS[num] = notas[ini:ini + (nxt.start() if nxt else len(notas))].strip()
 
-ORIG = {"core":"core (já existe no scaffold)","extensao":"extensão do core","novo":"novo (módulo Velaro)",
-        "core/novo":"core + novo","—":"—"}
+ORIG = {"core":"core (já existe no scaffold)","extensao":"core + colunas Velaro",
+        "novo":"novo (módulo Velaro)","—":"—"}
 ENVSLUG = {"Site público":"site","Portal do Lojista":"portal","Vitrine white label":"vitrine",
            "Painel Interno Velaro":"master","Transversal":"core"}
 
@@ -54,8 +54,8 @@ for t in m.T:
 |--------|--------|--------|
 {tabs}
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 
@@ -107,8 +107,15 @@ caracteriza **pendência de escopo**, e não melhoria opcional (Anexo I §9).
 
 ## Resumo do impacto no banco
 
-{len({tb[0] for t in m.T for tb in t['tabelas'] if tb[1] == 'novo'})} tabelas novas no módulo Velaro ·
-{len({tb[0] for t in m.T for tb in t['tabelas'] if tb[1] == 'extensao'})} extensões do core ·
-nenhuma tabela do núcleo alterada.
+**{len({tb[0] for t in m.T for tb in t['tabelas'] if tb[1] == 'novo'})} tabelas novas** no módulo Velaro ·
+**{len({tb[0] for t in m.T for tb in t['tabelas'] if tb[1] == 'extensao'})} tabelas do core alteradas** ·
+**71 tabelas** e **101 chaves estrangeiras** no banco, em **54 migrations** do módulo.
+
+A regra "nenhuma tabela do núcleo é alterada" foi **abandonada por decisão registrada**: o core
+passou a ser mutável. Em consequência, as três tabelas de extensão 1:1 que a documentação previa
+(`product_attributes`, `order_velaro_details`, `customer_velaro_details`) **não existem** — seus
+campos foram absorvidos por `products`, `orders` e `customers`.
+
+Decisões, política de exclusão de FKs e o fechamento das 18 lacunas: [`docs/banco-de-dados.md`](../banco-de-dados.md).
 """)
 print(f"{len(idx)} documentos + índice gerados em docs/telas/")

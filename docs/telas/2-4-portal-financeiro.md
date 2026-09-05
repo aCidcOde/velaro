@@ -14,11 +14,13 @@
 | Tabela | Origem | Campos |
 |--------|--------|--------|
 | `order_batches` | novo (módulo Velaro) | code, cut_date, due_date, status, total_amount |
+| `orders` | core + colunas Velaro | batch_id, payment_status, total_amount — os pedidos que compõem o lote |
 | `payments` | novo (módulo Velaro) | method (pix\|boleto\|transferencia), amount, due_date, paid_at, status, external_id, receipt_path |
-| `invoices` | novo (módulo Velaro) | number, series, amount, issued_at, pdf_path, xml_path |
+| `invoices` | novo (módulo Velaro) | batch_id, number, series, amount, issued_at, pdf_path, xml_path |
+| `invoice_items` | novo (módulo Velaro) | order_id, amount — rateio da nota do lote por pedido; é o que a coluna NF-E baixa |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

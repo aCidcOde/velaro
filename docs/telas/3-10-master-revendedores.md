@@ -17,9 +17,11 @@
 | `reseller_cnaes` | novo (módulo Velaro) | code, description, compatible |
 | `reseller_documents` | novo (módulo Velaro) | contrato social, doc do sócio, cartão CNPJ |
 | `reseller_verifications` | novo (módulo Velaro) | resultado da IA, score, checked_at |
+| `reseller_consents` | novo (módulo Velaro) | type, granted, document_version, granted_at, revoked_at — aceites do lojista |
+| `audit_logs` | core (já existe no scaffold) | action, actor_id, target_id — registra início e fim do “ver como revendedor” |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

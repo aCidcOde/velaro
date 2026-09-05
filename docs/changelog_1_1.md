@@ -7,6 +7,33 @@
 - Documentação por tela com campos, permissões, regras de negócio e critérios de aceite.
 - Sistema de design registrado como referência única e já aplicado à aplicação em funcionamento.
 
+### 2026-09-05 · FEAT · Fundação de dados da plataforma B2B
+
+**Resumo:** A plataforma saiu do desenho e ganhou a estrutura que sustenta os quatro
+ambientes. Tudo que as telas aprovadas prometem — do cadastro do lojista até a retirada do
+pedido no balcão da loja — passou a ter onde ser guardado, com as regras de negócio
+expressas na própria estrutura.
+
+**O que foi feito:** O modelo de dados foi construído a partir das telas aprovadas e das
+regras do contrato, cobrindo catálogo e estoque por tamanho, cadastro e habilitação de
+lojistas, carteira de clientes finais, pedidos com os dois acompanhamentos independentes,
+faturamento semanal com nota fiscal e remessa, vitrine com identidade e margem próprias de
+cada loja, atendimento e as configurações do sistema.
+
+As dezoito pendências que o levantamento anterior havia registrado como decisões em aberto
+foram todas fechadas — entre elas o consentimento do lojista exigido pela lei de proteção de
+dados, o transporte da remessa, o frete e o desconto do pedido, o local de armazenamento e a
+solicitação de produção. Uma delas era risco concreto de perda de dados: excluir um usuário
+apagaria em cascata a carteira de clientes e o histórico de pedidos de um lojista inteiro.
+O vínculo foi refeito para que isso não seja possível, e o histórico de pedidos passou a ser
+protegido contra exclusão por ser registro fiscal.
+
+Sobre essa estrutura foi escrita a camada de acesso aos dados e os geradores de massa de
+teste, que permitem montar um cenário completo de ponta a ponta — do lojista aprovado ao
+chamado de atendimento — para validar o comportamento antes de existir tela. A documentação
+das telas foi realinhada com o que existe de fato, e a cadeia de geração passou a avisar em
+destaque quais arquivos são produzidos automaticamente e não devem ser editados à mão.
+
 ### 2026-09-03 · CHORE · Higiene do repositório
 
 **Resumo:** Arquivos gerados automaticamente pela execução das ferramentas internas
@@ -434,14 +461,14 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 | 1 | `composer qa:validate` | 🟢 composer.json valid |
 | 2 | `composer qa:security` | 🟢 zero advisories |
 | 3 | `composer qa:style` | 🟢 passed |
-| 4 | `composer qa:static` | 🟢 no errors (109 arquivos) |
+| 4 | `composer qa:static` | 🟢 no errors |
 | 5 | `composer qa:test` | 🟢 72 passed, 332 assertions |
-| 6 | `composer qa:secrets` | 🟢 no leaks found |
-| 7 | prefixo de commit | 🟢 `[CHORE]` com descrição em pt-BR |
+| 6 | `composer qa:secrets` | 🟢 no leaks found (histórico e conteúdo staged) |
+| 7 | prefixo de commit | 🟢 `[FEAT]` com descrição em pt-BR |
 | 8 | `composer qa:anti-debug` | 🟢 sem debug calls |
 | 9 | Trivy | ⚪ N/A (sem Dockerfile) |
 | 10 | changelog atualizado | 🟢 este bloco |
-| — | `php artisan route:list --except-vendor` | 🟢 85 rotas |
+| — | `php artisan route:list --except-vendor` | 🟢 85 rotas (inalteradas) |
 
 **📊 Total de testes**
 
@@ -449,22 +476,29 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 
 **🛡️ Validação das demais gates**
 
-- 🟢 Geradores de documentação reexecutados após a limpeza, sem alteração de resultado
-- 🟢 Artefatos temporários confirmados fora do controle de versão após nova execução
-- 🟢 Contraste medido par a par: 12 combinações em uso aprovadas nos dois temas
-- 🟢 Identidade verificada na aplicação em execução, em tema claro e escuro
-- 🟢 Nenhuma migration alterada, criada ou órfã nesta entrega
-- ⚪ Tipografia do site institucional segue no fallback do sistema — decisão em aberto
+- 🟢 Estrutura de dados aplicada e revertida integralmente em MySQL e SQLite: a reversão
+  restaura o núcleo ao formato original, campo a campo
+- 🟢 Cenário completo de ponta a ponta validado com os geradores de massa: 87 verificações,
+  todas conferindo contagem esperada, em transação revertida ao final
+- 🟢 Unicidade dos identificadores provada por contagem de valores distintos, não por
+  ausência de erro: 25 registros de cada entidade crítica, sem colisão
+- 🟢 Camada de acesso auditada contra a estrutura real por verificação independente:
+  toda entidade coberta, todos os vínculos conferindo
+- 🟢 Verificação de segredos executada também sobre o conteúdo preparado para envio,
+  além do histórico
+- 🟢 Base de dados confirmada sem resíduo após as validações
+- ⚪ Vocabulário de dois campos de acompanhamento pendente de confirmação do cliente;
+  registrado em comentário no próprio código
 
 **📈 Métricas do sistema**
 
-- 🔵 Arquivos rastreados: 832
-- 🔵 Linhas rastreadas: 166.876
+- 🔵 Arquivos rastreados: 983
+- 🔵 Linhas rastreadas: 177.044
 - ⚪ Release anterior de referência: N/A (`1.1` é a baseline da série)
 - ⚪ Arquivos da release anterior: N/A
 - ⚪ Linhas da release anterior: N/A
 - ⚪ Aumento de arquivos vs release anterior: N/A
 - ⚪ Aumento de linhas vs release anterior: N/A
-- 🔵 Novos commits da release: 7 (incluindo esta entrega)
+- 🔵 Novos commits da release: 8 (incluindo esta entrega)
 
 **Status final: 🟢 APROVADO**

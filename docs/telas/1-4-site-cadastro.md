@@ -16,10 +16,11 @@
 | `resellers` | novo (módulo Velaro) | razao_social, nome_fantasia, cnpj, inscricao_estadual, responsavel_nome, responsavel_cpf, email, telefone, whatsapp, cep, logradouro, numero, complemento, bairro, cidade, uf, origem_contato, observacoes, status, protocolo |
 | `reseller_documents` | novo (módulo Velaro) | type (contrato_social\|documento_socio\|cartao_cnpj), original_name, disk, path, size_bytes, mime |
 | `reseller_cnaes` | novo (módulo Velaro) | code, description, is_primary, compatible |
-| `users` | core (já existe no scaffold) | name, email, password — criado em estado de pré-cadastro |
+| `reseller_consents` | novo (módulo Velaro) | type (termos\|lgpd), granted, document_version, granted_at, ip_address, user_agent |
+| `users` | core + colunas Velaro | name, email, password — criado em estado de pré-cadastro; reseller_id ainda nulo |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

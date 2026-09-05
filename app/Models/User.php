@@ -7,6 +7,7 @@ use App\Services\Acl\BackendAclService;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -34,6 +35,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
         'theme_preference',
         'is_admin',
         'is_agent',
+        'reseller_id',
         'is_blocked',
         'api_token_hash',
         'api_token_expires_at',
@@ -72,6 +74,12 @@ class User extends Authenticatable implements MustVerifyEmailContract
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    /** @return BelongsTo<Reseller, $this> */
+    public function reseller(): BelongsTo
+    {
+        return $this->belongsTo(Reseller::class);
     }
 
     /** @return HasMany<Customer, $this> */
@@ -113,6 +121,12 @@ class User extends Authenticatable implements MustVerifyEmailContract
     public function agentConversations(): HasMany
     {
         return $this->hasMany(AgentConversation::class);
+    }
+
+    /** @return HasMany<SupportTicket, $this> */
+    public function assignedTickets(): HasMany
+    {
+        return $this->hasMany(SupportTicket::class, 'assignee_id');
     }
 
     /** @return HasMany<AgentUpload, $this> */

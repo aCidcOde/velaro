@@ -13,12 +13,14 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `orders + order_velaro_details` | extensão do core | agregações por operational_status e payment_status |
-| `support_tickets` | novo (módulo Velaro) | contagem de chamados abertos |
-| `customers + customer_velaro_details` | extensão do core | contagem por reseller_id |
+| `orders` | core + colunas Velaro | reseller_id, customer_id, public_number, operational_status, payment_status, total_amount, previsao — KPIs e tabela “Últimos pedidos”; todo somatório da tela é escopado por reseller_id |
+| `customers` | core + colunas Velaro | reseller_id, name — KPI “Clientes cadastrados” e coluna “Cliente final” da tabela “Últimos pedidos” |
+| `support_tickets` | novo (módulo Velaro) | reseller_id, code, status — KPI “Chamados abertos” e pendências |
+| `reseller_stores` | novo (módulo Velaro) | name, slogan, logo_path, banner_path, domain, is_active, published_at — cartão “Vitrine da sua loja” |
+| `reseller_price_settings` | novo (módulo Velaro) | reseller_id, margin_global — item “definir margem padrão” do checklist de configuração |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

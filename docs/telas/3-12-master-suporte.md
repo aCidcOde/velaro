@@ -13,12 +13,15 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `support_tickets` | novo (módulo Velaro) | code, reseller_id, order_id, customer_id, subject, category, priority, status, assignee_id |
+| `support_tickets` | novo (módulo Velaro) | code, reseller_id, order_id, customer_id, subject, category, priority, status, assignee_id, channel, environment, browser, os, ip_address, first_response_at, resolved_at, closed_at |
 | `support_messages` | novo (módulo Velaro) | author_role, body, is_internal_note |
 | `support_attachments` | novo (módulo Velaro) | original_name, path, size_bytes |
+| `support_tags` | novo (módulo Velaro) | name, slug |
+| `support_ticket_tag` | novo (módulo Velaro) | support_ticket_id, support_tag_id — as “Tags” do protótipo |
+| `support_status_events` | novo (módulo Velaro) | from_status, to_status, actor_id, channel, note — o “Histórico de status” |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

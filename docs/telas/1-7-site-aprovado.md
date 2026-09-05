@@ -16,8 +16,8 @@
 | `resellers` | novo (módulo Velaro) | status = aprovado, approved_at, approved_by, code |
 | `notification_logs` | novo (módulo Velaro) | type, channel (email\|whatsapp), recipient, sent_at, provider_message_id, status |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

@@ -13,13 +13,22 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `orders` | core (já existe no scaffold) | public_number, customer_id, total_amount |
-| `order_velaro_details` | novo (módulo Velaro) | reseller_id, batch_id, operational_status, payment_status, previsao, arrived_at, retirado_em, retirado_por |
-| `order_status_events` | novo (módulo Velaro) | timeline completa com ator e nota |
-| `order_batches` | novo (módulo Velaro) | confirmação de chegada/retirada **por lote inteiro** |
+| `orders` | core + colunas Velaro | public_number, customer_id, reseller_id, batch_id, shipment_id, operational_status, payment_status, previsao, arrived_at, retirado_em, retirado_por, retirado_por_documento, retirado_por_customer_id, notes, created_at (data/hora do pedido na lista e no detalhe), e os valores subtotal_amount, discount_amount, total_amount |
+| `order_items` | core + colunas Velaro | product_id, product_variant_id, quantity, unit_price, total_price |
+| `order_item_engravings` | novo (módulo Velaro) | text, date — coluna ESPECIFICAÇÕES (“Gravação: M ❤ S”) |
+| `order_status_events` | novo (módulo Velaro) | scope, from_status, to_status, actor_id, note, created_at — timeline de 7 etapas e histórico de atualizações |
+| `order_batches` | novo (módulo Velaro) | code, arrived_at, retirado_em, retirado_por, retirado_por_documento — confirmação de chegada/retirada **por lote inteiro** |
+| `shipments` | novo (módulo Velaro) | code, status, carrier, tracking_code, tracking_url, released_by, released_at, shipped_at, estimated_at, delivered_at — o transporte, mesmo sem API da transportadora (§7.2) |
+| `payments` | novo (módulo Velaro) | method, status, paid_at — “Forma de pagamento (PIX)” |
+| `notification_logs` | novo (módulo Velaro) | recipient_type (revendedor\|cliente), channel, status, sent_at — card “Notificações enviadas” |
+| `customers` | core + colunas Velaro | name, document — Cliente (nome + CPF) |
+| `resellers` | novo (módulo Velaro) | razao_social, nome_fantasia, code, logradouro, numero, cidade, uf, cep — Revendedor e endereço de entrega (loja do revendedor) |
+| `products` | core + colunas Velaro | name, material_id |
+| `product_variants` | novo (módulo Velaro) | sku, aro — coluna CÓDIGO e ESPECIFICAÇÕES |
+| `product_images` | novo (módulo Velaro) | path, is_primary — miniatura do item |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

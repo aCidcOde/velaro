@@ -13,11 +13,15 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `order_velaro_details` | novo (módulo Velaro) | operational_status = pronto_retirada, arrived_at, retirado_em, retirado_por |
-| `notification_logs` | novo (módulo Velaro) | type = pedido_pronto, channel, recipient_type (revendedor\|cliente), sent_at, status |
+| `orders` | core + colunas Velaro | public_number, reseller_id, customer_id, operational_status = pronto_retirada, arrived_at, retirado_em, retirado_por, retirado_por_documento, retirado_por_customer_id |
+| `order_batches` | novo (módulo Velaro) | arrived_at, retirado_em, retirado_por, retirado_por_documento — retirada confirmada por lote inteiro |
+| `order_status_events` | novo (módulo Velaro) | to_status = pronto_retirada / retirado, actor_id, note, created_at |
+| `notification_logs` | novo (módulo Velaro) | type = pedido_pronto, channel, recipient, recipient_type (revendedor\|cliente), order_id, reseller_id, customer_id, status, sent_at, provider_message_id, error_message — log de envio e reenvio |
+| `reseller_stores` | novo (módulo Velaro) | name, endereco, whatsapp, email — remetente e endereço na mensagem |
+| `customers` | core + colunas Velaro | name, phone, email — destinatário da notificação |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

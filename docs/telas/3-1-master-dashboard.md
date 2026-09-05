@@ -13,10 +13,15 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `agregações` | — | pedidos, pré-cadastros, produção, pendências financeiras, NF, solicitações, suporte |
+| `orders` | core + colunas Velaro | pedidos recebidos e em produção — contagem por operational_status e payment_status |
+| `resellers` | novo (módulo Velaro) | status = pre_cadastro — fila de solicitações |
+| `order_batches` | novo (módulo Velaro) | lotes em aberto e vencidos |
+| `payments` | novo (módulo Velaro) | pagamentos B2B pendentes |
+| `invoices` | novo (módulo Velaro) | notas emitidas no período |
+| `support_tickets` | novo (módulo Velaro) | chamados abertos |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

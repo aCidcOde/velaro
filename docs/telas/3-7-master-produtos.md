@@ -13,18 +13,19 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `products` | core (já existe no scaffold) | name, slug, sku, description, price (B2B), is_active |
-| `product_attributes` | novo (módulo Velaro) | collection_id, category_id, material_id, finish_id, largura_mm, formato, permite_gravacao, gravacao_max_chars |
+| `products` | core + colunas Velaro | name, slug, sku, description, price (B2B), is_active, collection_id, category_id, material_id, finish_id, largura_mm, formato, permite_gravacao, gravacao_max_chars, prazo_entrega_dias, is_made_to_order |
 | `product_variants` | novo (módulo Velaro) | sku, aro/tamanho, is_active |
-| `product_images` | novo (módulo Velaro) | path, position, is_primary |
-| `collections` | novo (módulo Velaro) | abas do protótipo — tabela própria, não enum |
-| `categories` | novo (módulo Velaro) | name, slug, parent_id |
-| `materials` | novo (módulo Velaro) | name, slug |
-| `finishes` | novo (módulo Velaro) | name, slug |
-| `product_revisions` | novo (módulo Velaro) | histórico de alterações |
+| `product_images` | novo (módulo Velaro) | path, alt, position, is_primary — carrossel e “Gerenciar imagens” |
+| `collections` | novo (módulo Velaro) | name, slug, position, is_active — aba “Coleções”; tabela própria, não enum |
+| `categories` | novo (módulo Velaro) | name, slug, parent_id, position — aba “Categorias” e select da lista |
+| `materials` | novo (módulo Velaro) | name, slug, position, is_active — aba “Materiais” |
+| `finishes` | novo (módulo Velaro) | name, slug, position, is_active — aba “Acabamentos” |
+| `stock_items` | novo (módulo Velaro) | disponivel — “Estoque disponível” no resumo do produto |
+| `resellers` | novo (módulo Velaro) | status — “Revendedores ativos” no resumo do produto |
+| `product_revisions` | novo (módulo Velaro) | action, actor_id, before, after — “Histórico de alterações” |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

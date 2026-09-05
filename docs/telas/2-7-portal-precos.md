@@ -13,10 +13,11 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
+| `reseller_price_settings` | novo (módulo Velaro) | pricing_model, multiplier, margin_global, margin_min, margin_ideal, margin_max, rounding, rule_scope, apply_to_all, allow_manual_override, allow_promotional_prices, recalculated_at — 1:1 com o revendedor |
 | `reseller_price_rules` | novo (módulo Velaro) | scope (global\|collection\|product), collection_id, product_id, mode (multiplier\|percent\|manual\|promo), value, rounding, priority, is_active |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

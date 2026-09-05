@@ -13,14 +13,18 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `orders` | core (já existe no scaffold) | public_number, customer_id, total_amount, notes |
-| `order_velaro_details` | novo (módulo Velaro) | reseller_id, batch_id, operational_status, payment_status, previsao, retirado_em, retirado_por |
-| `order_items` | core (já existe no scaffold) | product_id, quantity, unit_price (snapshot imutável) |
-| `order_item_engravings` | novo (módulo Velaro) | enabled, text, date, chars, price |
-| `order_status_events` | novo (módulo Velaro) | from, to, actor_id, note, created_at — timeline |
+| `orders` | core + colunas Velaro | public_number, customer_id, reseller_id, batch_id, shipment_id, operational_status, payment_status, previsao, retirado_em, retirado_por, notes, created_at, e os valores subtotal_amount, engraving_amount, shipping_amount, discount_amount, total_amount (as quatro linhas do “Resumo do pedido” mais o total) |
+| `order_items` | core + colunas Velaro | product_id, product_variant_id, quantity, unit_price (snapshot imutável), total_price |
+| `order_item_engravings` | novo (módulo Velaro) | enabled, text, date, chars, price — card “Gravação interna” |
+| `order_promotions` | novo (módulo Velaro) | promotion_id, type, discount_amount — explica a linha “Descontos” do resumo |
+| `order_status_events` | novo (módulo Velaro) | scope, from_status, to_status, actor_id, note, created_at — timeline |
+| `customers` | core + colunas Velaro | name — coluna CLIENTE da lista e do drawer |
+| `products` | core + colunas Velaro | name, material_id, finish_id, formato — descrição do item no drawer (“Ouro 18k - Anat. / Polido”) |
+| `product_variants` | novo (módulo Velaro) | aro |
+| `product_images` | novo (módulo Velaro) | path, is_primary — miniatura do item |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 

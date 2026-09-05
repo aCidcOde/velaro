@@ -73,6 +73,13 @@ caracteriza **pendência de escopo**, e não melhoria opcional (Anexo I §9).
 
 ## Resumo do impacto no banco
 
-36 tabelas novas no módulo Velaro ·
-3 extensões do core ·
-nenhuma tabela do núcleo alterada.
+**49 tabelas novas** no módulo Velaro ·
+**5 tabelas do core alteradas** ·
+**71 tabelas** e **101 chaves estrangeiras** no banco, em **54 migrations** do módulo.
+
+A regra "nenhuma tabela do núcleo é alterada" foi **abandonada por decisão registrada**: o core
+passou a ser mutável. Em consequência, as três tabelas de extensão 1:1 que a documentação previa
+(`product_attributes`, `order_velaro_details`, `customer_velaro_details`) **não existem** — seus
+campos foram absorvidos por `products`, `orders` e `customers`.
+
+Decisões, política de exclusão de FKs e o fechamento das 18 lacunas: [`docs/banco-de-dados.md`](../banco-de-dados.md).

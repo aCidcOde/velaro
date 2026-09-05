@@ -13,13 +13,20 @@
 
 | Tabela | Origem | Campos |
 |--------|--------|--------|
-| `reseller_stores` | novo (módulo Velaro) | logo, cores, banner, domínio — pinta 100% da tela |
-| `products` | core (já existe no scaffold) | catálogo exposto ao consumidor |
-| `product_attributes` | novo (módulo Velaro) | categorias, destaques, características técnicas |
-| `reseller_price_rules` | novo (módulo Velaro) | resolve o **preço B2C** |
+| `reseller_stores` | novo (módulo Velaro) | name, slogan, logo_path, banner_path, slug, domain, color_primary, color_secondary, color_background, color_text, is_active, published_at, updated_at (KPI “Última atualização”), whatsapp (“Iniciar atendimento”) — pinta 100% da tela; os toggles do bloco de configurações são own_brand_only, hide_supplier_brand, show_prices, pickup_only, payment_in_store |
+| `reseller_store_categories` | novo (módulo Velaro) | category_id, position — “Categorias visíveis” e as abas da pré-visualização |
+| `reseller_store_products` | novo (módulo Velaro) | product_id, position, is_featured — “Destaque de produtos” |
+| `products` | core + colunas Velaro | catálogo exposto ao consumidor — name, slug, description, is_active, price (**base do cálculo B2C — nunca exibido na vitrine**), category_id, collection_id, material_id, finish_id, largura_mm, formato, permite_gravacao |
+| `product_images` | novo (módulo Velaro) | path, alt, position, is_primary — foto do card na vitrine |
+| `categories` | novo (módulo Velaro) | name, slug, position — origem das categorias visíveis |
+| `collections` | novo (módulo Velaro) | name, slug, is_active — KPI “Coleções ativas” |
+| `reseller_price_settings` | novo (módulo Velaro) | pricing_model, multiplier, margin_global, rounding — a base do cálculo |
+| `reseller_price_rules` | novo (módulo Velaro) | scope, collection_id, product_id, mode, value, rounding, priority — resolve o **preço B2C** |
+| `favorites` | novo (módulo Velaro) | product_id, reseller_store_id, visitor_token — coração na grade da vitrine |
+| `orders` | core + colunas Velaro | reseller_id, created_at — KPI “Pedidos iniciados na vitrine” |
 
-> `core` não é alterado. O domínio Velaro entra em tabelas próprias e em tabelas 1:1
-> de extensão, conforme a regra de módulo isolado do scaffold.
+> O domínio Velaro entra em tabelas próprias e em colunas acrescentadas às tabelas do
+> core. As extensões 1:1 foram descartadas — ver [decisão 1.1](../banco-de-dados.md).
 
 ## 2. Permissões
 
