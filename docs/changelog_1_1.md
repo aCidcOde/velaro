@@ -7,6 +7,25 @@
 - Documentação por tela com campos, permissões, regras de negócio e critérios de aceite.
 - Sistema de design registrado como referência única e já aplicado à aplicação em funcionamento.
 
+### 2026-09-05 · FIX · Deploy apontava para o produto errado
+
+**Resumo:** O roteiro de publicacao ainda era o do sistema base do qual a Velaro nasceu. Rodado
+como estava, publicaria no diretorio de outro produto do mesmo servidor e reiniciaria a fila dele.
+Tambem sobravam mencoes ao sistema base em textos que o usuario le.
+
+**O que foi feito:** O roteiro passou a apontar para o diretorio e a fila da Velaro. A etapa que
+gera os arquivos visuais virou opcional, porque o servidor de producao nao tem a ferramenta que a
+executa — antes ela interrompia a publicacao no pior momento, com o codigo e o banco ja atualizados
+e a aparencia ainda antiga. Entrou uma conferencia que interrompe a publicacao ANTES de qualquer
+troca, caso os arquivos visuais nao tenham sido enviados.
+
+Ficou registrado no proprio roteiro que o servidor hospeda mais de um produto e que a reinicializacao
+do interpretador afeta todos por alguns segundos.
+
+O nome do sistema base saiu do texto que o assistente responde ao usuario, da tela de envio de
+arquivos e do banco de dados sugerido para instalacoes novas — que apontava para a base do outro
+produto.
+
 ### 2026-09-05 · FEAT · Portal do Lojista e telas de acesso
 
 **Resumo:** O lojista aprovado passou a ter o proprio ambiente. Ele entra, ve o que comprou, o que

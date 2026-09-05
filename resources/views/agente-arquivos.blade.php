@@ -172,7 +172,7 @@
                             </div>
                             <h3 class="mt-5 text-xl font-semibold text-gray-900">Arraste PDFs para esta area</h3>
                             <p class="mt-3 max-w-xl text-sm leading-6 text-gray-600">
-                                Voce tambem pode selecionar arquivos manualmente. Assim que o envio for aceito pelo servidor, o restante segue em background no CodaFacil IA.
+                                Voce tambem pode selecionar arquivos manualmente. Assim que o envio for aceito pelo servidor, o restante segue em background no Velaro IA.
                             </p>
                             <p class="mt-3 max-w-xl text-xs leading-6 text-gray-500">
                                 Limite atual: ate {{ $uploadLimits['max_file_label'] ?? '200 MB' }} por PDF e ate {{ $uploadLimits['max_request_label'] ?? '200 MB' }} por envio.

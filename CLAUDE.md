@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**CodaFácil Scaffold** (v1.1) — base Laravel reutilizável para novos sistemas SaaS. Laravel 13 + Livewire 4 + Flux UI. Inclui autenticação completa, ACL granular, painel admin, API mobile, agente IA local assíncrono e domínio comercial mínimo (Customer → Product → Order).
+**Velaro** — plataforma B2B de aliancas, construida sobre o CodaFacil Scaffold (v1.1). Laravel 13 + Livewire 4 + Flux UI. Inclui autenticação completa, ACL granular, painel admin, API mobile, agente IA local assíncrono e domínio comercial mínimo (Customer → Product → Order).
 
 Site: `codafacil.dev`
 

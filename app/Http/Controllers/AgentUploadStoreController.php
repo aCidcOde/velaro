@@ -30,7 +30,7 @@ class AgentUploadStoreController extends Controller
                 'status' => AgentUpload::STATUS_PROCESSING,
                 'local_path' => $path,
                 'metadata' => [
-                    'source' => 'codafacil-agent',
+                    'source' => 'velaro-agent',
                 ],
             ]);
 

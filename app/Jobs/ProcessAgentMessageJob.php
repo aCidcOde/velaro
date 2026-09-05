@@ -77,7 +77,7 @@ class ProcessAgentMessageJob implements ShouldQueue
 
         $topicList = implode(', ', array_unique($topics));
 
-        return "Este CodaFacil IA e um exemplo local assíncrono da base SaaS. Posso orientar a operação sobre {$topicList}. "
+        return "Este Velaro IA e um exemplo local assíncrono da base SaaS. Posso orientar a operação sobre {$topicList}. "
             .'Use esta implementação como referência para substituir a lógica por integrações reais no próximo projeto.';
     }
 }
