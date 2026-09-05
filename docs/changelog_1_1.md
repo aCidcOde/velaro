@@ -7,6 +7,38 @@
 - Documentação por tela com campos, permissões, regras de negócio e critérios de aceite.
 - Sistema de design registrado como referência única e já aplicado à aplicação em funcionamento.
 
+### 2026-09-06 · FEAT · O Painel Interno passa a aprovar lojista
+
+**Resumo:** Ate aqui ninguem aprovava cadastro. Quem se cadastrava pelo site ficava parado em
+analise para sempre, porque a tela que decide nao existia — o ciclo comercial nao tinha como
+fechar. As duas primeiras telas do Painel Interno entram no ar e destravam isso: a fila de
+solicitacoes, com a decisao, e a base de revendedores, com o cadastro manual.
+
+**O que foi feito:** A fila mostra as solicitacoes que aguardam decisao e as que voltaram pedindo
+documento, com o resultado da triagem automatica ao lado de cada uma. Na ficha, a equipe ve os
+dados da empresa, os CNAEs informados, o que a verificacao apurou, os documentos anexados e o
+historico do cadastro — e decide entre tres caminhos: aprovar, reprovar ou pedir informacao
+adicional. Nenhum deles anda sem justificativa escrita: e ela que fica no historico, chega ao
+lojista e sustenta a decisao depois.
+
+Pedir informacao adicional passa a ter resposta do outro lado. O cadastro vai para o estado que
+abre o reenvio de documentos no painel do lojista, e o envio dele devolve a solicitacao para a
+fila. O que era um pedido sem retorno virou uma conversa com comeco e fim.
+
+A base de revendedores acompanha os lojistas ja habilitados e recebe o cadastro manual — o caminho
+de quem a Velaro prospecta e que nao passa pelo site. Esse cadastro nasce pendente como qualquer
+outro: cadastrar e aprovar continuam sendo dois atos, com permissoes distintas, porque quem digita
+nem sempre e quem decide.
+
+Toda decisao entra em `audit_logs` e no historico do cadastro, dentro de uma transacao unica: um
+cadastro nao muda de estado sem deixar registrado quem decidiu e por que. As permissoes sao por
+acao, nao por tela — ver a fila, aprovar, reprovar e pedir informacao sao quatro chaves separadas,
+e ha teste provando que negar uma delas fecha a porta mesmo para quem ja entrou no painel.
+
+**Fica pendente:** as tres acoes da fila dependem de rotas ainda nao registradas, e os testes que
+as cobrem se habilitam sozinhos quando elas entrarem. "Ver como revendedor" tem a permissao
+prevista, mas depende da sessao de impersonate no Portal.
+
 ### 2026-09-05 · FEAT · Um login, um painel: a jornada do lojista comeca dentro do sistema
 
 **Resumo:** O lojista que se cadastrava escolhia uma senha e saia com um login que nao levava a
