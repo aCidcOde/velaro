@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\Site\SiteContentService;
 use App\Support\ResellerScope;
+use App\Support\VitrineRouteBinding;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -46,6 +47,12 @@ class AppServiceProvider extends ServiceProvider
         // registro de outro lojista some com 404, nunca com 403 (a razão está
         // documentada em ResellerScope).
         ResellerScope::bindRouteParameters();
+
+        // A vitrine é pública e aninhada (`/loja/{store:slug}/produto/{product:slug}`):
+        // sem isto o Laravel escoparia `{product}` pela relação de curadoria da
+        // loja, e a vitrine de quem ainda não curou nada responderia 404 em toda
+        // ficha. Quem aplica a regra do catálogo visível é o service.
+        VitrineRouteBinding::bindChildParameters();
 
         RateLimiter::for('agent', function (Request $request) {
             $key = $request->user()?->id ?? $request->ip();

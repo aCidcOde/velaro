@@ -25,6 +25,14 @@ class Order extends Model implements OwnedByReseller
     // `status` (campo do scaffold) permanece apenas como espelho derivado, por compatibilidade
     // com OrderWorkflowStatusService — nada no modulo Velaro deve le-lo como autoridade.
 
+    /**
+     * Primeiro valor de `status`, o espelho do scaffold — o mesmo default da
+     * coluna. Existe como constante para que quem cria pedido (a vitrine cria)
+     * não escreva a string na mao; a lista completa e a matriz de transicao
+     * continuam em OrderWorkflowStatusService.
+     */
+    public const STATUS_DRAFT = 'draft';
+
     public const OPERATIONAL_STATUS_REGISTERED = 'registered';
 
     public const OPERATIONAL_STATUS_PAYMENT_CONFIRMED = 'payment_confirmed';

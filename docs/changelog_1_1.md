@@ -40,6 +40,30 @@ que o teste percorre e lida do proprio roteamento, para que uma tela nova nasca 
 O link publico de acompanhamento continua existindo e funcionando sem sessao, porque e ele que o
 e-mail e o WhatsApp abrem. Deixou apenas de ser o destino de quem faz login.
 
+### 2026-09-05 · FEAT · Vitrine white label do lojista
+
+**Resumo:** A loja do revendedor entrou no ar. O consumidor final navega o catalogo com a marca do
+lojista, ve o preco que o lojista definiu e monta o pedido com o vendedor no balcao — sem conta,
+sem senha e sem pagar nada pela internet.
+
+**O que foi feito:** A vitrine e o unico ambiente publico do sistema e foi construida sobre tres
+regras que o contrato trata como obrigacao, nao como detalhe.
+
+A marca da Velaro nao aparece em lugar nenhum para o consumidor. Isso exigiu mais do que trocar
+o logotipo: o titulo da aba, o icone do navegador e ate a descricao dos produtos — que mencionava a
+fabrica do fornecedor — foram tratados. A protecao nao depende de quem escreve a tela: os dados que
+chegam a vitrine ja saem preparados, sem qualquer caminho para o nome do fornecedor.
+
+O preco mostrado e sempre o que o lojista definiu, calculado a partir das margens dele. O custo que
+a Velaro cobra do lojista nao trafega ate a loja — nem escondido no codigo da pagina. Ha
+verificacao automatica que reprova a entrega se isso mudar.
+
+Nao ha pagamento online: a loja orienta o pagamento no caixa, como manda o modelo.
+
+Uma loja ainda nao publicada responde como inexistente, e um produto fora da curadoria de uma loja
+nao abre nela — o que impede descobrir o catalogo ou a operacao de um lojista a partir da vitrine
+de outro.
+
 ### 2026-09-05 · FEAT · Jornada do lojista unificada e permissoes do painel interno
 
 **Resumo:** O lojista deixou de ficar do lado de fora enquanto espera aprovacao. Ele se cadastra,
@@ -621,7 +645,7 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 | 2 | `composer qa:security` | 🟢 zero advisories |
 | 3 | `composer qa:style` | 🟢 passed |
 | 4 | `composer qa:static` | 🟢 no errors |
-| 5 | `composer qa:test` | 🟢 387 passed, 1.874 assertions |
+| 5 | `composer qa:test` | 🟢 463 passed, 2.356 assertions |
 | 6 | `composer qa:secrets` | 🟢 no leaks found (histórico) |
 | 7 | prefixo de commit | ⚪ N/A — sem commit nesta correção |
 | 8 | `composer qa:anti-debug` | 🟢 sem debug calls |
@@ -633,7 +657,7 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 
 **📊 Total de testes**
 
-🔵 387 testes · 1.874 assertions, incluindo 22 testes novos de regressão
+🔵 463 testes · 2.356 assertions, incluindo 22 testes novos de regressão
 
 **🛡️ Validação das demais gates**
 
@@ -662,6 +686,6 @@ O relatório anterior dizia que `DatabaseSeeder` e `MobileApiTest` usavam status
 - ⚪ Linhas da release anterior: N/A
 - ⚪ Aumento de arquivos vs release anterior: N/A
 - ⚪ Aumento de linhas vs release anterior: N/A
-- 🔵 Novos commits da release: 15 (incluindo esta entrega)
+- 🔵 Novos commits da release: 16 (incluindo esta entrega)
 
 **Status final: 🟢 Código e regressões validados · ⚪ Aplicação da nova migration ao banco local pendente**

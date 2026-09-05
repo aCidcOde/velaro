@@ -1,9 +1,31 @@
 {{-- Vitrine white label de um revendedor. Sem marca Velaro em lugar nenhum:
-     as cores vêm de reseller_stores. $store é obrigatório. --}}
-@props(['store', 'title' => null, 'ativo' => null, 'itensNoCarrinho' => 0, 'single' => false])
+     as cores vêm de reseller_stores. $store é obrigatório.
+
+     `abas` são as categorias que o lojista escolheu exibir (reseller_store_categories),
+     na forma [['rotulo' => ..., 'slug' => ...], ...] — a primeira sempre é
+     "Todos os produtos", com slug nulo. Sem a lista, o menu cai na navegação
+     padrão do protótipo. --}}
+@props(['store', 'title' => null, 'ativo' => null, 'itensNoCarrinho' => 0, 'single' => false, 'abas' => null])
 @php($r = $store->reseller)
-<x-velaro.layouts.base :title="$title ?? $store->name ?? $r?->trade_name">
+@php($menu = $abas ?? [
+  ['rotulo' => 'Todos os produtos', 'slug' => null],
+  ['rotulo' => 'Alianças', 'slug' => 'aliancas'],
+  ['rotulo' => 'Solitários', 'slug' => 'solitarios'],
+  ['rotulo' => 'Acessórios', 'slug' => 'acessorios'],
+])
+{{-- A marca do documento é a da LOJA, e o ícone da aba também: o <title> e o
+     favicon da Velaro seriam vazamento de marca perante o consumidor final
+     (regra 1 das telas 2.9 e 2.10). Sem logo gravada a aba fica sem ícone —
+     melhor nenhum do que o do fornecedor. --}}
+<x-velaro.layouts.base
+  :title="$title"
+  :marca="$store->name ?? $r?->trade_name ?? 'Loja'"
+  :favicons="false">
 <x-slot:head>
+@if($store->logo_path)
+<link rel="icon" href="{{ asset('storage/'.$store->logo_path) }}">
+@endif
+<meta name="theme-color" content="{{ $store->color_background ?? '#ffffff' }}">
 <style>
   .shop{
     --shop-primary:{{ $store->color_primary ?? '#800020' }};
@@ -18,10 +40,16 @@
 <div class="shop @if($single) shop--single @endif">
   <div class="shop__main" id="conteudo">
     <nav class="shop__nav">
-      <a class="shop__logo" href="{{ route('vitrine.index', $store) }}"><strong>{{ mb_strtoupper($store->name ?? $r?->trade_name ?? 'LOJA') }}</strong><small>ALIANÇAS</small></a>
+      <a class="shop__logo" href="{{ route('vitrine.index', $store) }}">
+        @if($store->logo_path)
+          <img src="{{ asset('storage/'.$store->logo_path) }}" alt="{{ $store->name ?? $r?->trade_name ?? 'Loja' }}" style="max-height:38px;width:auto">
+        @else
+          <strong>{{ mb_strtoupper($store->name ?? $r?->trade_name ?? 'LOJA') }}</strong><small>ALIANÇAS</small>
+        @endif
+      </a>
       <span class="shop__tabs">
-        @foreach(['Todos os produtos' => null, 'Alianças' => 'aliancas', 'Solitários' => 'solitarios', 'Acessórios' => 'acessorios'] as $rotulo => $cat)
-          <a href="{{ route('vitrine.index', [$store, 'categoria' => $cat]) }}" @class(['is-active' => ($ativo ?? null) === $cat])>{{ $rotulo }}</a>
+        @foreach($menu as $aba)
+          <a href="{{ route('vitrine.index', [$store, 'categoria' => $aba['slug']]) }}" @class(['is-active' => ($ativo ?? null) === $aba['slug']])>{{ $aba['rotulo'] }}</a>
         @endforeach
       </span>
       <span class="shop__navicons"><x-velaro.icon name="search" />
